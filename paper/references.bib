@@ -410,6 +410,22 @@
   langid = {english}
 }
 
+@article{hernanEstimatingCausalEffect2002,
+  title = {Estimating the Causal Effect of Zidovudine on {{CD4}} Count with a Marginal Structural Model for Repeated Measures},
+  author = {Hern{\'a}n, Miguel A. and Brumback, Babette A. and Robins, James M.},
+  year = 2002,
+  journal = {Statistics in Medicine},
+  volume = {21},
+  number = {12},
+  pages = {1689--1709},
+  issn = {1097-0258},
+  doi = {10.1002/sim.1144},
+  urldate = {2026-03-16},
+  abstract = {Even in the absence of unmeasured confounding factors or model misspecification, standard methods for estimating the causal effect of a time-varying treatment on the mean of a repeated measures outcome (for example, GEE regression) may be biased when there are time-dependent variables that are simultaneously confounders of the effect of interest and are predicted by previous treatment. In contrast, the recently developed marginal structural models (MSMs) can provide consistent estimates of causal effects when unmeasured confounding and model misspecification are absent. We describe an MSM for repeated measures that parameterizes the marginal means of counterfactual outcomes corresponding to prespecified treatment regimes. The parameters of MSMs are estimated using a new class of estimators -- inverse-probability of treatment weighted estimators. We used an MSM to estimate the effect of zidovudine therapy on mean CD4 count among HIV-infected men in the Multicenter AIDS Cohort Study. We estimated a potential expected increase of 5.4 (95 per cent confidence interval -1.8,12.7) CD4 lymphocytes/l per additional study visit while on zidovudine therapy. We also explain the theory and implementation of MSMs for repeated measures data and draw upon a simple example to illustrate the basic ideas. Copyright \copyright{} 2002 John Wiley \& Sons, Ltd.},
+  langid = {english},
+  keywords = {causality,confounding,HIV disease,repeated measures,time-varying exposure}
+}
+
 @article{hernanObservationalStudiesAnalyzed2008,
   title = {Observational Studies Analyzed like Randomized Experiments: An Application to Postmenopausal Hormone Therapy and Coronary Heart Disease},
   shorttitle = {Observational Studies Analyzed like Randomized Experiments},
@@ -491,6 +507,24 @@
   abstract = {Background The parametric g-formula can be used to estimate the effect of a policy, intervention, or treatment. Unlike standard regression approaches, the parametric g-formula can be used to adjust for time-varying confounders that are affected by prior exposures. To date, there are few published examples in which the method has been applied. Methods We provide a simple introduction to the parametric g-formula and illustrate its application in analysis of a small cohort study of bone marrow transplant patients in which the effect of treatment on mortality is subject to time-varying confounding. Results Standard regression adjustment yields a biased estimate of the effect of treatment on mortality relative to the estimate obtained by the g-formula. Conclusions The g-formula allows estimation of a relevant parameter for public health officials: the change in the hazard of mortality under a hypothetical intervention, such as reduction of exposure to a harmful agent or introduction of a beneficial new treatment. We present a simple approach to implement the parametric g-formula that is sufficiently general to allow easy adaptation to many settings of public health relevance.},
   pmcid = {PMC4310506},
   pmid = {25140837}
+}
+
+@article{keoghAnalysisLongitudinalStudies2018,
+  title = {Analysis of {{Longitudinal Studies With Repeated Outcome Measures}}: {{Adjusting}} for {{Time-Dependent Confounding Using Conventional Methods}}},
+  shorttitle = {Analysis of {{Longitudinal Studies With Repeated Outcome Measures}}},
+  author = {Keogh, Ruth H and Daniel, Rhian M and VanderWeele, Tyler J and Vansteelandt, Stijn},
+  year = 2018,
+  month = may,
+  journal = {American Journal of Epidemiology},
+  volume = {187},
+  number = {5},
+  pages = {1085--1092},
+  issn = {0002-9262},
+  doi = {10.1093/aje/kwx311},
+  urldate = {2026-03-16},
+  abstract = {Estimation of causal effects of time-varying exposures using longitudinal data is a common problem in epidemiology. When there are time-varying confounders, which may include past outcomes, affected by prior exposure, standard regression methods can lead to bias. Methods such as inverse probability weighted estimation of marginal structural models have been developed to address this problem. However, in this paper we show how standard regression methods can be used, even in the presence of time-dependent confounding, to estimate the total effect of an exposure on a subsequent outcome by controlling appropriately for prior exposures, outcomes, and time-varying covariates. We refer to the resulting estimation approach as sequential conditional mean models (SCMMs), which can be fitted using generalized estimating equations. We outline this approach and describe how including propensity score adjustment is advantageous. We compare the causal effects being estimated using SCMMs and marginal structural models, and we compare the two approaches using simulations. SCMMs enable more precise inferences, with greater robustness against model misspecification via propensity score adjustment, and easily accommodate continuous exposures and interactions. A new test for direct effects of past exposures on a subsequent outcome is described.},
+  pmcid = {PMC5928464},
+  pmid = {29020128}
 }
 
 @article{laanTargetedMinimumLoss,
@@ -892,6 +926,24 @@
   abstract = {Recent technological advances enable the collection of intensive longitudinal data. This scoping review aimed to provide an overview of methods for collecting intensive time series data in mental health research as well as basic principles, current applications, target constructs, and statistical methods for this type of data., In January 2021, the database MEDLINE was searched. Original articles were identified that (1) used active or passive data collection methods to gather intensive longitudinal data in daily life, (2) had a minimum sample size of N ⩾ 100 participants, and (3) included individuals with subclinical or clinical mental health problems., In total, 3799 original articles were identified, of which 174 met inclusion criteria. The most widely used methods were diary techniques (e.g. Experience Sampling Methodology), various types of sensors (e.g. accelerometer), and app usage data. Target constructs included affect, various symptom domains, cognitive processes, sleep, dysfunctional behaviour, physical activity, and social media use. There was strong evidence on feasibility of, and high compliance with, active and passive data collection methods in diverse clinical settings and groups. Study designs, sampling schedules, and measures varied considerably across studies, limiting the generalisability of findings., Gathering intensive longitudinal data has significant potential to advance mental health research. However, more methodological research is required to establish and meet critical quality standards in this rapidly evolving field. Advanced approaches such as digital phenotyping, ecological momentary interventions, and machine-learning methods will be required to efficiently use intensive longitudinal data and deliver personalised digital interventions and services for improving public mental health.},
   pmcid = {PMC9874995},
   pmid = {36377538}
+}
+
+@article{shinozakiUnderstandingMarginalStructural2020,
+  title = {Understanding {{Marginal Structural Models}} for {{Time-Varying Exposures}}: {{Pitfalls}} and {{Tips}}},
+  shorttitle = {Understanding {{Marginal Structural Models}} for {{Time-Varying Exposures}}},
+  author = {Shinozaki, Tomohiro and Suzuki, Etsuji},
+  year = 2020,
+  month = sep,
+  journal = {Journal of Epidemiology},
+  volume = {30},
+  number = {9},
+  pages = {377--389},
+  issn = {0917-5040},
+  doi = {10.2188/jea.JE20200226},
+  urldate = {2026-03-16},
+  abstract = {Epidemiologists are increasingly encountering complex longitudinal data, in which exposures and their confounders vary during follow-up. When a prior exposure affects the confounders of the subsequent exposures, estimating the effects of the time-varying exposures requires special statistical techniques, possibly with structural (ie, counterfactual) models for targeted effects, even if all confounders are accurately measured. Among the methods used to estimate such effects, which can be cast as a marginal structural model in a straightforward way, one popular approach is inverse probability weighting. Despite the seemingly intuitive theory and easy-to-implement software, misunderstandings (or ``pitfalls'') remain. For example, one may mistakenly equate marginal structural models with inverse probability weighting, failing to distinguish a marginal structural model encoding the causal parameters of interest from a nuisance model for exposure probability, and thereby failing to separate the problems of variable selection and model specification for these distinct models. Assuming the causal parameters of interest are identified given the study design and measurements, we provide a step-by-step illustration of generalized computation of standardization (called the g-formula) and inverse probability weighting, as well as the specification of marginal structural models, particularly for time-varying exposures. We use a novel hypothetical example, which allows us access to typically hidden potential outcomes. This illustration provides steppingstones (or ``tips'') to understand more concretely the estimation of the effects of complex time-varying exposures.},
+  pmcid = {PMC7429147},
+  pmid = {32684529}
 }
 
 @article{snowdenImplementationGComputationSimulated2011,

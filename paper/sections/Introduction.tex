@@ -54,13 +54,6 @@ sequential extension of the deconfounder method of
 a latent variable is used to estimate a statistically sufficient substitute for the unmeasured confounders. This allows the method to retain the sequential ignorability 
 assumption to estimate any causal target of interest in a downstream analysis.
 
-%instead of having conditionally 
-%independent multiple treatments at a single time point, there is a temporally ordered 
-%causally linked sequence of treatments. 
-%The approach is based on the Gaussian process latent variable 
-%model \cite{lawrenceGaussianProcessLatent2003}, which is used to 
-%estimate a statistically sufficient substitute for the unmeasured confounders. 
-
 These two methods are comparable as they can be used in settings such as those described above. They both involve a 
 unit-specific constant unobserved heterogeneity component that is supposed to 
 capture the effect of the unmeasured confounders. They diverge, however, 
@@ -93,7 +86,7 @@ SeqGPLVM is provided, which was not fully elaborated in the original paper.
 Moreover, for the first time, a modular implementation of SeqGPLVM is 
 developed using the \texttt{GPyTorch} \cite{gardnerGPyTorchBlackboxMatrixMatrix2021}. 
 This implementation is designed to accommodate different treatment types and intended for 
-practical reuse in future research \footnote{Code available at \url{https://github.com/Ali-Setareh/SeqGPLVM_FEMSM}}.
+practical reuse in future research\footnote{Code available at \url{https://github.com/Ali-Setareh/SeqGPLVM_FEMSM}}.
 
 The remainder of the thesis is structured as follows. Chapter ~\ref{chap:literature_review} reviews the 
 relevant literature on longitudinal causal inference and the methods exist to address confounding. Next in
@@ -103,13 +96,12 @@ Chapter ~\ref{chap:simulation_study}, presents a simulation study comparing the 
 two methods under different scenarios. Finally, chapter ~\ref{chap:discussion}, discusses the 
 implications of findings and suggest directions for future research.
 
-
-%which include inverse probability of treatment weighting (IPTW) of marginal structural 
-%models \cite{robinsMarginalStructuralModels2000}, 
-%the g-formula \cite{snowdenImplementationGComputationSimulated2011}, and 
-%g-estimation of structural nested models \cite{vansteelandtStructuralNestedModels2014}.
-
- 
+%instead of having conditionally 
+%independent multiple treatments at a single time point, there is a temporally ordered 
+%causally linked sequence of treatments. 
+%The approach is based on the Gaussian process latent variable 
+%model \cite{lawrenceGaussianProcessLatent2003}, which is used to 
+%estimate a statistically sufficient substitute for the unmeasured confounders. 
 
 \begin{comment}
 Causal inference is a field of study that aims to understand and estimate the 
