@@ -4,6 +4,23 @@
   langid = {english}
 }
 
+@article{angristIdentificationCausalEffects1996,
+  title = {Identification of {{Causal Effects Using Instrumental Variables}}},
+  author = {Angrist, Joshua D. and Imbens, Guido W. and Rubin, Donald B.},
+  year = 1996,
+  journal = {Journal of the American Statistical Association},
+  volume = {91},
+  number = {434},
+  eprint = {2291629},
+  eprinttype = {jstor},
+  pages = {444--455},
+  publisher = {[American Statistical Association, Taylor \& Francis, Ltd.]},
+  issn = {0162-1459},
+  doi = {10.2307/2291629},
+  urldate = {2026-03-13},
+  abstract = {We outline a framework for causal inference in settings where assignment to a binary treatment is ignorable, but compliance with the assignment is not perfect so that the receipt of treatment is nonignorable. To address the problems associated with comparing subjects by the ignorable assignment-an "intention-to-treat analysis"-we make use of instrumental variables, which have long been used by economists in the context of regression models with constant treatment effects. We show that the instrumental variables (IV) estimand can be embedded within the Rubin Causal Model (RCM) and that under some simple and easily interpretable assumptions, the IV estimand is the average causal effect for a subgroup of units, the compliers. Without these assumptions, the IV estimand is simply the ratio of intention-to-treat causal estimands with no interpretation as an average causal effect. The advantages of embedding the IV approach in the RCM are that it clarifies the nature of critical assumptions needed for a causal interpretation, and moreover allows us to consider sensitivity of the results to deviations from key assumptions in a straightforward manner. We apply our analysis to estimate the effect of veteran status in the Vietnam era on mortality, using the lottery number that assigned priority for the draft as an instrument, and we use our results to investigate the sensitivity of the conclusions to critical assumptions.}
+}
+
 @article{arkhangelskyCausalModelsLongitudinal2024,
   title = {Causal Models for Longitudinal and Panel Data: A Survey},
   shorttitle = {Causal Models for Longitudinal and Panel Data},
@@ -18,6 +35,18 @@
   doi = {10.1093/ectj/utae014},
   urldate = {2026-03-11},
   abstract = {In this survey we discuss the recent causal panel data literature. This recent literature has focused on credibly estimating causal effects of binary interventions in settings with longitudinal data, emphasising practical advice for empirical researchers. It pays particular attention to heterogeneity in the causal effects, often in situations where few units are treated and with particular structures on the assignment pattern. The literature has extended earlier work on difference-in-differences or two-way fixed effect estimators. It has more generally incorporated factor models or interactive fixed effects. It has also developed novel methods using synthetic control approaches.}
+}
+
+@article{bacakMarginalStructuralModels2015,
+  title = {Marginal {{Structural Models}}: {{An Application}} to {{Incarceration}} and {{Marriage During Young Adulthood}}},
+  shorttitle = {Marginal {{Structural Models}}},
+  author = {Bacak, Valerio and Kennedy, Edward},
+  year = 2015,
+  month = feb,
+  journal = {Journal of Marriage and Family},
+  volume = {77},
+  doi = {10.1111/jomf.12159},
+  abstract = {Advanced methods for panel data analysis are commonly used in research on family life and relationships, but the fundamental issue of simultaneous time-dependent confounding and mediation has received little attention. In this article the authors introduce inverse-probability-weighted estimation of marginal structural models, an approach to causal analysis that (unlike conventional regression modeling) appropriately adjusts for confounding variables on the causal pathway linking the treatment with the outcome. They discuss the need for marginal structural models in social science research and describe their estimation in detail. Substantively, the authors contribute to the ongoing debate on the effects of incarceration on marriage by applying a marginal structural model approach to panel data from the National Longitudinal Survey of Youth 1997 (N = 4,781). In line with the increasing evidence on the collateral consequences of contact with the criminal justice system, the authors find that incarceration is associated with reduced chances of entering marriage.}
 }
 
 @article{bartolucciEstimatingDynamicCausal2012,
@@ -103,6 +132,22 @@
   langid = {english}
 }
 
+@article{bodnarMarginalStructuralModels2004,
+  title = {Marginal {{Structural Models}} for {{Analyzing Causal Effects}} of {{Time-dependent Treatments}}: {{An Application}} in {{Perinatal Epidemiology}}},
+  shorttitle = {Marginal {{Structural Models}} for {{Analyzing Causal Effects}} of {{Time-dependent Treatments}}},
+  author = {Bodnar, Lisa M. and Davidian, Marie and {Siega-Riz}, Anna Maria and Tsiatis, Anastasios A.},
+  year = 2004,
+  month = may,
+  journal = {American Journal of Epidemiology},
+  volume = {159},
+  number = {10},
+  pages = {926--934},
+  issn = {0002-9262},
+  doi = {10.1093/aje/kwh131},
+  urldate = {2026-03-15},
+  abstract = {Marginal structural models (MSMs) are causal models designed to adjust for time-dependent confounding in observational studies of time-varying treatments. MSMs are powerful tools for assessing causality with complicated, longitudinal data sets but have not been widely used by practitioners. The objective of this paper is to illustrate the fitting of an MSM for the causal effect of iron supplement use during pregnancy (time-varying treatment) on odds of anemia at delivery in the presence of time-dependent confounding. Data from pregnant women enrolled in the Iron Supplementation Study (Raleigh, North Carolina, 1997--1999) were used. The authors highlight complexities of MSMs and key issues epidemiologists should recognize before and while undertaking an analysis with these methods and show how such methods can be readily interpreted in existing software packages, including SAS and Stata. The authors emphasize that if a data set with rich information on confounders is available, MSMs can be used straightforwardly to make robust inferences about causal effects of time-dependent treatments/exposures in epidemiologic research.}
+}
+
 @article{bollenFixedRandomEffects,
   title = {Fixed and {{Random Effects}} in {{Panel Data Using Structural Equations Models}}},
   author = {Bollen, Kenneth A and Brand, Jennie E},
@@ -124,6 +169,23 @@
   abstract = {Accurately estimating treatment effects over time is crucial in fields such as precision medicine, epidemiology, economics, and marketing. Many current methods for estimating treatment effects over time assume that all confounders are observed or attempt to infer unobserved ones. In contrast, our approach focuses on unobserved adjustment variables, which specifically have a causal effect on the outcome sequence. Under the assumption of unconfoundedness, we address estimating Conditional Average Treatment Effects (CATEs) while accounting for unobserved heterogeneity in response to treatment due to these unobserved adjustment variables. Our proposed Causal Dynamic Variational Autoencoder (CDVAE) is grounded in theoretical guarantees concerning the validity of latent adjustment variables and generalization bounds on CATE estimation error. Extensive evaluations on synthetic and real-world datasets show that CDVAE outperforms existing baselines. Moreover, we demonstrate that state-of-the-art models significantly improve their CATE estimates when augmented with the latent substitutes learned by CDVAE, approaching oracle-level performance without direct access to the true adjustment variables.},
   archiveprefix = {arXiv},
   keywords = {Computer Science - Machine Learning,Statistics - Machine Learning}
+}
+
+@article{brayAssessingTotalEffect2006,
+  title = {Assessing the {{Total Effect}} of {{Time-Varying Predictors}} in {{Prevention Research}}},
+  author = {Bray, Bethany Cara and Almirall, Daniel and Zimmerman, Rick S. and Lynam, Donald and Murphy, Susan A.},
+  year = 2006,
+  month = mar,
+  journal = {Prevention Science},
+  volume = {7},
+  number = {1},
+  pages = {1--17},
+  issn = {1573-6695},
+  doi = {10.1007/s11121-005-0023-0},
+  urldate = {2026-03-15},
+  abstract = {Observational data are often used to address prevention questions such as, ``If alcohol initiation could be delayed, would that in turn cause a delay in marijuana initiation?'' This question is concerned with the total causal effect of the timing of alcohol initiation on the timing of marijuana initiation. Unfortunately, when observational data are used to address a question such as the above, alternative explanations for the observed relationship between the predictor, here timing of alcohol initiation, and the response abound. These alternative explanations are due to the presence of confounders. Adjusting for confounders when using observational data is a particularly challenging problem when the predictor and confounders are time-varying. When time-varying confounders are present, the standard method of adjusting for confounders may fail to reduce bias and indeed can increase bias. In this paper, an intuitive and accessible graphical approach is used to illustrate how the standard method of controlling for confounders may result in biased total causal effect estimates. The graphical approach also provides an intuitive justification for an alternate method proposed by James Robins [Robins, J. M. (1998). 1997 Proceedings of the American Statistical Association, section on Bayesian statistical science (pp. 1--10). Retrieved from http://www.biostat.harvard.edu/robins/research.html;Robins, J. M., Hern\'an, M., \& Brumback, B. (2000). Epidemiology, 11(5), 550--560]. The above two methods are illustrated by addressing the motivating question. Implications for prevention researchers who wish to estimate total causal effects using longitudinal observational data are discussed.},
+  langid = {english},
+  keywords = {confounding,graphical approach,time-varying,total effect,weighting}
 }
 
 @techreport{cardMinimumWagesEmployment1993,
@@ -174,6 +236,22 @@
   keywords = {Deep learning,Hidden confounder,Longitudinal data,Real-world evidence,Treatment effects}
 }
 
+@article{danielMethodsDealingTimedependent2013,
+  title = {Methods for Dealing with Time-Dependent Confounding},
+  author = {Daniel, R.m. and Cousens, S.n. and De Stavola, B.l. and Kenward, M. G. and Sterne, J. a. C.},
+  year = 2013,
+  journal = {Statistics in Medicine},
+  volume = {32},
+  number = {9},
+  pages = {1584--1618},
+  issn = {1097-0258},
+  doi = {10.1002/sim.5686},
+  urldate = {2026-03-15},
+  abstract = {Longitudinal studies, where data are repeatedly collected on subjects over a period, are common in medical research. When estimating the effect of a time-varying treatment or exposure on an outcome of interest measured at a later time, standard methods fail to give consistent estimators in the presence of time-varying confounders if those confounders are themselves affected by the treatment. Robins and colleagues have proposed several alternative methods that, provided certain assumptions hold, avoid the problems associated with standard approaches. They include the g-computation formula, inverse probability weighted estimation of marginal structural models and g-estimation of structural nested models. In this tutorial, we give a description of each of these methods, exploring the links and differences between them and the reasons for choosing one over the others in different settings. Copyright \copyright{} 2012 John Wiley \& Sons, Ltd.},
+  langid = {english},
+  keywords = {g-computation formula,g-estimation,inverse probability weighting,marginal structural model,structural nested model,time-dependent confounding}
+}
+
 @misc{deanerProxyControlsPanel2023,
   title = {Proxy {{Controls}} and {{Panel Data}}},
   author = {Deaner, Ben},
@@ -196,6 +274,23 @@
   howpublished = {https://www.tandfonline.com/doi/full/10.1080/10705511.2024.2316586}
 }
 
+@misc{gardnerGPyTorchBlackboxMatrixMatrix2021,
+  title = {{{GPyTorch}}: {{Blackbox Matrix-Matrix Gaussian Process Inference}} with {{GPU Acceleration}}},
+  shorttitle = {{{GPyTorch}}},
+  author = {Gardner, Jacob R. and Pleiss, Geoff and Bindel, David and Weinberger, Kilian Q. and Wilson, Andrew Gordon},
+  year = 2021,
+  month = jun,
+  number = {arXiv:1809.11165},
+  eprint = {1809.11165},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.1809.11165},
+  urldate = {2026-03-13},
+  abstract = {Despite advances in scalable models, the inference tools used for Gaussian processes (GPs) have yet to fully capitalize on developments in computing hardware. We present an efficient and general approach to GP inference based on Blackbox Matrix-Matrix multiplication (BBMM). BBMM inference uses a modified batched version of the conjugate gradients algorithm to derive all terms for training and inference in a single call. BBMM reduces the asymptotic complexity of exact GP inference from \$O(n\textasciicircum 3)\$ to \$O(n\textasciicircum 2)\$. Adapting this algorithm to scalable approximations and complex GP models simply requires a routine for efficient matrix-matrix multiplication with the kernel and its derivative. In addition, BBMM uses a specialized preconditioner to substantially speed up convergence. In experiments we show that BBMM effectively uses GPU hardware to dramatically accelerate both exact GP inference and scalable approximations. Additionally, we provide GPyTorch, a software platform for scalable GP inference via BBMM, built on PyTorch.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Machine Learning,Statistics - Machine Learning}
+}
+
 @article{gillCausalInferenceComplex2001,
   title = {Causal {{Inference}} for {{Complex Longitudinal Data}}: {{The Continuous Case}}},
   shorttitle = {Causal {{Inference}} for {{Complex Longitudinal Data}}},
@@ -209,6 +304,40 @@
   doi = {10.1214/aos/1015345962},
   urldate = {2026-03-11},
   langid = {english}
+}
+
+@article{greenlandCausalDiagramsEpidemiologic1999,
+  title = {Causal {{Diagrams}} for {{Epidemiologic Research}}},
+  author = {Greenland, Sander and Pearl, Judea and Robins, James M.},
+  year = 1999,
+  month = jan,
+  journal = {Epidemiology},
+  volume = {10},
+  number = {1},
+  pages = {37},
+  issn = {1044-3983},
+  urldate = {2026-03-15},
+  abstract = {Causal diagrams have a long history of informal use and, more recently, have undergone formal development for applications in expert systems and robotics. We provide an introduction to these developments and their use in epidemiologic research. Causal diagrams can provide a starting point for identifying variables that must be measured and controlled to obtain unconfounded effect estimates. They also provide a method for critical evaluation of traditional epidemiologic criteria for confounding. In particular, they reveal certain heretofore unnoticed shortcomings of those criteria when used in considering multiple potential confounders. We show how to modify the traditional criteria to correct those shortcomings. (Epidemiology 1999;10:37--48)},
+  langid = {american}
+}
+
+@article{hamakerFrontiersModelingIntensive2018,
+  title = {At the {{Frontiers}} of {{Modeling Intensive Longitudinal Data}}: {{Dynamic Structural Equation Models}} for the {{Affective Measurements}} from the {{COGITO Study}}},
+  shorttitle = {At the {{Frontiers}} of {{Modeling Intensive Longitudinal Data}}},
+  author = {Hamaker, E. L. and Asparouhov, T. and Brose, A. and Schmiedek, F. and Muth{\'e}n, B.},
+  year = 2018,
+  month = nov,
+  journal = {Multivariate Behavioral Research},
+  volume = {53},
+  number = {6},
+  pages = {820--841},
+  publisher = {Routledge},
+  issn = {0027-3171},
+  doi = {10.1080/00273171.2018.1446819},
+  urldate = {2026-03-15},
+  abstract = {With the growing popularity of intensive longitudinal research, the modeling techniques and software options for such data are also expanding rapidly. Here we use dynamic multilevel modeling, as it is incorporated in the new dynamic structural equation modeling (DSEM) toolbox in Mplus, to analyze the affective data from the COGITO study. These data consist of two samples of over 100 individuals each who were measured for about 100 days. We use composite scores of positive and negative affect and apply a multilevel vector autoregressive model to allow for individual differences in means, autoregressions, and cross-lagged effects. Then we extend the model to include random residual variances and covariance, and finally we investigate whether prior depression affects later depression scores through the random effects of the daily diary measures. We end with discussing several urgent---but mostly unresolved---issues in the area of dynamic multilevel modeling.},
+  pmid = {29624092},
+  keywords = {dynamic multilevel modeling,Dynamic structural equation modeling (DSEM),intensive longitudinal data,multilevel time series analysis}
 }
 
 @inproceedings{hattSequentialDeconfoundingCausal2024,
@@ -238,6 +367,32 @@
   urldate = {2026-02-08},
   abstract = {Panel data are ubiquitous in scientific fields such as social sciences. Various modeling approaches have been presented for observational causal inference based on such data. Existing approaches typically impose restrictive assumptions on the data-generating process such as Gaussian responses or time-invariant effects, or they can only consider short-term causal effects. To surmount these restrictions, we present the dynamic multivariate panel model (DMPM) that supports time-varying, time-invariant, and individual-specific effects, multiple responses across a wide variety of distributions, and arbitrary dependency structures of lagged responses of any order. We formally demonstrate how DMPM facilitates causal inference within the structural causal modeling framework and we take a Bayesian approach for the estimation of the posterior distributions of the model parameters and causal effects of interest. We demonstrate the use of DMPM by applying the approach to both real and synthetic data.},
   keywords = {Bayesian methods,Causal inference,Intervention,Markov models,Panel data,Prediction}
+}
+
+@book{hernanCausalInferenceWhat2023,
+  title = {Causal Inference: What If},
+  shorttitle = {Causal Inference},
+  author = {Hern{\'a}n, Miguel and Robins, James M.},
+  year = 2023,
+  edition = {First edition},
+  publisher = {{Taylor and Francis}},
+  address = {Boca Raton},
+  abstract = {"Written by pioneers in the field, this practical book presents an authoritative yet accessible overview of the methods and applications of causal inference. The text provides a thorough introduction to the basics of the theory for non-time-varying treatments and the generalization to complex longitudinal data"--},
+  isbn = {978-1-4200-7616-5 978-0-367-71133-7},
+  langid = {english}
+}
+
+@inbook{hernanCausalInferenceWhat2023booksection,
+  title = {Treatment-Confounder Feedback},
+  booktitle = {Causal Inference: What If},
+  year = 2023,
+  edition = {First edition},
+  pages = {263--272},
+  publisher = {{Taylor and Francis}},
+  address = {Boca Raton},
+  collaborator = {Hern{\'a}n, Miguel and Robins, James M.},
+  isbn = {978-1-4200-7616-5 978-0-367-71133-7},
+  langid = {english}
 }
 
 @article{hernanComparisonDynamicTreatment2006,
@@ -271,6 +426,21 @@
   abstract = {Background The Women's Health Initiative randomized trial found greater coronary heart disease (CHD) risk in women assigned to estrogen/progestin therapy than in those assigned to placebo. Observational studies had previously suggested reduced CHD risk in hormone users. Methods Using data from the observational Nurses' Health Study, we emulated the design and intention-to-treat (ITT) analysis of the randomized trial. The observational study was conceptualized as a sequence of ``trials'' in which eligible women were classified as initiators or noninitiators of estrogen/progestin therapy. Results The ITT hazard ratios (95\% confidence intervals) of CHD for initiators versus noninitiators were 1.42 (0.92 -- 2.20) for the first 2 years, and 0.96 (0.78 -- 1.18) for the entire follow-up. The ITT hazard ratios were 0.84 (0.61 -- 1.14) in women within 10 years of menopause, and 1.12 (0.84 -- 1.48) in the others (P value for interaction = 0.08). These ITT estimates are similar to those from the Women's Health Initiative. Because the ITT approach causes severe treatment misclassification, we also estimated adherence-adjusted effects by inverse probability weighting. The hazard ratios were 1.61 (0.97 -- 2.66) for the first 2 years, and 0.98 (0.66 -- 1.49) for the entire follow-up. The hazard ratios were 0.54 (0.19 -- 1.51) in women within 10 years after menopause, and 1.20 (0.78 -- 1.84) in others (P value for interaction = 0.01). Finally, we also present comparisons between these estimates and previously reported NHS estimates. Conclusions Our findings suggest that the discrepancies between the Women's Health Initiative and Nurses' Health Study ITT estimates could be largely explained by differences in the distribution of time since menopause and length of follow-up.},
   pmcid = {PMC3731075},
   pmid = {18854702}
+}
+
+@article{hernanUsingBigData2016,
+  title = {Using {{Big Data}} to {{Emulate}} a {{Target Trial When}} a {{Randomized Trial Is Not Available}}},
+  author = {Hern{\'a}n, Miguel A. and Robins, James M.},
+  year = 2016,
+  month = apr,
+  journal = {American Journal of Epidemiology},
+  volume = {183},
+  number = {8},
+  pages = {758--764},
+  issn = {0002-9262},
+  doi = {10.1093/aje/kwv254},
+  urldate = {2026-03-15},
+  abstract = {Ideally, questions about comparative effectiveness or safety would be answered using an appropriately designed and conducted randomized experiment. When we cannot conduct a randomized experiment, we analyze observational data. Causal inference from large observational databases (big data) can be viewed as an attempt to emulate a randomized experiment---the target experiment or target trial---that would answer the question of interest. When the goal is to guide decisions among several strategies, causal analyses of observational data need to be evaluated with respect to how well they emulate a particular target trial. We outline a framework for comparative effectiveness research using big data that makes the target trial explicit. This framework channels counterfactual theory for comparing the effects of sustained treatment strategies, organizes analytic approaches, provides a structured process for the criticism of observational studies, and helps avoid common methodologic pitfalls.}
 }
 
 @article{imaiWhenShouldWe2019,
@@ -455,6 +625,36 @@
   keywords = {Statistics - Methodology}
 }
 
+@article{molinaAssociationStimulantTreatment2023,
+  title = {Association {{Between Stimulant Treatment}} and {{Substance Use Through Adolescence Into Early Adulthood}}},
+  author = {Molina, Brooke S. G. and Kennedy, Traci M. and Howard, Andrea L. and Swanson, James M. and Arnold, L. Eugene and Mitchell, John T. and Stehli, Annamarie and Kennedy, Edward H. and Epstein, Jeffery N. and Hechtman, Lily T. and Hinshaw, Stephen P. and Vitiello, Benedetto},
+  year = 2023,
+  month = sep,
+  journal = {JAMA Psychiatry},
+  volume = {80},
+  number = {9},
+  pages = {933--941},
+  issn = {2168-622X},
+  doi = {10.1001/jamapsychiatry.2023.2157},
+  urldate = {2026-03-15},
+  abstract = {Possible associations between stimulant treatment of attention-deficit/hyperactivity disorder (ADHD) and subsequent substance use remain debated and clinically relevant.To assess the association of stimulant treatment of ADHD with subsequent substance use using the Multimodal Treatment Study of ADHD (MTA), which provides a unique opportunity to test this association while addressing methodologic complexities (principally, multiple dynamic confounding variables).MTA was a multisite study initiated at 6 sites in the US and 1 in Canada as a 14-month randomized clinical trial of medication and behavior therapy for ADHD but transitioned to a longitudinal observational study. Participants were recruited between 1994 and 1996. Multi-informant assessments included comprehensively assessed demographic, clinical (including substance use), and treatment (including stimulant treatment) variables. Children aged 7 to 9 years with rigorously diagnosed DSM-IV combined-type ADHD were repeatedly assessed until a mean age of 25 years. Analysis took place between April 2018 and February 2023.Stimulant treatment of ADHD was measured prospectively from baseline for 16 years (10 assessments) initially using parent report followed by young adult report.Frequency of heavy drinking, marijuana use, daily cigarette smoking, and other substance use were confidentially self-reported with a standardized substance use questionnaire.A total of 579 children (mean [SD] age at baseline, 8.5 [0.8] years; 465 [80\%] male) were analyzed. Generalized multilevel linear models showed no evidence that current (B [SE] range, -0.62 [0.55] to 0.34 [0.47]) or prior stimulant treatment (B [SE] range, -0.06 [0.26] to 0.70 [0.37]) or their interaction (B [SE] range, -0.49 [0.70] to 0.86 [0.68]) were associated with substance use after adjusting for developmental trends in substance use and age. Marginal structural models adjusting for dynamic confounding by demographic, clinical, and familial factors revealed no evidence that more years of stimulant treatment (B [SE] range, -0.003 [0.01] to 0.04 [0.02]) or continuous, uninterrupted stimulant treatment (B [SE] range, -0.25 [0.33] to -0.03 [0.10]) were associated with adulthood substance use. Findings were the same for substance use disorder as outcome.This study found no evidence that stimulant treatment was associated with increased or decreased risk for later frequent use of alcohol, marijuana, cigarette smoking, or other substances used for adolescents and young adults with childhood ADHD. These findings do not appear to result from other factors that might drive treatment over time and findings held even after considering opposing age-related trends in stimulant treatment and substance use.}
+}
+
+@article{moodieDemystifyingOptimalDynamic2007,
+  title = {Demystifying {{Optimal Dynamic Treatment Regimes}}},
+  author = {Moodie, Erica E. M. and Richardson, Thomas S. and Stephens, David A.},
+  year = 2007,
+  month = jun,
+  journal = {Biometrics},
+  volume = {63},
+  number = {2},
+  pages = {447--455},
+  issn = {0006-341X},
+  doi = {10.1111/j.1541-0420.2006.00686.x},
+  urldate = {2026-03-13},
+  abstract = {A dynamic regime is a function that takes treatment and covariate history and baseline covariates as inputs and returns a decision to be made. Murphy (2003, Journal of the Royal Statistical Society, Series B ~65, 331--366) and Robins (2004, Proceedings of the Second Seattle Symposium on Biostatistics, 189--326) have proposed models and developed semiparametric methods for making inference about the optimal regime in a multi-interval trial that provide clear advantages over traditional parametric approaches. We show that Murphy's model is a special case of Robins's and that the methods are closely related but not equivalent. Interesting features of the methods are highlighted using the Multicenter AIDS Cohort Study and through simulation.}
+}
+
 @article{mulderCausalEffectsTimeVarying2024,
   title = {Causal {{Effects}} of {{Time-Varying Exposures}}: {{A Comparison}} of {{Structural Equation Modeling}} and {{Marginal Structural Models}} in {{Cross-Lagged Panel Research}}},
   shorttitle = {Causal {{Effects}} of {{Time-Varying Exposures}}},
@@ -491,6 +691,23 @@
   pmid = {29856567}
 }
 
+@article{naimiIntroductionMethods2017,
+  title = {An Introduction to g Methods},
+  author = {Naimi, Ashley I and Cole, Stephen R and Kennedy, Edward H},
+  year = 2017,
+  month = apr,
+  journal = {International Journal of Epidemiology},
+  volume = {46},
+  number = {2},
+  pages = {756--762},
+  issn = {0300-5771},
+  doi = {10.1093/ije/dyw323},
+  urldate = {2026-03-15},
+  abstract = {Robins' generalized methods (g methods) provide consistent estimates of contrasts (e.g. differences, ratios) of potential outcomes under a less restrictive set of identification conditions than do standard regression methods (e.g. linear, logistic, Cox regression). Uptake of g methods by epidemiologists has been hampered by limitations in understanding both conceptual and technical details. We present a simple worked example that illustrates basic concepts, while minimizing technical complications.},
+  pmcid = {PMC6074945},
+  pmid = {28039382}
+}
+
 @article{neugebauerCausalInferenceLongitudinal2007,
   title = {Causal Inference in Longitudinal Studies with History-Restricted Marginal Structural Models},
   author = {Neugebauer, Romain and {van der Laan}, Mark J. and Joffe, Marshall M. and Tager, Ira B.},
@@ -505,6 +722,24 @@
   abstract = {A new class of Marginal Structural Models (MSMs), History-Restricted MSMs (HRMSMs), was recently introduced for longitudinal data for the purpose of defining causal parameters which may often be better suited for public health research or at least more practicable than MSMs (, ). HRMSMs allow investigators to analyze the causal effect of a treatment on an outcome based on a fixed, shorter and user-specified history of exposure compared to MSMs. By default, the latter represent the treatment causal effect of interest based on a treatment history defined by the treatments assigned between the study's start and outcome collection. We lay out in this article the formal statistical framework behind HRMSMs. Beyond allowing a more flexible causal analysis, HRMSMs improve computational tractability and mitigate statistical power concerns when designing longitudinal studies. We also develop three consistent estimators of HRMSM parameters under sufficient model assumptions: the Inverse Probability of Treatment Weighted (IPTW), G-computation and Double Robust (DR) estimators. In addition, we show that the assumptions commonly adopted for identification and consistent estimation of MSM parameters (existence of counterfactuals, consistency, time-ordering and sequential randomization assumptions) also lead to identification and consistent estimation of HRMSM parameters.},
   pmcid = {PMC3475192},
   pmid = {23087778}
+}
+
+@article{neugebauerCausalInferenceLongitudinal2007a,
+  title = {Causal Inference in Longitudinal Studies with History-Restricted Marginal Structural Models},
+  author = {Neugebauer, Romain and van der Laan, Mark J. and Joffe, Marshall M. and Tager, Ira B.},
+  year = 2007,
+  month = jan,
+  journal = {Electronic Journal of Statistics},
+  volume = {1},
+  number = {none},
+  eprint = {0705.1270},
+  primaryclass = {math},
+  issn = {1935-7524},
+  doi = {10.1214/07-EJS050},
+  urldate = {2026-03-13},
+  abstract = {A new class of Marginal Structural Models (MSMs), History-Restricted MSMs (HRMSMs), was recently introduced for longitudinal data for the purpose of defining causal parameters which may often be better suited for public health research or at least more practicable than MSMs \textbackslash citejoffe,feldman. HRMSMs allow investigators to analyze the causal effect of a treatment on an outcome based on a fixed, shorter and user-specified history of exposure compared to MSMs. By default, the latter represent the treatment causal effect of interest based on a treatment history defined by the treatments assigned between the study's start and outcome collection. We lay out in this article the formal statistical framework behind HRMSMs. Beyond allowing a more flexible causal analysis, HRMSMs improve computational tractability and mitigate statistical power concerns when designing longitudinal studies. We also develop three consistent estimators of HRMSM parameters under sufficient model assumptions: the Inverse Probability of Treatment Weighted (IPTW), G-computation and Double Robust (DR) estimators. In addition, we show that the assumptions commonly adopted for identification and consistent estimation of MSM parameters (existence of counterfactuals, consistency, time-ordering and sequential randomization assumptions) also lead to identification and consistent estimation of HRMSM parameters.},
+  archiveprefix = {arXiv},
+  keywords = {Mathematics - Statistics Theory,Statistics - Methodology}
 }
 
 @article{parzenGeneralizedLinearMixed2011,
@@ -659,6 +894,22 @@
   pmid = {36377538}
 }
 
+@article{snowdenImplementationGComputationSimulated2011,
+  title = {Implementation of {{G-Computation}} on a {{Simulated Data Set}}: {{Demonstration}} of a {{Causal Inference Technique}}},
+  shorttitle = {Implementation of {{G-Computation}} on a {{Simulated Data Set}}},
+  author = {Snowden, Jonathan M. and Rose, Sherri and Mortimer, Kathleen M.},
+  year = 2011,
+  month = apr,
+  journal = {American Journal of Epidemiology},
+  volume = {173},
+  number = {7},
+  pages = {731--738},
+  issn = {0002-9262},
+  doi = {10.1093/aje/kwq472},
+  urldate = {2026-03-15},
+  abstract = {The growing body of work in the epidemiology literature focused on G-computation includes theoretical explanations of the method but very few simulations or examples of application. The small number of G-computation analyses in the epidemiology literature relative to other causal inference approaches may be partially due to a lack of didactic explanations of the method targeted toward an epidemiology audience. The authors provide a step-by-step demonstration of G-computation that is intended to familiarize the reader with this procedure. The authors simulate a data set and then demonstrate both G-computation and traditional regression to draw connections and illustrate contrasts between their implementation and interpretation relative to the truth of the simulation protocol. A marginal structural model is used for effect estimation in the G-computation example. The authors conclude by answering a series of questions to emphasize the key characteristics of causal inference techniques and the G-computation procedure in particular.}
+}
+
 @article{tanSensitivityModelsBounds2025,
   title = {Sensitivity Models and Bounds under Sequential Unmeasured Confounding in Longitudinal Studies},
   author = {TAN, {\relax ZHIQIANG}},
@@ -687,6 +938,23 @@
   doi = {10.48550/arXiv.2009.10982},
   urldate = {2026-03-07},
   abstract = {A standard assumption for causal inference from observational data is that one has measured a sufficiently rich set of covariates to ensure that within covariate strata, subjects are exchangeable across observed treatment values. Skepticism about the exchangeability assumption in observational studies is often warranted because it hinges on investigators' ability to accurately measure covariates capturing all potential sources of confounding. Realistically, confounding mechanisms can rarely if ever, be learned with certainty from measured covariates. One can therefore only ever hope that covariate measurements are at best proxies of true underlying confounding mechanisms operating in an observational study, thus invalidating causal claims made on basis of standard exchangeability conditions. Causal learning from proxies is a challenging inverse problem which has to date remained unresolved. In this paper, we introduce a formal potential outcome framework for proximal causal learning, which while explicitly acknowledging covariate measurements as imperfect proxies of confounding mechanisms, offers an opportunity to learn about causal effects in settings where exchangeability on the basis of measured covariates fails. Sufficient conditions for nonparametric identification are given, leading to the proximal g-formula and corresponding proximal g-computation algorithm for estimation. These may be viewed as generalizations of Robins' foundational g-formula and g-computation algorithm, which account explicitly for bias due to unmeasured confounding. Both point treatment and time-varying treatment settings are considered, and an application of proximal g-computation of causal effects is given for illustration.},
+  archiveprefix = {arXiv},
+  keywords = {Statistics - Methodology}
+}
+
+@misc{tchetgenMarginalStructuralModels2018,
+  title = {Marginal {{Structural Models}} for {{Time-varying Endogenous Treatments}}: {{A Time-Varying Instrumental Variable Approach}}},
+  shorttitle = {Marginal {{Structural Models}} for {{Time-varying Endogenous Treatments}}},
+  author = {Tchetgen, Eric J. Tchetgen and Michael, Haben and Cui, Yifan},
+  year = 2018,
+  month = sep,
+  number = {arXiv:1809.05422},
+  eprint = {1809.05422},
+  primaryclass = {stat},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.1809.05422},
+  urldate = {2026-03-13},
+  abstract = {Robins (1998) introduced marginal structural models (MSMs), a general class of counterfactual models for the joint effects of time-varying treatment regimes in complex longitudinal studies subject to time-varying confounding. He established identification of MSM parameters under a sequential randomization assumption (SRA), which essentially rules out unmeasured confounding of treatment assignment over time. In this technical report, we consider sufficient conditions for identification of MSM parameters with the aid of a time-varying instrumental variable, when sequential randomization fails to hold due to unmeasured confounding. Our identification conditions essentially require that no unobserved confounder predicts compliance type for the time-varying treatment, the longitudinal generalization of the identifying condition of Wang and Tchetgen Tchetgen (2018). Under this assumption, We derive a large class of semiparametric estimators that extends standard inverse-probability weighting (IPW), the most popular approach for estimating MSMs under SRA, by incorporating the time-varying IV through a modified set of weights. The set of influence functions for MSM parameters is derived under a semiparametric model with sole restriction on observed data distribution given by the MSM, and is shown to provide a rich class of multiply robust estimators, including a local semiparametric efficient estimator.},
   archiveprefix = {arXiv},
   keywords = {Statistics - Methodology}
 }
