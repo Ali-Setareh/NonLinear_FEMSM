@@ -179,7 +179,34 @@ Moreover, any function of the past treatment history can be used in the numerato
 
 \section{Time-invariant unmeasured confounding in longitudinal studies}
 \subsection{Fixed-effects approaches}
-\cite{imaiWhenShouldWe2019} -> \cite{blackwellEffectPoliticalAdvertising2024} 
+Using fixed-effect regression to adjust for unmeasured time-invariant confounders is a common approach in 
+longitudinal data analysis \cite{imaiWhenShouldWe2019}. The idea is to include an individual-specific intercept 
+in the outcome model and estimate the model using the within-individual variation over time. The simplest 
+version of this approach when there is no time-varying confounder is to fit a linear model of the form
+$$Y_{it} = \alpha_i + \beta A_{it} + \epsilon_{it},$$
+with $\alpha_i$ being the individual-specific intercept that captures the effect of any 
+unmeasured time-invariant confounder in an additive form. 
+
+Although these models can adjust for unmeasured time-invariant confounders, They have 
+several shortcomings. They are primaarily designed for settings with repeated measures of the outcome, 
+and they are not directly applicable to settings with a single terminal outcome. Depending on the 
+context, this can be a significant limitation, as many longitudinal studies are interested in the effect of treatments on a final outcome measured at the end of the study. 
+More importantly even when there are repeated measures of the outcome, the causal structures in which 
+fixed-effect regression can be used to adjust for unmeasured confounding to get valid estimates of causal effects are limited. Specifically, 
+they can only be used when there is no treatment-confounder feedback. Another important drawback 
+of fixed-effect regression is their inability to target the average potential outcome under a specific treatment regime, which is often of interest in longitudinal studies. Instead, 
+they target average sprantaneous effect of the current treatment on the current outcome, i.e. $\mathbb{E}[Y_{it}(A_{it}=1) - Y_{it}(A_{it}=0)]$, which is not a well-defined causal estimand in the presence of treatment-confounder feedback. 
+The causal assumptions 
+required implicitly by the fixed-effect regression is discussed in detail in \cite{imaiWhenShouldWe2019}. 
+
+In contrast, MSMs can target the average potential outcome under a full treatment regime while allowing for complex
+causal paths. However, they cannot adjust for unmeasured confounding. 
+The FE-MSM proposed by \cite{blackwellEffectPoliticalAdvertising2024} can be best understood as a hybrid of these approaches. The novelty 
+FE-MSM is that instead of considering a fixed-effect in the outcome model, 
+it considers a fixed-effect in the propensity score model. This allows the method 
+to adjust for unmeasured time-invariant confounders wihtout relying on repeated outcome measures, 
+while still benefiting from the ability of MSMs to adjust for all sorts of causal dynamics including treatment-confounder feedback.  
+However, this comes at the cost of targeting the average potential outcome under truncated treatment interventions instead of the full treatment regimes.
 \subsection{Deconfounder theory and sequential deconfounding}
 
 \begin{figure}[htbp]
