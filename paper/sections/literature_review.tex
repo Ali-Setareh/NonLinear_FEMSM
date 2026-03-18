@@ -1,7 +1,7 @@
 \chapter{Background and related work}
 \label{chap:literature_review}
 
-Methods for longitudinal causal inference can be organized along two main dimensions: 
+Methods for observational longitudinal causal inference can be organized along two main dimensions: 
 the structure of the causal diagram and the causal target of interest. 
 The structure of the causal setting is typically represented by a directed acyclic graph (DAG) 
 that encodes the assumptions about the data generating process and the causal relationships 
@@ -23,8 +23,8 @@ In this framework, the potential outcome of individual $i$ is defined as $Y_i(a)
 the treatment $A$ were set to a specific value $a$. Note the difference between the observed outcome $Y_i$ and the 
 potential outcome $Y_i(a)$ which is an unobserved variable, 
 as we can only observe the outcome under the treatment that was actually assigned to. Similarly, in the longitudinal setting, we can define the potential outcome at time $t$ for a 
-static\footnote{The static here is to contrast with a 
-dynamic treatment regime, where treatments depends on the values of the confounders \cite{moodieDemystifyingOptimalDynamic2007}. In this thesis we only consider static treatment regimes.} treatment regime 
+static treatment regime\footnote{The static here is to contrast with a 
+dynamic treatment regime, where treatments depends on the values of the confounders \cite{moodieDemystifyingOptimalDynamic2007}. In this thesis we only consider static treatment regimes.} 
 $\bar{a}_t = (a_1, a_2, \ldots, a_t)$ as $Y_{i,t+1}(\bar{a}_t)$, 
 representing the outcome that would be observed if the treatment were set to specific values at each 
 time point. In single terminal outcome setting, it is common to drop the time index on the potential outcome and simply write $Y_i(\bar{a}_T)$ to represent the potential outcome at the end of the study under treatment regime $\bar{a}_T$. 
@@ -62,21 +62,120 @@ of particular interest as it can be used to construct various causal contrasts b
 For example, the average causal effect of taking a binary treatment at all time points compared to not 
 taking the treatment at all time points can be defined as $\mathbb{E}[Y_i(\bar{1}_T) - Y_i(\bar{0}_T)]$.
 
-\paragraph{Identification under sequential ignorability.}
+\paragraph{G-methods.}
 There are well-established methods to identify and estimate $\mathbb{E}[Y_i(\bar{a}_T)]$, 
-when treatment-confounder feedback is present. 
-These methods—known as the g-methods—include the 
-g-formula \cite{keilParametricGformulaTimetoevent2014,snowdenImplementationGComputationSimulated2011}, 
-marginal structural models (MSMs) \cite{robinsMarginalStructuralModels2000, shinozakiUnderstandingMarginalStructural2020}, 
-and structural nested models (SNMs) ~\mbox{\cite{vansteelandtStructuralNestedModels2014}}. They all 
-rely on the assumption of sequential ignorability, which states that there are no unmeasured confounders 
-at each time point. More formally, sequential ignorability can be expressed 
-as $Y_i(\bar{a}_T) \perp A_{i,t} | \bar{A}_{i,t-1}, \bar{X}_{i,t}$ for all $t \in \{1, \ldots, T\}$ , which means that the 
-potential outcome is independent of the treatment at time $t$ given the past treatment and confounder history. 
-This assumption is strong and often violated in observational settings, 
+when treatment-confounder feedback is present. The g-formula and marginal structural models (MSMs) are 
+two members of the Robins' g-methods family that aim directly at this causal target 
+\cite{robinsMarginalStructuralModels2000, shinozakiUnderstandingMarginalStructural2020, snowdenImplementationGComputationSimulated2011}.
+While g-formula gives the full map $
+\bar{a} \mapsto \mathbb{E}\!\left[Y_i(\bar{a})\right]$ for all possible treatment regimes, MSMs are 
+an imposed model on $\mathbb{E}\!\left[Y_i(\bar{a})\right]$. This is particularly 
+useful when the number of time points in a study is large and the number of possible treatment regimes grows 
+exponentially. If we have a binary treatment at each time point, then there are $2^T$ 
+possible treatment regimes. This means for $T=10$ time points, there are already 1024 possible 
+treatment regimes. And the problem becomes even more severe when the treatment is not binary. 
+
+\paragraph{Identification under sequential ignorability.}
+These methods are relying on the assumptions of sequential ignorability for identification, which 
+states that there are no unmeasured confounders at each time point.  More formally, 
+sequential ignorability can be expressed as 
+
+\begin{equation}
+    \label{eq:seq-ignorability}
+Y_i(\bar{a}_T) \perp A_{it} | \bar{A}_{it-1}, \bar{X}_{it} \quad \text{for all } t \in \{1, \ldots, T\},
+\end{equation}
+
+which means that the potential outcome is independent of the treatment at time $t$ given the past treatment and confounder history. 
+This assumption is strong and often violated in observational settings. For instance, 
+in electronic health record data, the socio-economic status of patients is often 
+an important confounder that affects both the treatment decisions and the health 
+outcomes, but it is often not measured in the data. For this reason, the 
+standard methods may not be valid in many real-world applications,
 which motivates the need for methods that can address unmeasured confounding in longitudinal data.
 
+%Since both of the methods compared in this thesis are used in conjunction with MSMs, 
+%we will review the literature on MSMs the following section.
 \section{Marginal structural models}
+MSMs are models for average potential outcomes under different treatment regimes. 
+Although these models can 
+be nonparametric \cite{neugebauerNonparametricCausalEffects2007}, they are often specified as a 
+parametric model for $\mathbb{E}[Y_i(\bar{a}_T)]$:
+$$\mathbb{E}[Y_i(\bar{a}_T)] = m(\bar{a}_T; \beta_0)$$
+where we use $\beta_0$ to denote the set of true parameters. These models are called marginal 
+structural models because they model the mean of the marginal distribution of the potential outcomes, 
+rather than the usual conditional mean of the observed outcomes given the treatments and 
+confounders, i.e., $\mathbb{E}[Y_i|\bar{A}_T, \bar{X}_T]$, used in association studies. 
+A common example of a MSM is 
+the linear model $$\mathbb{E}[Y_i(\bar{a}_T)] = m(\bar{a}_T; \beta) = \beta_1 + \beta_2 \sum_{t=1}^{T} a_t.$$ 
+Unlike the pure association models, the parameters of MSMs have a causal interpretation. In the above linear MSM, 
+$\beta_1$ is the expected outcome when no treatment is given at any time point, 
+and $\beta_2$ represents the average causal effect of recieving one more treatment at any time point on the expected outcome.
+
+MSMs paramters are often estimated using inverse probability of treatment weighting (IPTW) 
+\cite{robinsMarginalStructuralModels2000}. 
+IPTW creates a pseudo-population in which the treatment assignment is exagenous 
+while preserving the causal effect of $\bar{A}$ on $Y$. 
+In this pseudo-population, the parameters of the MSM can be estimated using standard regression methods. The 
+way IPTW works is by weighting each observation by the inverse of the 
+probability of receiving the treatment that they actually received, 
+given their past treatment and confounder history. Let $\pi_{it} = \mathbb{P}(A_{it} = 1 | \bar{A}_{it-1}, \bar{X}_{it})$ be 
+the true probability of receiving the treatment at time $t$ given the past treatment (propensity score) and confounder history for individual $i$. 
+Then the IPTW weight for individual $i$ is defined as 
+$w_{i} = \prod_{t=1}^{T} \pi_{it}^{-A_{it}} (1-\pi_{it})^{-(1-A_{it})}$. Using 
+these weights, \cite{robinsAssociationCausationMarginal1999} showed that 
+
+\begin{equation}
+    \label{eq:ipw-identification}
+\mathbb{E}\!\left[\mathbf{1}\{\bar A_{iT}=\bar a_T\}W_iY_i\right]=m(\bar a_T,\beta_0).
+\end{equation}
+
+In observational studies, the true probabilities $\pi_{it}$ are unknown and need to be 
+estimated from the data. This is typically done by fitting a parametric model for the 
+treatment assignment mechanism. Let $\pi_{it}(\bar{a}_{t-1}, \bar{x}_{t}; \theta_0) = \mathbb{P}(A_{it} = 1 | \bar{A}_{it-1}, \bar{X}_{it})$ be a 
+parametrization of the treatment assignment mechanism, where $\theta_0$ is the true parameter. Then the 
+estimated propensity scores are $\hat{\pi}_{it} = \pi_{it}(\bar{A}_{it-1}, \bar{X}_{it}; \hat{\theta})$ where $\hat{\theta}$ is the maximum likelihood estimate of $\theta_0$.
+Then the estimated IPTW weights are defined as 
+\begin{equation}
+    \label{eq:ipw-weights}
+\hat{w}_{i} = \prod_{t=1}^{T} \hat{\pi}_{it}^{-A_{it}} (1-\hat{\pi}_{it})^{-(1-A_{it})}, 
+\end{equation}
+where $\hat{\theta}$ is the maximum likelihood estimate of $\theta_0$. Once the weights are estimated, the IPTW estimator of MSM can be obtained by solving emperical version of the following equation:
+
+\begin{equation}
+    \label{eq:ipw-estimation}
+\mathbb{E}\left\{\hat{w}_i\, h\!\left(\bar{A}_{i,T}\right)\left(Y_i - m\!\left(\bar{A}_{i,T};\beta\right)\right)\right\}=0,
+\end{equation}
+where $h(\cdot)$ is a researcher-chosen vector valued function of the treatment history with dimensionality of  
+$1 \times \dim(\beta)$. If $h(\cdot)$ 
+is chosen to be the identity function and the MSM is specified as a linear model, 
+then the above estimating equation reduces to a weighted least squares problem.
+
+If the estimated propensity scores be close to zero or one, the IPTW weights can become 
+very large, which can lead to unstable estimates. To mitigate this issue, stabilized weights 
+are often used, which are defined as 
+
+\begin{equation}
+    \label{eq:stabilized-weights}
+\widehat{sw}_i
+=
+\prod_{t=1}^{T}
+\frac{
+\hat{\bar{\pi}}_{it}^{A_{it}}\left(1-\hat{\bar{\pi}}_{it}\right)^{1-A_{it}}
+}{
+\hat{\pi}_{it}^{A_{it}}\left(1-\hat{\pi}_{it}\right)^{1-A_{it}}
+}.
+\end{equation}
+In this equation, ${\hat{\bar{\pi}}}_{it}$ is the estimated 
+reduced propensity score, which is the probability of 
+receiving the treatment at time $t$ given only the past treatment history:
+$
+\mathbb{P}(A_{it} = 1 | \bar{A}_{it-1}).
+$
+
+The consistency of the IPTW estimator relies on the correct 
+specification of the treatment assignment model which is used in the denominator of the stabilized weights. 
+The numerator of the stabilized weights is only used to improve the finite sample performance of the estimator, but the misspecification of it does not affect the consistency. 
+Moreover, any function of the past treatment history can be used in the numerator as long as it is not a function of the confounders \cite{robinsMarginalStructuralModels2000a}.
 
 \section{Time-invariant unmeasured confounding in longitudinal studies}
 \subsection{Fixed-effects approaches}

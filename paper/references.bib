@@ -321,6 +321,19 @@
   langid = {american}
 }
 
+@article{grimmerNaiveRegressionRequires2023,
+  title = {Naive Regression Requires Weaker Assumptions than Factor Models to Adjust for Multiple Cause Confounding},
+  author = {Grimmer, Justin and Knox, Dean and Stewart, Brandon},
+  year = 2023,
+  journal = {Journal of Machine Learning Research},
+  volume = {24},
+  number = {182},
+  pages = {1--70},
+  issn = {1533-7928},
+  urldate = {2026-03-16},
+  abstract = {The empirical practice of using factor models to adjust for shared, unobserved confounders, ZZ\textbackslash boldsymbol\textbraceleft Z\textbraceright, in observational settings with multiple treatments, AA\textbackslash boldsymbol\textbraceleft A\textbraceright, is widespread in fields including genetics, networks, medicine, and politics. Wang and Blei (2019, WB) generalize these procedures to develop the ``deconfounder,'' a causal inference method using factor models of AA\textbackslash boldsymbol\textbraceleft A\textbraceright{} to estimate ``substitute confounders,'' Z\textasciicircum Z\textasciicircum\textbackslash widehat\textbraceleft\textbackslash boldsymbol\textbraceleft Z\textbraceright\textbraceright, then estimating treatment effects---regressing the outcome, YY\textbackslash boldsymbol\textbraceleft Y\textbraceright, on part of AA\textbackslash boldsymbol\textbraceleft A\textbraceright{} while adjusting for Z\textasciicircum Z\textasciicircum\textbackslash widehat\textbraceleft\textbackslash boldsymbol\textbraceleft Z\textbraceright\textbraceright. WB claim the deconfounder is unbiased when (among other assumptions) there are no single-cause confounders and Z\textasciicircum Z\textasciicircum\textbackslash widehat\textbraceleft\textbackslash boldsymbol\textbraceleft Z\textbraceright\textbraceright{} is ``pinpointed.'' We clarify pinpointing requires each confounder to affect infinitely many treatments. We prove that when the conditions hold for the deconfounder to be asymptotically unbiased, a naive semiparametric regression of YY\textbackslash boldsymbol\textbraceleft Y\textbraceright{} on AA\textbackslash boldsymbol\textbraceleft A\textbraceright{} which ignores confounding is also asymptotically unbiased. We provide bias formulas for finite numbers of treatments and show that different deconfounders exhibit different kinds of bias. We replicate every deconfounder analysis with available data and find that neither the naive regression nor the deconfounder consistently outperform the other. In practice, the deconfounder produces implausible estimates in WB's case study of movie earnings: estimates suggest comic author Stan Lee's cameo appearances causally contributed \$15.5 billion, most of Marvel movie revenue. We conclude neither approach is a viable substitute for careful research design in real-world applications.}
+}
+
 @article{hamakerFrontiersModelingIntensive2018,
   title = {At the {{Frontiers}} of {{Modeling Intensive Longitudinal Data}}: {{Dynamic Structural Equation Models}} for the {{Affective Measurements}} from the {{COGITO Study}}},
   shorttitle = {At the {{Frontiers}} of {{Modeling Intensive Longitudinal Data}}},
@@ -776,6 +789,22 @@
   keywords = {Mathematics - Statistics Theory,Statistics - Methodology}
 }
 
+@article{neugebauerNonparametricCausalEffects2007,
+  title = {Nonparametric Causal Effects Based on Marginal Structural Models},
+  author = {Neugebauer, Romain and {van der Laan}, Mark},
+  year = 2007,
+  month = feb,
+  journal = {Journal of Statistical Planning and Inference},
+  volume = {137},
+  number = {2},
+  pages = {419--434},
+  issn = {0378-3758},
+  doi = {10.1016/j.jspi.2005.12.008},
+  urldate = {2026-03-17},
+  abstract = {A parametric marginal structural model (PMSM) approach to Causal Inference has been favored since the introduction of MSMs by Robins [1998a. Marginal structural models. In: 1997 Proceedings of the American Statistical Association. American Statistical Association, Alexandria, VA, pp. 1--10]. We propose an alternative, nonparametric MSM (NPMSM) approach that extends the definition of causal parameters of interest and causal effects. This approach is appealing in practice as it does not require correct specification of a parametric model but instead relies on a working model which can be willingly misspecified. We propose a methodology for longitudinal data to generate and estimate so-called NPMSM parameters describing so-called nonparametric causal effects and provide insight on how to interpret these parameters causally in practice. Results are illustrated with a point treatment simulation study. The proposed NPMSM approach to Causal Inference is compared to the more typical PMSM approach and we contribute to the general understanding of PMSM estimation by addressing the issue of PMSM misspecification.},
+  keywords = {Causality,Locally efficient estimation,Longitudinal data,Marginal structural model,Nonparametric}
+}
+
 @article{parzenGeneralizedLinearMixed2011,
   title = {A Generalized Linear Mixed Model for Longitudinal Binary Data with a Marginal Logit Link Function},
   author = {Parzen, Michael and Ghosh, Souparno and Lipsitz, Stuart and Sinha, Debajyoti and Fitzmaurice, Garrett M. and Mallick, Bani K. and Ibrahim, Joseph G.},
@@ -893,6 +922,23 @@
   issn = {1044-3983},
   doi = {10.1097/00001648-200009000-00011},
   urldate = {2026-02-25},
+  langid = {english}
+}
+
+@incollection{robinsMarginalStructuralModels2000a,
+  title = {Marginal {{Structural Models}} versus {{Structural}} Nested {{Models}} as {{Tools}} for {{Causal}} Inference},
+  booktitle = {Statistical {{Models}} in {{Epidemiology}}, the {{Environment}}, and {{Clinical Trials}}},
+  author = {Robins, James M.},
+  editor = {Miller, Willard and Halloran, M. Elizabeth and Berry, Donald},
+  year = 2000,
+  volume = {116},
+  pages = {95--133},
+  publisher = {Springer New York},
+  address = {New York, NY},
+  doi = {10.1007/978-1-4612-1284-3_2},
+  urldate = {2026-03-18},
+  abstract = {Robins (1993, 1994, 1997, 1998ab) has developed a set of causal or counterfactual models, the structural nested models (SNMs). This paper describes an alternative new class of causal modelsthe (non-nested) marginal structural models (MSMs). We will then describe a class of semiparametric estimators for the parameters of these new models under a sequential randomization (i.e., ignorability) assumption. We then compare the strengths and weaknesses of MSMs versus SNMs for causal inference from complex longitudinal data with time-dependent treatments and confounders. Our results provide an extension to continuous treatments of propensity score estimators of an average treatment effect.},
+  isbn = {978-1-4612-7078-2 978-1-4612-1284-3},
   langid = {english}
 }
 
