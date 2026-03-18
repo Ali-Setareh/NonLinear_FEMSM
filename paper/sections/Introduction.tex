@@ -25,7 +25,7 @@ inference increasingly important \cite{myin-germeysExperienceSamplingMethodology
 Estimating causal effects in longitudinal settings with time-varying treatments and confounders is 
 particularly challenging due to the presence of treatment-confounder feedback, where treatments at 
 previous time points can affect confounders at subsequent time points, which in turn can affect future 
-treatments and outcome(s). In presence of such feedback loops, naive standard regression methods that 
+treatments and outcome. In presence of such feedback loops, naive standard regression methods that 
 adjust for 
 post-treatment confounders at each time point can produce biased estimates of causal effects. %\cite{hernanCausalInferenceWhat2023booksection}
 To address this issue, a family of methods known as the g-methods have been developed \cite{robinsEstimationCausalEffects2008, naimiIntroductionMethods2017}. 
@@ -50,9 +50,11 @@ which combines the marginal structural model (MSM)
 is the sequential Gaussian process latent variable model (SeqGPLVM) introduced by 
 \cite{hattSequentialDeconfoundingCausal2024}. This method may be interpreted as the 
 sequential extension of the deconfounder method of 
-\cite{wangBlessingsMultipleCauses2019} where 
-a latent variable is used to estimate a statistically sufficient substitute for the unmeasured confounders. This allows the method to retain the sequential ignorability 
-assumption to estimate any causal target of interest in a downstream analysis.
+\cite{wangBlessingsMultipleCauses2019}.
+
+%where 
+%a latent variable is used to estimate a statistically sufficient substitute for the unmeasured confounders. This allows the method to retain the sequential ignorability 
+%assumption to estimate any causal target of interest in a downstream analysis.
 
 These two methods are comparable as they can be used in settings such as those described above. They both involve a 
 unit-specific constant unobserved heterogeneity component that is supposed to 
