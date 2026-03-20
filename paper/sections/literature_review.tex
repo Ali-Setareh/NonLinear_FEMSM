@@ -178,6 +178,7 @@ The numerator of the stabilized weights is only used to improve the finite sampl
 Moreover, any function of the past treatment history can be used in the numerator as long as it is not a function of the confounders \cite{robinsMarginalStructuralModels2000a}.
 
 \section{Time-invariant unmeasured confounding in longitudinal studies}
+
 \subsection{Fixed-effects approaches}
 Using fixed-effect regression to adjust for unmeasured time-invariant confounders is a common approach in 
 longitudinal data analysis \cite{imaiWhenShouldWe2019}. The idea is to include an individual-specific intercept 
@@ -195,20 +196,101 @@ More importantly even when there are repeated measures of the outcome, the causa
 fixed-effect regression can be used to adjust for unmeasured confounding to get valid estimates of causal effects are limited. Specifically, 
 they can only be used when there is no treatment-confounder feedback. Another important drawback 
 of fixed-effect regression is their inability to target the average potential outcome under a specific treatment regime, which is often of interest in longitudinal studies. Instead, 
-they target average sprantaneous effect of the current treatment on the current outcome, i.e. $\mathbb{E}[Y_{it}(A_{it}=1) - Y_{it}(A_{it}=0)]$, which is not a well-defined causal estimand in the presence of treatment-confounder feedback. 
+they target average sprantaneous effect of the current treatment on the current outcome, i.e. $\mathbb{E}[Y_{it}(A_{it}=1) - Y_{it}(A_{it}=0)]$. 
 The causal assumptions 
 required implicitly by the fixed-effect regression is discussed in detail in \cite{imaiWhenShouldWe2019}. 
 
 In contrast, MSMs can target the average potential outcome under a full treatment regime while allowing for complex
 causal paths. However, they cannot adjust for unmeasured confounding. 
-The FE-MSM proposed by \cite{blackwellEffectPoliticalAdvertising2024} can be best understood as a hybrid of these approaches. The novelty 
-FE-MSM is that instead of considering a fixed-effect in the outcome model, 
-it considers a fixed-effect in the propensity score model. This allows the method 
+The FE-MSM proposed by \cite{blackwellEffectPoliticalAdvertising2024} can be best understood as a 
+hybrid of these approaches. TThe novelty of FE-MSM comes from its use of a fixed-effect in 
+the propensity score model as opposed to the outcome model. This allows the method 
 to adjust for unmeasured time-invariant confounders wihtout relying on repeated outcome measures, 
-while still benefiting from the ability of MSMs to adjust for all sorts of causal dynamics including treatment-confounder feedback.  
-However, this comes at the cost of targeting the average potential outcome under truncated treatment interventions instead of the full treatment regimes.
+while still benefiting from the ability of MSMs to adjust for all sorts of causal dynamics 
+including treatment-confounder feedback.  
+However, this comes at the cost of targeting the average potential outcome under truncated treatment 
+interventions instead of the full treatment regimes.
 
 \subsection{Deconfounder theory and sequential deconfounding}
+Another approach to address time-invariant unmeasured confounding is based on the 
+deconfounder theory proposed by \cite{wangBlessingsMultipleCauses2019}. This method is 
+devised for static settings with multiple treatments. The key idea is that if there is 
+a a true structural unobserved confounder vector $U$ that affects multiple treatments, then it leaves a 
+statistical signature in the observed treatments by inducing conditional independence 
+between the treatments: 
+$$p(A_{i1}, A_{i2}, \ldots, A_{iM}\mid U_i, X_i) =  \prod_{j=1}^{M} p(A_{ij}\mid U_i, X_i)$$
+Moreover, if $U_i$ was observed, then the strong ignorability assumption would hold:
+$$Y_i(\bar{a}_M) \perp (A_{i1}, A_{i2}, \ldots, A_{iM}) | U_i, X_i$$
+where $M$ is the number of treatments, $A_{ij}$ is the $j$-th treatment for 
+individual $i$, and $X_i$ is the observed covariate vector. 
+
+The deconfounder recepie is then to fit a latent factor model of the assigned 
+treatments which renders the same treatment conditional independance structure as the true unobserved confounder $U$ by substituting the latent variable $Z$ instead: 
+$$p_{\Theta}(A_{i1}, A_{i2}, \ldots, A_{iM}\mid Z_i, X_i) = \prod_{i=1}^N \prod_{j=1}^{M} p(A_{ij}\mid Z_i, X_i,\theta_j)$$
+where $\theta_j$ is the treatment-specific parameter. Under the assumptions below and SUTVA,  
+this latent variable $Z$ can be used as a substitute for the unobserved confounder $U$ and to retain the ignorability assumption:
+$$Y_i(\bar{a}_M) \perp (A_{i1}, A_{i2}, \ldots, A_{iM}) | Z_i, X_i$$. 
+\begin{itemize}
+    \item \textbf{Assumption 1: No single-treatment confounder.} There is no 
+    unmeasured confounder that affects only one treatment. 
+    This assumption is also known as single-cause ignorability assumption. 
+    \item \textbf{Assumption 2: Consistency of the substitute confounders.} The latent variable $Z$ is 
+    pinpointed almost surely by a single deterministic function of the observed treatments:
+    $$ P(Z \mid A_1, A_2, \ldots, A_M) = \delta_{f(A_1, A_2, \ldots, A_M)}. $$
+    where $\delta_{f(\cdot)}$ denotes a point mass at $f(\cdot)$. This means that the latent variable 
+    $Z$ is a deterministic function of the observed treatments and it implies the uniquness of the latent variable \cite{wangClarifyingTheoryDeconfounder2020}. 
+    \item \textbf{Assumption 3: Positivity or overlap.} The last $k$ treatments satisfy 
+    overlap, $p(A_{i,(M-k+1):M} = a_{i,(M-k+1):M} | Z_i, X_i) > 0$ for all $a_{i,(M-k+1):M}$ in the support of $A_{i,(M-k+1):M}$ and for some $k \ge 1$.
+    This assumption is needed for identification of the average potential outcome of subsets of the treatments,
+    $\mathbf{E}[Y_i\left(A_{1:M-k}, a_{i,(M-k+1):M}\right)]$. This represents an intervene only on the last 
+    $k$ treatments while keeping the remaining treatments at their observed values.
+\end{itemize}
+
+and use the estimated latent variable as a substitute for the unobserved confounder.
+that captures the shared confounding by fitting a factor model to the 
+observed treatments: 
+
+This means that if we could find a latent variable $Z$ that renders the 
+treatments conditionally independent, 
+then under certain assumptions (below), this latent variable can be used as a 
+substitute for the unobserved confounder $U$ and to retain the ignorability assumption: 
+\begin{equation}
+    \label{eq:deconfounder-ignorability}
+    Y_i(\bar{a}_M) \perp (A_{i1}, A_{i2}, \ldots, A_{iM}) | Z_i, X_i
+\end{equation}
+
+In another word, 
+the deconfounder framework makes a bridge between the latent variable modeling 
+and the causal inference by presenting a set of assumptions under which the latent variable can be used to adjust for unmeasured confounding.
+
+
+and based on the assumption mentioned below, 
+it is possible to estimate a latent variable which conditioning on it along with the observed covariates, 
+renders the treatments independent: 
+\begin{equation}
+    \label{eq:deconfounder-model}
+    p(A_{i1}, A_{i2}, \ldots, A_{iM}) =  \prod_{j=1}^{M} p(A_{ij}|Z_i, X_i),
+\end{equation}
+where $M$ is the number of treatments, $A_{ij}$ is the $j$-th treatment for individual $i$, $X_i$ is the observed 
+covariate vector, and $Z_i$ is the latent variable that captures the shared confounding which can be multi-dimensional.
+
+The deconfounder method relies on the assumption 
+
+
+1
+ and more importantly, it causes the potential 
+outcomes to be independent of the treatments and therefore, the standard methods for 
+causal inference can be applied by adjusting for this latent variable.
+
+what is the important to note is that the this latent variable is not necessarily the structural unobserved confounder itself, 
+but rather a statistically sufficient substitute for the unobserved confounder. Moreover, the \emph{estimated} 
+latent variable is not necessarily the same as the \emph{true} latent variable and it can be a bijective 
+transformation of the true latent variable. What matters that the factor model captures the the dependence structure 
+of the treatments well enough. 
+
+\cite{wangBlessingsMultipleCauses2019}
+\cite{bicaTimeSeriesDeconfounder2020}
+\cite{hattSequentialDeconfoundingCausal2024}
 
 \begin{figure}[htbp]
     \centering
@@ -237,9 +319,7 @@ However, this comes at the cost of targeting the average potential outcome under
     figures can be extended to include observed confounders.}
     \label{fig:combined}
 \end{figure}
-\cite{wangBlessingsMultipleCauses2019}
-\cite{bicaTimeSeriesDeconfounder2020}
-\cite{hattSequentialDeconfoundingCausal2024}
+
 \begin{comment}
     
 
