@@ -1,11 +1,13 @@
-\section{Assumptions}
+\section{Common assumptions}
 \label{sec:assumptions}
 In this work, we categorize the assumptions into three groups: identification assumptions, 
 modeling assumptions, and estimation assumptions. Identification assumptions, 
 are the assumptions which let us write target causal estimands such as 
 $\mathbb{E}[Y_i(\bar{a})]$ in terms of observed data. 
 Based on the identification strategy, certain quantities must be modeled. 
-For example, identifying $\mathbb{E}[Y_i(\bar{a})]$ using IPTW requires 
+For example, identifying $\mathbb{E}[Y_i(\bar{a})]$ using marginal 
+structural models requires modeling the average potential outcome 
+$\mathbb{E}[Y_i(\bar{a})]$ as a function of the treatment history $\bar{a}$, while inverse probability weighting requires
 modeling the propensity scores. Modeling assumptions are about the 
 requirements placed on these models. Finally, 
 different components of the procedure may be estimated using different methods, each requiring its own assumptions.

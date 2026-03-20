@@ -820,6 +820,22 @@
   keywords = {Causality,Locally efficient estimation,Longitudinal data,Marginal structural model,Nonparametric}
 }
 
+@misc{ogburnCommentBlessingsMultiple2019,
+  title = {Comment on "{{Blessings}} of {{Multiple Causes}}"},
+  author = {Ogburn, Elizabeth L. and Shpitser, Ilya and Tchetgen, Eric J. Tchetgen},
+  year = 2019,
+  month = oct,
+  number = {arXiv:1910.05438},
+  eprint = {1910.05438},
+  primaryclass = {stat},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.1910.05438},
+  urldate = {2026-03-20},
+  abstract = {(This comment has been updated to respond to Wang and Blei's rejoinder [arXiv:1910.07320].) The premise of the deconfounder method proposed in "Blessings of Multiple Causes" by Wang and Blei [arXiv:1805.06826], namely that a variable that renders multiple causes conditionally independent also controls for unmeasured multi-cause confounding, is incorrect. This can be seen by noting that no fact about the observed data alone can be informative about ignorability, since ignorability is compatible with any observed data distribution. Methods to control for unmeasured confounding may be valid with additional assumptions in specific settings, but they cannot, in general, provide a checkable approach to causal inference, and they do not, in general, require weaker assumptions than the assumptions that are commonly used for causal inference. While this is outside the scope of this comment, we note that much recent work on applying ideas from latent variable modeling to causal inference problems suffers from similar issues.},
+  archiveprefix = {arXiv},
+  keywords = {Statistics - Machine Learning,Statistics - Methodology}
+}
+
 @article{parzenGeneralizedLinearMixed2011,
   title = {A Generalized Linear Mixed Model for Longitudinal Binary Data with a Marginal Logit Link Function},
   author = {Parzen, Michael and Ghosh, Souparno and Lipsitz, Stuart and Sinha, Debajyoti and Fitzmaurice, Garrett M. and Mallick, Bani K. and Ibrahim, Joseph G.},
@@ -1125,6 +1141,22 @@
   urldate = {2026-02-02},
   abstract = {Causal inference from observational data is a vital problem, but it comes with strong assumptions. Most methods assume that we observe all confounders, variables that affect both the causal variables and the outcome variables. This assumption is standard but it is also untestable. In this article, we develop the deconfounder, a way to do causal inference with weaker assumptions than the traditional methods require. The deconfounder is designed for problems of multiple causal inference: scientific studies that involve multiple causes whose effects are simultaneously of interest. Specifically, the deconfounder combines unsupervised machine learning and predictive model checking to use the dependencies among multiple causes as indirect evidence for some of the unobserved confounders. We develop the deconfounder algorithm, prove that it is unbiased, and show that it requires weaker assumptions than traditional causal inference. We analyze its performance in three types of studies: semi-simulated data around smoking and lung cancer, semi-simulated data around genome-wide association studies, and a real dataset about actors and movie revenue. The deconfounder is an effective approach to estimating causal effects in problems of multiple causal inference. Supplementary materials for this article are available online.},
   keywords = {Causal inference,Machine learning,Probabilistic models,Unconfoundedness,Unobserved confounding}
+}
+
+@article{wangBlessingsMultipleCauses2019a,
+  title = {The {{Blessings}} of {{Multiple Causes}}: {{Rejoinder}}},
+  shorttitle = {The {{Blessings}} of {{Multiple Causes}}},
+  author = {Wang, Yixin and Blei, David M.},
+  year = 2019,
+  month = oct,
+  journal = {Journal of the American Statistical Association},
+  volume = {114},
+  number = {528},
+  pages = {1616--1619},
+  issn = {0162-1459, 1537-274X},
+  doi = {10.1080/01621459.2019.1690841},
+  urldate = {2026-03-20},
+  langid = {english}
 }
 
 @misc{wangClarifyingTheoryDeconfounder2020,
