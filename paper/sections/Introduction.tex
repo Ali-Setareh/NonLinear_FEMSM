@@ -15,12 +15,12 @@ observational data to estimate causal effects, which introduces additional chall
 This thesis focuses on a specific observational longitudinal study design with 
 discrete time points \cite{gillCausalInferenceComplex2001}, which involves
 data with repeated covariate measurements of the same units, a time-varying binary treatment, 
-a terminal outcome at the end of the observation period and a lack of anticipation effects, i.e. 
-where treatments at future points do not impact potential outcomes at the current time point \cite{arkhangelskyCausalModelsLongitudinal2024}. 
+a terminal outcome at the end of the observation period and a lack of anticipation effects, meaning 
+that treatments at future points do not impact potential outcomes at the current time point \cite{arkhangelskyCausalModelsLongitudinal2024}. 
 Instances of such designs can be found in psychology \cite{molinaAssociationStimulantTreatment2023}, sociology \cite{bacakMarginalStructuralModels2015}, and epidemiology \cite{bodnarMarginalStructuralModels2004}. 
 Moreover, the growing availability of intensive longitudinal data through techniques like experience sampling, 
 mobile evaluations, and wearable devices has made methods for longitudinal causal 
-inference increasingly important \cite{myin-germeysExperienceSamplingMethodology2018}.
+inference increasingly important \cite{myin-germeysExperienceSamplingMethodology2018, shiMetalearningMethodEstimation2025a}.
 
 Estimating causal effects in longitudinal settings with time-varying treatments and confounders is 
 particularly challenging due to the presence of treatment-confounder feedback, where treatments at 
@@ -44,13 +44,13 @@ characteristics of individuals during the span of the study.
 Two methods have been proposed in the recent literature to estimate the 
 causal effects of time-varying treatments in the presence of time-invariant 
 unmeasured confounders. The first is the fixed-effect marginal structural model (FE-MSM) 
-proposed by \cite{blackwellEffectPoliticalAdvertising2024}, 
+proposed by \citeA{blackwellEffectPoliticalAdvertising2024}, 
 which combines the marginal structural model (MSM) 
 \cite{robinsMarginalStructuralModels2000} with unit fixed effects. The second method 
 is the sequential Gaussian process latent variable model (SeqGPLVM) introduced by 
-\cite{hattSequentialDeconfoundingCausal2024}. This method may be interpreted as the 
+\citeA{hattSequentialDeconfoundingCausal2024}. This method may be interpreted as the 
 sequential extension of the deconfounder method of 
-\cite{wangBlessingsMultipleCauses2019}.
+\citeA{wangBlessingsMultipleCauses2019}.
 
 %where 
 %a latent variable is used to estimate a statistically sufficient substitute for the unmeasured confounders. This allows the method to retain the sequential ignorability 
@@ -65,8 +65,8 @@ as a frequentist fixed effect and a nuisance parameter which is tied to inverse
 probability of treatment weighting (IPTW) of marginal structural models, 
 the machine-learning-based SeqGPLVM views it as a 
 latent variable and employs a much more flexible and non-parametric approach to 
-estimate these latent variables which then can be employed in a wide range of 
-causal inference methods. As a result, they make different assumptions 
+estimate that latent variable which then can be employed in a wide range of 
+causal inference estimators. As a result, they make different assumptions 
 about the unobserved heterogeneity component, the range of causal targets they can 
 identify and the scope of estimators they can be used with. Despite 
 these similarities and differences, these two methods have not been 
@@ -77,7 +77,7 @@ when one method might be preferred over the other.
 To fill this gap, the current thesis provides a unified presentation of these two 
 methods, highlighting their assumptions with a common notation. The performance of 
 the proposed methods was evaluated through a simulation study using 
-the data generating process suggested in \cite{blackwellEffectPoliticalAdvertising2024}. 
+the data generating process suggested in \citeA{blackwellEffectPoliticalAdvertising2024}. 
 Synthetic datasets were generated for three different ratios of individuals to time 
 points under two different confounding strengths. The estimates obtained from 
 both methods were compared to the true causal effects to assess their bias, 

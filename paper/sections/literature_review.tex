@@ -1,9 +1,9 @@
 \chapter{Background and related work}
 \label{chap:literature_review}
 
-Methods for observational longitudinal causal inference can be organized along two main dimensions: 
-the structure of the causal diagram and the causal target of interest. 
-The structure of the causal setting is typically represented by a directed acyclic graph (DAG) 
+Methods for observational longitudinal causal inference with discrete time points can be organized along two main dimensions: 
+the structure of the causal process and the causal target of interest. 
+The structure of the causal process is typically represented by a directed acyclic graph (DAG) 
 that encodes the assumptions about the data generating process and the causal relationships 
 between the variables \cite{pearlCausalityModelsReasoning2009}. The presence or absence of 
 treatment-confounder feedback 
@@ -27,7 +27,7 @@ static treatment regime\footnote{The static here is to contrast with a
 dynamic treatment regime, where treatments depends on the values of the confounders \cite{moodieDemystifyingOptimalDynamic2007}. In this thesis we only consider static treatment regimes.} 
 $\bar{a}_t = (a_1, a_2, \ldots, a_t)$ as $Y_{i,t+1}(\bar{a}_t)$, 
 representing the outcome that would be observed if the treatment were set to specific values at each 
-time point. In single terminal outcome settings, it is common to drop the time index on the potential outcome and simply write $Y_i(\bar{a}_T)$ to represent the potential outcome at the end of the study under treatment regime $\bar{a}_T$. 
+time point. In single terminal outcome settings with $T$ time points, it is common to drop the time index on the potential outcome and simply write $Y_i(\bar{a}_T)$ to represent the potential outcome at the end of the study under treatment regime $\bar{a}_T$. 
 In a similar way, the 
 potential value of confounders at time $t$ can also be defined as $X_{i,t}(\bar{a}_{t-1})$, 
 representing the value of the confounder at time $t$ that would be observed if the treatment 
@@ -108,7 +108,7 @@ A common example of a MSM is
 the linear model $$\mathbb{E}[Y_i(\bar{a}_T)] = m(\bar{a}_T; \beta) = \beta_1 + \beta_2 \sum_{t=1}^{T} a_t.$$ 
 Unlike the pure association models, the parameters of MSMs have a causal interpretation. In the above linear MSM, 
 $\beta_1$ is the expected outcome when no treatment is given at any time point, 
-and $\beta_2$ represents the average causal effect of recieving one more treatment at any time point on the expected outcome.
+and $\beta_2$ represents the average causal effect of recieving one more treatment on the expected outcome.
 
 MSMs paramters are often estimated using inverse probability of treatment weighting (IPTW) 
 \cite{robinsMarginalStructuralModels2000}. 
@@ -120,8 +120,8 @@ probability of receiving the treatment,
 given their past treatment and confounder history. For binary treatments, let $\pi_{it} = \mathbb{P}(A_{it} = 1 | \bar{A}_{it-1}, \bar{X}_{it})$ be 
 the true probability of receiving the treatment at time $t$ given the past treatment  and confounder history for individual $i$ (the propensity score). 
 Then the IPTW weight for individual $i$ is defined as 
-$w_{i} = \prod_{t=1}^{T} \pi_{it}^{-A_{it}} (1-\pi_{it})^{-(1-A_{it})}$. Using 
-these weights, \cite{robinsAssociationCausationMarginal1999} showed that 
+$W_{i} = \prod_{t=1}^{T} \pi_{it}^{-A_{it}} (1-\pi_{it})^{-(1-A_{it})}$. Using 
+these weights, \citeA{robinsAssociationCausationMarginal1999} showed that 
 
 \begin{equation}
     \label{eq:ipw-identification}
@@ -136,13 +136,13 @@ estimated propensity scores are then given by $\hat{\pi}_{it} = \pi_{it}(\bar{A}
 The estimated IPTW weights are
 \begin{equation}
     \label{eq:ipw-weights}
-\hat{w}_{i} = \prod_{t=1}^{T} \hat{\pi}_{it}^{-A_{it}} (1-\hat{\pi}_{it})^{-(1-A_{it})}, 
+\widehat{W}_{i} = \prod_{t=1}^{T} \hat{\pi}_{it}^{-A_{it}} (1-\hat{\pi}_{it})^{-(1-A_{it})}, 
 \end{equation}
 Once the weights are estimated, the IPTW estimator of MSM can be obtained by solving emperical version of the following equation:
 
 \begin{equation}
     \label{eq:ipw-estimation}
-\mathbb{E}\left\{\hat{w}_i\, h\!\left(\bar{A}_{i,T}\right)\left(Y_i - m\!\left(\bar{A}_{i,T};\beta\right)\right)\right\}=0,
+\mathbb{E}\left\{\widehat{W}_i\, h\!\left(\bar{A}_{i,T}\right)\left(Y_i - m\!\left(\bar{A}_{i,T};\beta\right)\right)\right\}=0,
 \end{equation}
 where $h(\cdot)$ is a researcher-chosen vector valued function of the treatment history with dimensionality of  
 $1 \times \dim(\beta)$. If $h(\cdot)$ 
@@ -156,7 +156,7 @@ are often used.  They are defined as
 
 \begin{equation}
     \label{eq:stabilized-weights}
-\widehat{sw}_i
+\widehat{SW}_i
 =
 \prod_{t=1}^{T}
 \frac{
@@ -184,26 +184,30 @@ Using fixed-effect regression to adjust for unmeasured time-invariant confounder
 longitudinal data analysis \cite{imaiWhenShouldWe2019}. The idea is to include an individual-specific intercept 
 in the outcome model and estimate the model using the within-individual variation over time. The simplest 
 version of this approach when there is no time-varying confounder is to fit a linear model of the form
-$$Y_{it} = \alpha_i + \beta A_{it} + \epsilon_{it},$$
+$$Y_{it+1} = \alpha_i + \beta A_{it} + \epsilon_{it},$$
 with $\alpha_i$ being the individual-specific intercept that captures the effect of any 
 unmeasured time-invariant confounder in an additive form. 
 
 Although these models can adjust for unmeasured time-invariant confounders, They have 
-several shortcomings. They are primaarily designed for settings with repeated outcomes, 
+several shortcomings. They are primaarily designed for settings with repeated measured outcomes, 
 and are not directly applicable to designs with a single terminal outcome. Depending on the 
 context, this can be a significant limitation, as many longitudinal studies are 
 interested in the effect of treatments on a final outcome measured at the end of the study. 
 More importantly even when there are repeated measures of the outcome, the causal structures in which 
 fixed-effect regression can be used to adjust for unmeasured confounding to get valid estimates of causal effects are limited. Specifically, 
 they can only be used when there is no treatment-confounder feedback. Another important drawback 
-of fixed-effect regression is their inability to target the average potential outcome under specific treatment regimes, which is often of interest in longitudinal studies. Instead, 
-they target average sprantaneous effect of the current treatment on the current outcome, i.e. $\mathbb{E}[Y_{it}(A_{it}=1) - Y_{it}(A_{it}=0)]$. 
-The causal assumptions 
-required implicitly by the fixed-effect regression is discussed in detail in \cite{imaiWhenShouldWe2019}. 
+of fixed-effect regression is their inability to target the average 
+potential outcome under specific treatment regimes, which is often of 
+interest in longitudinal studies. Instead, 
+they target average sprantaneous effect of the current treatment 
+on the current outcome, i.e., $\mathbb{E}[Y_{it+1}(A_{it}=1) - Y_{it}(A_{it+1}=0)]$. 
+The assumptions 
+required implicitly by the fixed-effect regression to be causally interpretable is discussed in 
+detail by \citeA{imaiWhenShouldWe2019}. 
 
 In contrast, MSMs can target the average potential outcome under a full treatment regime while allowing for complex
 causal paths. However, they cannot adjust for unmeasured confounding. 
-The FE-MSM proposed by \cite{blackwellEffectPoliticalAdvertising2024} can be best understood as a 
+The FE-MSM proposed by \citeA{blackwellEffectPoliticalAdvertising2024} can be best understood as a 
 hybrid of these approaches. The novelty of FE-MSM comes from its use of a fixed-effect in 
 the propensity score model as opposed to the outcome model. This allows the method 
 to adjust for unmeasured time-invariant confounders wihtout relying on repeated outcome measures, 
@@ -213,7 +217,7 @@ However, this comes at the cost of targeting the average potential outcome under
 interventions instead of the full treatment regimes.
 
 \subsection{Deconfounder theory and sequential deconfounding}
-\subsubsection{Multi-cause deconfounder}
+\subsubsection{Multi-treatment deconfounder}
 Another approach to address time-invariant unmeasured confounding is based on the 
 deconfounder theory proposed by \cite{wangBlessingsMultipleCauses2019}. This method is 
 devised for static settings with multiple treatments. The key idea is that if there is 
@@ -232,19 +236,19 @@ $$p_{\Theta}(A_{i1}, A_{i2}, \ldots, A_{iM}\mid Z_i, X_i) = \prod_{i=1}^N \prod_
 where $\theta_j$ is the treatment-specific parameter. Under the assumptions below and SUTVA,  
 this latent variable $Z$ can be used as a substitute for the unobserved confounder $U$ and to retain the ignorability assumption:
 $$Y_i(\bar{a}_M) \perp (A_{i1}, A_{i2}, \ldots, A_{iM}) | Z_i, X_i.$$
-Note that this substitute confounder $Z$ is not necessarily the same as the true 
+Note that the substitute confounder $Z$ is not necessarily the same as the true 
 unobserved confounder $U$.
 \begin{itemize}
     \item \textbf{Assumption 1: No single-treatment confounder.} There is no 
-    unmeasured confounder that affects only one treatment. 
+    unmeasured confounder that affects only one treatment. Or in other words, 
+    all unmeasured confounders are multi-treatment confounders that affect at least two treatments.
     This assumption is also known as single-cause ignorability assumption. 
     \item \textbf{Assumption 2: Consistency of the substitute confounders.} The latent variable $Z$ is 
     pinpointed almost surely by a single deterministic function of the observed treatments:
     $$ P(Z \mid A_1, A_2, \ldots, A_M) = \delta_{f(A_1, A_2, \ldots, A_M)}. $$
     where $\delta_{f(\cdot)}$ denotes a point mass at $f(\cdot)$. This means that the latent variable 
     $Z$ is a deterministic function of the observed treatments and it implies the 
-    uniquness of the latent variable \cite{wangClarifyingTheoryDeconfounder2020}. This assumption 
-    is motivated 
+    uniquness of the latent variable \cite{wangClarifyingTheoryDeconfounder2020}. 
     \item \textbf{Assumption 3: Positivity or overlap.} The last $k$ treatments satisfy 
     overlap, $p(A_{i,(M-k+1):M} = a_{i,(M-k+1):M} | Z_i, X_i) > 0$ for all $a_{i,(M-k+1):M}$ in the support of $A_{i,(M-k+1):M}$ and for some $k \ge 1$.
     This assumption is needed for identification of the average truncated potential outcomes,
@@ -253,12 +257,12 @@ unobserved confounder $U$.
    
 \end{itemize}
 
-\subsubsection{Debates on multi-cause deconfounder}
+\subsubsection{Debates on multi-treatment deconfounder}
 
 Since the introduction of the deconfounder method, it has initiated several extensive 
 debates in the literature about the validity of the assumptions. Most of the criticisms are about the 
 consistency assumption and its tension with the positivity assumption. 
-\cite{damourMultiCauseApproachesCausal2019} notes that factorization existance does not guarantee 
+\citeA{damourMultiCauseApproachesCausal2019} notes that factorization existance does not guarantee 
 the uniqueness of the latent variable and derives an equivalance class of 
 latent variables that can all render the same treatment conditional independence structure,
 while 
@@ -267,7 +271,7 @@ that consistency assumption should be understood as property of the underlying
 data generating process and not as consequence of a particular factor model. Hence, 
 it is not possible to be verified by the observed data. 
 
-Another point raised by \cite{damourMultiCauseApproachesCausal2019} 
+Another point raised by \citeA{damourMultiCauseApproachesCausal2019} 
 is that, under the consistency assumption, the latent variables are a 
 deterministic function of the observed treatments. Consequently, there is no variability 
 in the treatments given the latent variable which violates the positivity assumption. Hence, 
@@ -276,31 +280,45 @@ However, if the causal target of interest is the average potential
 outcome under interventions on subsets of the treatments, then the positivity assumption can still 
 hold 
 for that subset while the consistency assumption holds for the full set of treatments as 
-stated by Theorem 6 in \cite{wangBlessingsMultipleCauses2019}. 
+stated by Theorem 6 in \citeA{wangBlessingsMultipleCauses2019}. 
 
 The other criticism is about if deconfounder's assumptions are truly weaker than the standard 
-ignorability assumption. \cite{grimmerNaiveRegressionRequires2023} argues that in most settings where
+ignorability assumption. \citeA{grimmerNaiveRegressionRequires2023} argues that in most settings where
 the deconfounder assumptions hold, the naive regression adjustment with only the 
 observed covariates also results in unbiased estimates of the causal effects. Moreover, through 
-extensive simulation studies, \cite{grimmerNaiveRegressionRequires2023} showed 
+extensive simulation studies, they showed 
 that both the deconfounder method and the naive regression adjustment perform equally poorly in presence 
 of unmeasrued confounding. 
 
-Furthermore, \cite{ogburnCommentBlessingsMultiple2019} notes that if $Z$ is 
+Furthermore, \citeA{ogburnCommentBlessingsMultiple2019} notes that if $Z$ is 
 a deterministic function of the observed treatments, i.e. $Z = f(A_1, A_2, \ldots, A_M)$, 
 then $Z$ is a post-treatment variable and conditioning on it may cause biased estimates of 
 the causal effects. 
 
-Some of these criticisms are responded by \cite{wangBlessingsMultipleCauses2019a} 
-and \cite{wangClarifyingTheoryDeconfounder2020}. However, the ambiguity surrounding the consistency 
+Some of these criticisms are responded by \citeA{wangBlessingsMultipleCauses2019a} 
+and \citeA{wangClarifyingTheoryDeconfounder2020}. However, the ambiguity surrounding the consistency 
 assumption and the constraints it imposes on the latent variable candidates, still remains 
 a major concern for the deconfounder method to be widely applicable. 
 
-\subsubsection{Sequential deconfounder}
-There are 
-
-\cite{bicaTimeSeriesDeconfounder2020}
-\cite{hattSequentialDeconfoundingCausal2024}
+\subsubsection{Longitudinal extensions of the deconfounder}
+The deconfounder method has been extended to longitudinal settings 
+by \citeA{bicaTimeSeriesDeconfounder2020} and \citeA{hattSequentialDeconfoundingCausal2024}. 
+They both rely on the 
+same key idea as the original deconfounder method, which is to use a 
+latent variable to capture the statistical signature of the unobserved 
+confounders in the observed treatments. Their main difference lie in the causal structures they are designed for 
+and the causal targets they can identify.
+While 
+\citeA{bicaTimeSeriesDeconfounder2020} is designed
+for settings with multiple treatments 
+at each time point to adjust for time-varying unmeasured confounders using dynamic 
+latent variables, 
+\citeA{hattSequentialDeconfoundingCausal2024} is designed for a common settings 
+with a single treatment at each time point and it estimates a constant latent variable using 
+the treatment history. Moreover, they both required the consistency assumption which 
+is the most controversial assumption of the deconfounder method. In Figure 
+\ref{fig:deconfounder-comparison}, a graphical comparison of 
+the sequential deconfounder and the multi-treatment deconfounder is presented.
 
 \begin{figure}[htbp]
     \centering
@@ -308,7 +326,7 @@ There are
     \begin{subfigure}[t]{0.47\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figures/build/blessing_dag.pdf}
-        \caption{Multi-cause deconfounder.}
+        \caption{Multi-treatment deconfounder.}
         \label{fig:first}
     \end{subfigure}
     \hfill
@@ -324,10 +342,10 @@ There are
     at a single time point. 
     The second DAG (b) represents the sequential deconfounder setting where 
     there are time-varying $T$ treatments temporally linked. Both DAGs include 
-    an unobserved \emph{multi-cause} confounder $U_i$ that affects at least two treatments, 
+    an unobserved \emph{multi-treatment} confounder $U_i$ that affects at least two treatments, 
     and a latent variable $Z_i$ which is a statistically sufficient substitute for the unobserved confounder $U_i$. Both 
     figures can be extended to include observed confounders.}
-    \label{fig:combined}
+    \label{fig:deconfounder-comparison}
 \end{figure}
 
 \begin{comment}
