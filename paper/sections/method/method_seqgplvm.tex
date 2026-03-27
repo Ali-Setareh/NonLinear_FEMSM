@@ -1,7 +1,20 @@
-\subsection{Sequential Gaussian processes latent variable model}
+\section{SeqGPLVM-MSM}
 \label{sec:seqgplvm}
+
+SeqGPLVM in combination with MSM consists of three
+stages: (i) a latent variable model (SeqGPLVM) that estimates a substitute for the
+unmeasured confounder based on the observed treatment sequence, (ii) estimating
+the propensity scores using a treatment model that conditions on both observed
+covariates and the estimated unmeasured confounder substitute, and (iii) a marginal
+structural model that uses the estimated propensity scores in stage two to adjust
+for confounding using IPTW. It is worth mentioning that SeqGPLM can be used
+with any other estimation methods as well, such as g-computation or doubly
+robust methods, but we focus on IPTW estimation of MSM for comparability with
+FE-MSM.
+
 \hl{It seems that we dont need a first order CMM necessarily, we can have higher order CMMs as well? for now I 
 will keep it first order because that is what Hatt et al do.}
+
 
 Sequential Gaussian processes latent variable model (SeqGPLVM) is probabilistic latent variable 
 model. It is based on the assumption that the conditional joint treatment hisotory distribution 

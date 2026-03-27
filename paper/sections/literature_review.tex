@@ -82,7 +82,7 @@ sequential ignorability can be expressed as
 
 \begin{equation}
     \label{eq:seq-ignorability}
-Y_i(\bar{a}_T) \perp A_{it} | \bar{A}_{it-1}, \bar{X}_{it} \quad \text{for all } t \in \{1, \ldots, T\},
+Y_i(\bar{a}_T) \perp A_{it} | \bar{A}_{i,t-1}, \bar{X}_{it} \quad \text{for all } t \in \{1, \ldots, T\},
 \end{equation}
 This equation states that the potential outcome is independent of the treatment at time $t$ given the past treatment and confounder history. 
 This assumption is strong and often violated in observational settings. For instance, 
@@ -130,9 +130,9 @@ these weights, \citeA{robinsAssociationCausationMarginal1999} showed that
 
 In observational studies, the true probabilities $\pi_{it}$ are unknown and need to be 
 estimated from the data. This is typically done by fitting a parametric model for the 
-treatment assignment mechanism. Let $\pi_{it}(\bar{a}_{t-1}, \bar{x}_{t}; \theta_0) = \mathbb{P}(A_{it} = 1 | \bar{A}_{it-1}, \bar{X}_{it})$ be a 
+treatment assignment mechanism. Let $\pi_{it}(\bar{a}_{t-1}, \bar{x}_{t}; \theta_0) = \mathbb{P}(A_{it} = 1 | \bar{A}_{i,t-1} = \bar{a}_{t-1}, \bar{X}_{it} = \bar{x}_{t})$ be a 
 parametrization of the treatment assignment mechanism, with $\theta_0$ denoting the true parameter. The 
-estimated propensity scores are then given by $\hat{\pi}_{it} = \pi_{it}(\bar{A}_{it-1}, \bar{X}_{it}; \hat{\theta})$ where $\hat{\theta}$ is the maximum likelihood estimate of $\theta_0$.
+estimated propensity scores are then given by $\hat{\pi}_{it} = \pi_{it}(\bar{A}_{i,t-1}, \bar{X}_{it}; \hat{\theta})$ where $\hat{\theta}$ is the maximum likelihood estimate of $\theta_0$.
 The estimated IPTW weights are
 \begin{equation}
     \label{eq:ipw-weights}
@@ -169,7 +169,7 @@ In the numerator, ${\hat{\bar{\pi}}}_{it}$ is the estimated
 reduced propensity score, that is, the probability of 
 receiving the treatment at time $t$ given only the past treatment history, 
 \[
-\bar{\pi}_{it} = \mathbb{P}(A_{it} = 1 | \bar{A}_{it-1}).
+\bar{\pi}_{it} = \mathbb{P}(A_{it} = 1 | \bar{A}_{i,t-1}).
 \]
 
 The consistency of the IPTW estimator only relies on the correct 
@@ -184,7 +184,7 @@ Using fixed-effect regression to adjust for unmeasured time-invariant confounder
 longitudinal data analysis \cite{imaiWhenShouldWe2019}. The idea is to include an individual-specific intercept 
 in the outcome model and estimate the model using the within-individual variation over time. The simplest 
 version of this approach when there is no time-varying confounder is to fit a linear model of the form
-$$Y_{it+1} = \alpha_i + \beta A_{it} + \epsilon_{it},$$
+$$Y_{i,t+1} = \alpha_i + \beta A_{it} + \epsilon_{it},$$
 with $\alpha_i$ being the individual-specific intercept that captures the effect of any 
 unmeasured time-invariant confounder in an additive form. 
 
@@ -200,7 +200,7 @@ of fixed-effect regression is their inability to target the average
 potential outcome under specific treatment regimes, which is often of 
 interest in longitudinal studies. Instead, 
 they target average sprantaneous effect of the current treatment 
-on the current outcome, i.e., $\mathbb{E}[Y_{it+1}(A_{it}=1) - Y_{it}(A_{it+1}=0)]$. 
+on the current outcome, i.e., $\mathbb{E}[Y_{i,t+1}(A_{it}=1) - Y_{i,t}(A_{i,t+1}=0)]$. 
 The assumptions 
 required implicitly by the fixed-effect regression to be causally interpretable is discussed in 
 detail by \citeA{imaiWhenShouldWe2019}. 
@@ -245,12 +245,12 @@ unobserved confounder $U$.
     This assumption is also known as single-cause ignorability assumption. 
     \item \textbf{Assumption 2: Consistency of the substitute confounders.} The latent variable $Z$ is 
     pinpointed almost surely by a single deterministic function of the observed treatments:
-    $$ P(Z \mid A_1, A_2, \ldots, A_M) = \delta_{f(A_1, A_2, \ldots, A_M)}. $$
+    $$ \mathbb{P}(Z \mid A_1, A_2, \ldots, A_M) = \delta_{f(A_1, A_2, \ldots, A_M)}. $$
     where $\delta_{f(\cdot)}$ denotes a point mass at $f(\cdot)$. This means that the latent variable 
     $Z$ is a deterministic function of the observed treatments and it implies the 
     uniquness of the latent variable \cite{wangClarifyingTheoryDeconfounder2020}. 
     \item \textbf{Assumption 3: Positivity or overlap.} The last $k$ treatments satisfy 
-    overlap, $p(A_{i,(M-k+1):M} = a_{i,(M-k+1):M} | Z_i, X_i) > 0$ for all $a_{i,(M-k+1):M}$ in the support of $A_{i,(M-k+1):M}$ and for some $k \ge 1$.
+    overlap, $\mathbb{P}(A_{i,(M-k+1):M} = a_{i,(M-k+1):M} | Z_i, X_i) > 0$ for all $a_{i,(M-k+1):M}$ in the support of $A_{i,(M-k+1):M}$ and for some $k \ge 1$.
     This assumption is needed for identification of the average truncated potential outcomes,
     $\mathbb{E}[Y_i\left(A_{1:M-k}, a_{i,(M-k+1):M}\right)]$, where only the last $k$ treatments 
     are intervened on while the remaining treatments are kept at their observed values.  
@@ -314,7 +314,8 @@ for settings with multiple treatments
 at each time point to adjust for time-varying unmeasured confounders using dynamic 
 latent variables, 
 \citeA{hattSequentialDeconfoundingCausal2024} is designed for a common settings 
-with a single treatment at each time point and it estimates a constant latent variable using 
+with a single treatment at each time point in presence of constant 
+unmeasured confounding and it estimates a constant latent variable using 
 the treatment history. Moreover, they both required the consistency assumption which 
 is the most controversial assumption and the implementations of it will 
 be discussed in Chapter~\ref{chap:discussion}. A graphical comparison of 

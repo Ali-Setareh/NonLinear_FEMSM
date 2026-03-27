@@ -1,10 +1,9 @@
 \chapter{Simulation study}
 \label{chap:simulation_study} 
 \section{Data generating process}
-In this section, we present a simulation study designed to evaluate the performance 
-of the two methods for estimating causal effects with time-varying treatments 
-under time-invariant unmeasured confounding. The data generation process (DGP) is taken 
-from the DGP described in Section 5.1 of \cite{blackwellEffectPoliticalAdvertising2024}. In this 
+To evaluate the finte sample performance of the two proposed method, 
+ . The data generation process (DGP) is taken 
+from the DGP described in Section 5.1 of \citeA{blackwellEffectPoliticalAdvertising2024}. In this 
 DGP, the scenario which we simulate is a study design where individuals are exposed to a binary treatment
 (e.g., receiving a political advertisement) over a period fixed period of time, and the outcome of interest
 is measured only once at the end of the study period (e.g., voting behavior). The treatment assignment
@@ -42,11 +41,15 @@ contribution of the unmeasured confounder $U_i$ to the variance of the linear pr
 of covariates, we simulate for $p \in \{2, 4\}$. 
 The coefficients are set to $\beta = (-0.5, -0.5)^{\top}$ when $p=2$ and 
 $\beta = (-0.5, -0.5, 1, -0.5)^{\top}$ when $p=4$. \hl{(add some note about why we chose 
-these coeffs based on the variance or sth)}. We set $\varphi = 0.3$. Note that we generate 
-the covariates $X_{it}$ exogenously to the treatments. So we do not have the 
-treatment-confounder feedback. This is done to isolate the effect of
-adjusting for unmeasred time-invariant confounding and make the simulation simpler and it has important 
-implications in interpreting the causal effects. see section \ref{estimation}. Also note that theere is no dynamics 
+these coeffs based on the variance or sth)}. We set $\varphi = 0.3$. %Note that we generate 
+The covariates $X_{it}$ are generated exogenously to 
+the treatments solely for the sake of simplicity. By doing this, the ground truth 
+values for the causal targets of interests conincide wit the DGP parameter. 
+%So we do not have the 
+%treatment-confounder feedback. This is done to isolate the effect of
+%adjusting for unmeasred time-invariant confounding and make the simulation simpler and it has important 
+%implications in interpreting the causal effects. see section \ref{estimation}. 
+Also note that theere is no dynamics 
 in the covariates and the distribution of $X_{it}$ is the same for all time points. The parameters 
 for the outcome model are set to $\tau_F = 1$, $\tau_C = 0.3$, and $\gamma = (1, 0.5)^{\top}$ 
 when $p=2$ and when $p=4$, $\gamma = (1, 0.5, 1, 1)^{\top}$. You can the the graphical model of this dgp in figure 
@@ -71,7 +74,7 @@ this mathematically, we first define $S_k(\bar{d}_{T-K:T-1}) := \sum_{t=T-K}^{T-
 of treatments received in the last $K$ time points before $T$. Then, the average effect of receiving one additional treatment 
 in these $K$ time points on the final outcome is defined as 
 $\mathbb{E}\left[Y_{iT}\left({S_k(\bar{d}_{T-K:T-1}) = s, D_{iT}}\right) - Y_{iT}\left({S_k(\bar{d}_{T-K:T-1}) = s+1, D_{iT}}\right)\right], s \in \{0,1,\dots,K-1\}$. 
-To answer both of these causal questions, we can propose a marginal structural model (MSM) 
+To answer both of these causal questions, a marginal structural model is prposed  
 that relates the assigned treatments to the expected potential outcome at the final time: 
 $\mathbb{E\left[Y_{iT}\left(\bar{d}_{T-k:T}\right)\right]} = g(\bar{d}_{T-k:T}, \gamma_0)$, where 
 $g(\bar{d}_{T-k:T}, \gamma_0)$ is the true unkown function parameterized by $\gamma_0$. Our job is 
@@ -106,7 +109,7 @@ Y_{iT}\!\left(\bar d_{T-k:T}\right)
 &= \alpha_0 + \tau_F d_T + \tau_C s_3. %\qquad s_3 := \sum_{t=T-3}^{T-1} d_t 
 \end{align}
 
-Similary, we can show: 
+Similary, it can be shown: 
 \begin{align}
 \label{eq:tau_f}
 &\mathbb{E}\!\left[Y_{iT}\!\left(d_{T},S_3\right)\right]
@@ -118,9 +121,12 @@ Similary, we can show:
 \label{eq:tau_c}
 \end{align}
 
-\hl{The important point to note here is that since $X_{it}$ is exogenous to the treatment, we do not have 
-terms involving $X_{it}(\underline{d}_{T-k})$ which are counterfactual covariates under 
-the specified treatment regime.} From Eq.~\eqref{eq:tau_f} and Eq.~\eqref{eq:tau_c}, we can see: 
+\hl{The important point to note here is that since $X_{it}$ is 
+exogenous to the treatment, there are no
+terms involving $X_{it}(\underline{d}_{T-k})$ which are 
+counterfactual covariates under 
+the specified treatment regime.} 
+From Eq.~\eqref{eq:tau_f} and Eq.~\eqref{eq:tau_c}, it can be seen: 
 
 \begin{equation}
         \mathbb{E}\left[ Y_{iT}\left(d_T = 1, S_3\right) - Y_{iT}\left(d_T = 0, S_3\right) \right] = \tau_F
@@ -133,15 +139,14 @@ and
     \mathbb{E}\left[Y_{iT}\left({S_3 = s, D_{iT}}\right) - Y_{iT}\left({S_3 = s+1, D_{iT}}\right)\right] = \tau_C
 \end{equation}
 The equality between these causal effects and the parameters of the DGP is a result of the linearity of the DGP and the absence of treatment-confounder feedback. 
-See \ref{sec:msm_ground_truth} for more discussion on this.
-
-To only focus on the adjustment for the unmeasred confounder, for both of the methods, 
+See \ref{sec:msm_ground_truth} for more discussion on this. To only focus 
+on the adjustment for the unmeasred confounder, for both of the methods, 
 we specify $f\left(\underline{d}_{T-k}; \gamma \right)$ as the correctly specified linear MSM:
 \begin{equation}
     f\left(\underline{d}_{T-k}; \gamma \right) = \alpha' + \tau_F' d_T + \tau_C' \sum_{t=T-3}^{T-1} d_t
 \end{equation}
 where $\gamma = (\alpha', \tau_F', \tau_C')$. 
-\subsection{Fix-effect marginal structural model}
+
 
 
 

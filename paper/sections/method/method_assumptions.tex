@@ -1,21 +1,17 @@
 \section{Common assumptions}
 \label{sec:assumptions}
-In this work, we categorize the assumptions into three groups: identification assumptions, 
-modeling assumptions, and estimation assumptions. Identification assumptions, 
-are the assumptions which let us write target causal estimands such as 
-$\mathbb{E}[Y_i(\bar{a})]$ in terms of observed data. 
-Based on the identification strategy, certain quantities must be modeled. 
-For example, identifying $\mathbb{E}[Y_i(\bar{a})]$ using marginal 
-structural models requires modeling the average potential outcome 
-$\mathbb{E}[Y_i(\bar{a})]$ as a function of the treatment history $\bar{a}$, while inverse probability weighting requires
-modeling the propensity scores. Modeling assumptions are about the 
-requirements placed on these models. Finally, 
-different components of the procedure may be estimated using different methods, each requiring its own assumptions.
-
-As estimation assumptions are method-specific and highly technical, 
-we refer the reader to the original papers for further detail. 
-We outline the common identification and modeling assumptions 
-behind both FE--MSM and SeqGPLVM approaches below. Throughout the text, 
+The common assumptions for both FE-MSM and SeqGPLVM-MSM are stated below. 
+The assumptions can be categorized into two groups: identification assumptions and 
+modeling assumptions. Identification assumptions, 
+are the assumptions which are needed to write target causal estimands such as 
+$\mathbb{E}[Y_i(\underline{a}_{T-k})]$ in terms of observed data. 
+Based on the identification strategy and the estimator of choice, 
+certain quantities must be modeled. 
+For example, estimating a marginal structural model for the target causal estimand using 
+inverse probability of treatment weighting (IPTW) requires modeling the 
+propensity scores. Modeling assumptions are about the 
+requirements placed on these models in order to have unbiased or consistent estimates. 
+Throughout the text, 
 we use C, I, and M to denote common, identification, and modeling 
 assumptions, respectively.
 % --- Common assumptions (C1, C2, ...) ---
@@ -23,11 +19,13 @@ assumptions, respectively.
 
 \begin{assumpC}[Consistency]\label{ass:C-consistency}
 The observed outcome for each individual under their observed treatment history equals
-the potential outcome under that treatment history. Formally, for each individual $i$
-and time $t$, if $\bar{A}_{i,t}=\bar{a}_{i,t}$, then $Y_{i,t+1}=Y_{i,t+1}(\bar{a}_{i,t})$. 
-Moreover, $Y_{i,T+1} = Y_{i,T+1}(\underline{a}_{i,T-k})$ if 
-$\bar{A}_{i,T}=\left(\bar{A}_{i,T-k-1},\underline{a}_{i,T-k}\right)$.
+the potential outcome under that treatment history. Formally, if $\bar{A}_{iT}=\bar{a}_{iT}$, 
+then $Y_{i}=Y_{i}(\bar{a}_{iT})$. 
+Moreover, $Y_{i} = Y_{i}(\underline{a}_{i,T-k})$ if 
+$\bar{A}_{iT}=\left(\bar{A}_{i,T-k-1},\underline{a}_{i,T-k}\right)$.
 \end{assumpC}
+
+\begin{comment}
 
 \begin{assumpC}[Positivity]\label{ass:C-positivity}
 \[
@@ -45,6 +43,8 @@ for all values $(\bar{a}_{t-1}, \bar{x}_t)$ with
 
 in the population of interest, and for all $a_t \in \mathcal{A}_t$.
 \end{assumpC}
+
+\end{comment}
 
 \begin{assumpC}[No interference]\label{ass:C-no-interference}
 The treatment assignment for one individual does not affect the potential outcomes of
@@ -66,3 +66,5 @@ U_i. \]
 Note that this assumption is about the true underlying data-generating process and cannot be  
 used for identification directly since $U_i$ is unmeasured. 
 \end{assumpC}
+
+
