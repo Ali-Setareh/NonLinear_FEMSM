@@ -18,14 +18,15 @@ predefined set of treatment options $\mathcal{A}_t$. In this thesis,
 the treatments are assumed to be binary, so that $A_{it} \in \{0,1\}$. We adopt the convention that treatment 
 is absent at the beginning of the study. Therefore, $A_{i0} = 0$ 
 for all individuals. 
-The single measured outcome variable at the end of the study is defined as $Y_{i}$. 
-Observed covariates are denoted by $X_{it}$ and may include 
+The single measured outcome variable at the end of the study is defined as $Y_{i}$. The 
+observed covariate vector is denoted by $X_{it}$ and may include 
 both time-invariant and time-varying covariates.
 The history of treatment and covariates up to time $t$ is represented as
 $\bar{A}_{it} = (A_{i1}, A_{i2}, \ldots, A_{it})$ and $\bar{X}_{it} = (X_{i1}, X_{i2}, \ldots, X_{it})$, 
 respectively. The potential outcome under a specific treatment
 regime $\bar{a}_T = (a_1, a_2, \ldots, a_T)$ is denoted by $Y_{i}(\bar{a}_T)$. Finally, we use $U_i$ 
-to represent \emph{structural} unmeasured confounders that are time-invariant for individual $i$. The truncated treatment histories from are defined as the last $k$ treatment values, 
+to represent \emph{structural} unmeasured confounders that are time-invariant for individual $i$. The truncated treatment histories 
+are defined as the last $k$ treatment values, 
 denoted as $\underline{A}_{i,T-k} = (A_{i,T-k+1}, A_{i,T-k+2}, \ldots, A_{i,T})$. Similarly, 
 the truncated covariate histories are defined as 
 $\underline{X}_{i,T-k} = (X_{i,T-k+1}, X_{i,T-k+2}, \ldots, X_{i,T})$. Based on the 

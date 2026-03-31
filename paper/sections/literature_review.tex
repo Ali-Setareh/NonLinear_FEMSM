@@ -274,8 +274,9 @@ data generating process and not as consequence of a particular factor model. Hen
 it is not possible to be verified by the observed data. 
 
 Another point raised by \citeA{damourMultiCauseApproachesCausal2019} 
-is that, under the consistency assumption, the latent variables are a 
-deterministic function of the observed treatments. Consequently, there is no variability 
+is that, if the consistency assumption holds, %the latent variables are a 
+%deterministic function of the observed treatments. Consequently, 
+there is no variability 
 in the treatments given the latent variable which violates the positivity assumption. Hence, 
 consistency and positivity assumptions cannot hold simultaneously.  
 However, if the causal target of interest is the average potential 
@@ -284,7 +285,7 @@ hold
 for that subset while the consistency assumption holds for the full set of treatments as 
 stated by Theorem 6 in \citeA{wangBlessingsMultipleCauses2019}. 
 
-The other criticism is about if deconfounder's assumptions are truly weaker than the standard 
+The other criticism is concerning whether the deconfounder's assumptions are truly weaker than the standard 
 ignorability assumption. \citeA{grimmerNaiveRegressionRequires2023} argues that in most settings where
 the deconfounder assumptions hold, the naive regression adjustment with only the 
 observed covariates also results in unbiased estimates of the causal effects. Moreover, through 
@@ -299,7 +300,7 @@ the causal effects.
 
 Some of these criticisms are responded by \citeA{wangBlessingsMultipleCauses2019a} 
 and \citeA{wangClarifyingTheoryDeconfounder2020}. However, the ambiguity surrounding the consistency 
-assumption and the constraints it imposes on the latent variable candidates, still remains 
+assumption and the constraints it imposes on the substitute confounder, still remains 
 a major concern for the deconfounder method to be widely applicable. 
 
 \subsubsection{Longitudinal extensions of the deconfounder}
