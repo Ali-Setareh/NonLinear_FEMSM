@@ -40,13 +40,13 @@ as a confounder for the treatment at time $t$ and the outcomes at later time poi
 \paragraph{Treatment-confounder feedback.}
 Treatment-confounder feedback occurs when the treatment at time $t$ can affect the confounders at later 
 time points. This creates a feedback loop between the treatment and the confounders, 
-which can lead to bias if not properly adjusted for; see \cite{hernanCausalInferenceWhat2023booksection} 
-for detailed examples. In Figure \ref{fig:sample_dags} (b), these feedback loops 
+which can lead to bias if not properly adjusted for; (see 
+\citeA{hernanCausalInferenceWhat2023booksection} 
+for detailed examples.) In Figure \ref{fig:sample_dags} (b), these feedback loops 
 are represented by the purple arrows from $A_t$ to subsequent $X_{t+k}$ where $1 \le k \le T-t$. These structures 
 are problematic for standard regression-based methods which estimate 
 models such as $\mathbb{E}[Y_i|\bar{A}_3,\bar{X}_3] = \alpha + \sum_{t=1}^{3} \beta_t A_t + \sum_{t=1}^{3}\gamma_t X_t$ 
-for a terminal outcome and three 
-time points, even 
+even 
 if this outcome regression is correctly specified. To see why, in Figure \ref{fig:sample_dags} (b), 
 $X_3$ is a confounder for the effect of $A_3$ on $Y$ as it is a common cause of both $A_3$ and $Y$. So it needs to be adjusted for to get an unbiased estimate of the effect of $A_3$ on $Y$. 
 However, since $X_3$ is on the path of $A_2$ to $Y$, by conditioning on $X_3$ 
@@ -67,22 +67,23 @@ There are well-established methods to identify and estimate $\mathbb{E}[Y_i(\bar
 when treatment-confounder feedback is present. The g-formula and marginal structural models (MSMs) are 
 two members of the Robins' g-methods family that aim directly at this causal target 
 \cite{robinsMarginalStructuralModels2000, shinozakiUnderstandingMarginalStructural2020, snowdenImplementationGComputationSimulated2011}.
-While g-formula gives the full map $
+While the g-formula gives the full map $
 \bar{a} \mapsto \mathbb{E}\!\left[Y_i(\bar{a})\right]$ for all possible treatment regimes, MSMs are 
 an imposed model on $\mathbb{E}\!\left[Y_i(\bar{a})\right]$. This is particularly 
-useful when the number of time points in a study is large and the number of possible treatment regimes grows 
+useful when the number of time points in a study is large as the number of possible treatment regimes grows 
 exponentially. To see this, if we have a binary treatment at each time point, then there are $2^T$ 
 possible treatment regimes. This means for $T=10$ time points, there are already 1024 possible 
 treatment regimes. The problem becomes even more severe when the treatment is not binary. 
 
 \paragraph{Identification under sequential ignorability.}
 G-methods are relying on the assumptions of sequential ignorability for identification, which 
-states that there are no unmeasured confounders at each time point.  More formally, 
+states that there are no unmeasured confounders between the 
+treatment and outcome at each time point.  More formally, 
 sequential ignorability can be expressed as 
 
 \begin{equation}
     \label{eq:seq-ignorability}
-Y_i(\bar{a}_T) \perp A_{it} | \bar{A}_{i,t-1}, \bar{X}_{it} \quad \text{for all } t \in \{1, \ldots, T\},
+Y_i(\bar{a}_T) \perp A_{it} | \bar{A}_{i,t-1}, \bar{X}_{it} \quad \text{for all } t \in \{1, \ldots, T\}.
 \end{equation}
 This equation states that the potential outcome is independent of the treatment at time $t$ given the past treatment and confounder history. 
 This assumption is strong and often violated in observational settings. For instance, 
@@ -106,7 +107,8 @@ rather than the usual conditional mean of the observed outcomes given the treatm
 confounders, i.e., $\mathbb{E}[Y_i|\bar{A}_T, \bar{X}_T]$, used in association studies. 
 A common example of a MSM is 
 the linear model $$\mathbb{E}[Y_i(\bar{a}_T)] = m(\bar{a}_T; \beta) = \beta_1 + \beta_2 \sum_{t=1}^{T} a_t.$$ 
-Unlike the pure association models, the parameters of MSMs have a causal interpretation. In the above linear MSM, 
+Unlike the pure association models, the parameters of MSMs have a causal interpretation. If this model is 
+correctly specified,
 $\beta_1$ is the expected outcome when no treatment is given at any time point, 
 and $\beta_2$ represents the average causal effect of recieving one more treatment on the expected outcome.
 
@@ -136,7 +138,7 @@ estimated propensity scores are then given by $\hat{\pi}_{it} = \pi_{it}(\bar{A}
 The estimated IPTW weights are
 \begin{equation}
     \label{eq:ipw-weights}
-\widehat{W}_{i} = \prod_{t=1}^{T} \hat{\pi}_{it}^{-A_{it}} (1-\hat{\pi}_{it})^{-(1-A_{it})}, 
+\widehat{W}_{i} = \prod_{t=1}^{T} \hat{\pi}_{it}^{-A_{it}} (1-\hat{\pi}_{it})^{-(1-A_{it})}.
 \end{equation}
 Once the weights are estimated, the IPTW estimator of MSM can be obtained by solving emperical version of the following equation:
 
