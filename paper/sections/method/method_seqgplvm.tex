@@ -5,78 +5,114 @@ SeqGPLVM in combination with MSM consists of three
 stages: (i) a latent variable model (SeqGPLVM) that estimates a substitute for the
 unmeasured confounder based on the observed treatment sequence, (ii) estimating
 the propensity scores using a treatment model that conditions on both observed
-covariates and the estimated unmeasured confounder substitute, and (iii) a marginal
+covariates and the confounder substitute, and (iii) a marginal
 structural model that uses the estimated propensity scores in stage two to adjust
 for confounding using IPTW. It is worth mentioning that SeqGPLM can be used
-with any other estimation methods as well, such as g-computation or doubly
+in conjuction with any other estimation methods as well, such as g-computation or doubly
 robust methods, but we focus on IPTW estimation of MSM for comparability with
 FE-MSM.
 
-\hl{It seems that we dont need a first order CMM necessarily, we can have higher order CMMs as well? for now I 
-will keep it first order because that is what Hatt et al do.}
+%\hl{It seems that we dont need a first order CMM necessarily, we can have higher order CMMs as well? for now I 
+%will keep it first order because that is what Hatt et al do.}
 
+\subsection{Sequential deconfounding}
 
-Sequential Gaussian processes latent variable model (SeqGPLVM) is probabilistic latent variable 
-model. It is based on the assumption that the conditional joint treatment hisotory distribution 
-can be written as a as a conditional Markov model (CMM) conditioned on both observed covariates and
-the confounder substitute $Z_i$. 
-\begin{idassumpSG}[Conditional Markov treatment model]\label{ass:SG-Marcovianity}
+The sequential deconfounding theory proposed by 
+\citeA{hattSequentialDeconfoundingCausal2024} can be seen as the sequential version of 
+the multi-treatment deconfounder proposed by \citeA{wangBlessingsMultipleCauses2019}. Similarly 
+to the multi-treatment deconfounder, it is based on the three key assumptions that are 
+described below. 
+
+%SeqGPLVM
+%is a probabilistic 
+%longitudinal latent variable 
+%model. 
+
+\begin{idassumpSG}[CMM(p): Conditional Markov Model of order p]\label{ass:SG-Marcovianity}
+    A latent variable $Z$, a fixed order $p \in \mathbb{N}^*$
+    and a parameter vector $\boldsymbol{\gamma} = (\gamma_1, \ldots, \gamma_T)$ exist such that the assigned treatment distribution can be 
+    factorized as: 
     \begin{equation}
-    p_{\boldsymbol{\gamma}}(\bar{a}_{iT} \mid \bar{\mathbf{x}}_{iT}, \mathbf{z}_i) = p_{\gamma_0}(a_{i1} \mid \mathbf{x}_{i1}, \mathbf{z}_i) \prod_{t=2}^T p_{\gamma_t}(a_{it} \mid a_{i,t-1}, \mathbf{x}_{it}, \mathbf{z}_i)
+    p_{\boldsymbol{\gamma}}(\bar{a}_{T} \mid \bar{\mathbf{x}}_{T}, \mathbf{z}) 
+    = \prod_{t=1}^T p_{\gamma_t}(a_{t} \mid a_{t-p:t-1}, \mathbf{x}_{t}, \mathbf{z}). 
+    \label{eq:cmm}
     \end{equation}
-    (for rigorous definition of CMM we can look at 
-\cite{bouchattaouiCausalDynamicVariational2025})
+    for $t<1$, $a_t$ is set to $0$ by convention. We then say that the 
+    latent variable Z follows a Conditional Markov Model of order p, 
+    written $Z \sim \text{CMM} (p).$
+     
 \end{idassumpSG}
+The original version of this assumption 
+in \citeA{hattSequentialDeconfoundingCausal2024} is stated only for a first-order CMM. However, 
+the proof of their Theorem 1 using Preposition 7.6 in \citeA{kallenbergFoundationsModernProbability}, 
+can be easily extended to higher-order CMMs as well 
+(see \href{https://chatgpt.com/share/69c7c2fe-2f64-8388-8843-b0d989e7b267}{link} 
+and \cite{bouchattaouiCausalDynamicVariational2025}). Hence the more general 
+form of the CMM assumption is stated above. In Equation~\ref{eq:cmm},
+\(\gamma = \{\gamma_0, \gamma_2, \ldots, \gamma_T\}\) are the \emph{generative} 
+parameters of the treatment assignment model. Note that the conditional 
+probability 
+distribution at
+each time point can have different parameters. 
+This is cruicial to understand the SeqGPLVM architecture. 
 
-
-where \(\gamma = \{\gamma_0, \gamma_2, \ldots, \gamma_T\}\) are the \emph{generative} 
-parameters of the treatment assignment model at each time point. Note that the each time point can have 
-its own set of parameters. This is cruicial to understand the SeqGPLVM architecture. 
-In theorem 1 of \cite{hattSequentialDeconfoundingCausal2024}, it is shown that, if the treatment 
-assignment follows a CMM, we obtain sequential ignorability 
-conditioned on the observed covariates' history, treatment history and the
-confounder substitute, i.e., for all $t \in \{1, \ldots, T\}$ and for all $\bar{a}_t$,
-\begin{equation}
-    \label{eq:seqgplvm-single-unit-seqignorability}
-    Y_{i,t+1}(\bar{a}_t) \perp A_t \mid \bar{X}_{it}, \bar{A}_{i,t-1} ,Z_{i}.
-\end{equation}
-
-In our setting with one outcome measurement at the end of the study, we only need this 
-result for t=T, i.e.,
-\begin{equation}
-    \label{eq:seqgplvm-single-unit-seqignorability-t=T}
-    Y_{i,T+1}(\bar{a}_T) \perp A_t \mid \bar{X}_{iT}, \bar{A}_{i,T-1} ,Z_{i}.
-\end{equation}
-Note that this equation means that the potential outcome of the entire treatment history at time T+1 is independent of the treatment assignment 
-at \emph{any} time point t, given the entire observed covariates' history and treatment history up to time T-1, along with the confounder substitute. 
-
-Although in \cite{hattSequentialDeconfoundingCausal2024}, the authors only mentioned the 
-set of assumptions in \ref{ass:C-consistency}-\ref{ass:C-no-interference} plus \ref{ass:SG-Marcovianity}, they 
-implicitly assume an assumption that we call here \emph{No single-time-point confounding} assumption. This  
-assumption is the dynamic version of no-single-cause assumption in \cite{wangBlessingsMultipleCauses2019}. It rules 
-out the existance of confounders that only affect in only single time point. Note that, \ref{ass:C-timeinvariant-uc} is not 
-sufficient to exclude these single-time-point confounders since a confounder can be constant but its effect 
-varry with time. 
-
-\begin{idassumpSG}[No single-time-point confounding]
+\begin{idassumpSG}[No unmeasured single-time-point confounding]
     \label{ass:SG-No-single-time-point-confounding}
-    For each $t\in\{1,\dots,T\}$, there does not exist an unobserved variable $U_t$ such that
-    (i) $A_t \not\!\perp\!\!\!\perp Y_{i,t+1}(\bar a_T)\mid \bar A_{i,t-1},\bar X_{i,t}$ for some $\bar a_t$ (i.e., $U_t$ 
-    confounds the effect of $A_t$ on the outcome),
-    and (ii) $U_t \perp\!\!\!\perp \bar A_{i,-t}\mid \bar A_{i,t-1},\bar X_{i,t}$ (i.e., $U_t$ 
-    affects \emph{only} the treatment assignment at time $t$ and leaves no dependence 
-    footprint in the remaining treatment process).
+    All confounders that only affect at a single time point are observed. 
     Equivalently, any unobserved confounder influencing $A_t$ must also induce 
     dependence with at least one other treatment $A_s$ ($s\neq t$), conditional on the observed history.
 \end{idassumpSG}
-This assumption states that the unmeasured time-invariant confounder is not a function of any single time point's treatment assignment, but rather a function of the entire treatment history. 
+This assummption excludes structures such as the one in 
+Figure~\ref{fig:single-time-point-confounding}. Note that, Assumption~\ref{ass:C-timeinvariant-uc} 
+is not 
+sufficient to exclude these single-time-point confounders since a confounder can 
+be constant but its effect 
+varry with time. 
 
-\begin{idassumpSG}[Consistency of the confounder substitute]
+\begin{figure}
+    \centering
+    \includegraphics[width=.8\textwidth]{figures/build/single_time_point.pdf}
+    \caption{Sequential deconfounder excludes unmeasured single-time-point confounders such $V_i$. }
+    \label{fig:single-time-point-confounding}
+\end{figure}
+
+\begin{idassumpSG}[Consistency of the substitute confounder]
     \label{ass:SG-Consistency}
-    The confounder substitute $Z_i$
-    
+The sequential deconfounder assumes that all latent variables $Z\sim\text{CMM}(p)$ for a particular 
+$p$ are pinpointed 
+by a single deterministic function of treatment and observed covariates history. 
+Formally, there exists a measurable function
+$f$ such that
+\[
+p(z \mid \bar x_T, \bar a_T) = \delta_{f(\bar x_T,\bar a_T)}.
+\]    
 \end{idassumpSG}
+Assumption~\ref{ass:SG-Consistency} implies the uniqueness of the substitute confounder. 
+ This assumption is necessary since only the existance of a CMM, does not guaranty the uniqueness of the latent 
+ variable \cite{damourMultiCauseApproachesCausal2019}. However, the substitute confounder is not 
+ required to coincide with the true confounder $U$ or the true latent factorizer $Z$. It is sufficient 
+ to estimate the substitue confounder up to some deterministic bijective 
+ transformation,e.g., a linear 
+ transformation.  
 
+Under these assumptions
+and the common assumptions, Theorem 1 in \citeA{hattSequentialDeconfoundingCausal2024} 
+states that we obtain sequential ignorability 
+conditioned on the observed covariates' history, treatment history and the
+substitute confounder $Z_i$, i.e., for all $t \in \{1, \ldots, T\}$ and for all $\bar{a}_t$,
+\begin{equation}
+    \label{eq:seqgplvm-single-unit-seqignorability}
+    Y_{i}(\bar{a}_{T}) \perp A_t \mid \bar{X}_{it}, \bar{A}_{i,t-1} ,Z_{i}.
+\end{equation}
+This theorem makes a bridge between the observational world and the potential outcomes world. 
+More importantly, this theorem does not restrict the class of models that can be used to 
+estimate the substitute confounder. It holds for any 
+latent variable model that can estimate a latent variable $Z$ in a CMM of chosen order $p$.
+
+\subsection{SeqGPLVM}
+
+
+\subsection{Outcome model}
 In \cite{hattSequentialDeconfoundingCausal2024}, the exact procedure for adjusting for unmeasured time-invariant confounding using SeqGPLVM is as follows:
 \begin{itemize}
     \item \textbf{Stage 1: Sequential Latent Factor Model.} Fit a latent variable model to the 

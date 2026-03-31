@@ -14,7 +14,7 @@ into the details of the steps of each method.
 Let $i=1, \ldots, N$ index the individuals in the study and let $t=0, \ldots, T$ 
 index the time points at which measurements are taken. The treatment 
 variable is denoted as $A_{it}$, which can take on values from a 
-predefined set of treatment options. In this thesis, 
+predefined set of treatment options $\mathcal{A}_t$. In this thesis, 
 the treatments are assumed to be binary, so that $A_{it} \in \{0,1\}$. We adopt the convention that treatment 
 is absent at the beginning of the study. Therefore, $A_{i0} = 0$ 
 for all individuals. 
@@ -51,5 +51,6 @@ as the causal target of interest in this thesis.
 \input{sections/method/method_fe_msm.tex}
 \input{sections/method/method_seqgplvm.tex}
 \input{sections/method/outcome.tex}
+\input{sections/method/trimming.tex}
 \input{sections/method/method_comparison.tex}
 

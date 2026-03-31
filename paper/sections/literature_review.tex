@@ -224,7 +224,7 @@ devised for static settings with multiple treatments. The key idea is that if th
 a a true structural unobserved confounder vector $U$ that affects multiple treatments, then it leaves a 
 statistical signature in the observed treatments by inducing conditional independence 
 between the treatments: 
-$$p(A_{i1}, A_{i2}, \ldots, A_{iM}\mid U_i, X_i) =  \prod_{j=1}^{M} p(A_{ij}\mid U_i, X_i)$$
+$$\mathbb{P}(A_{i1}, A_{i2}, \ldots, A_{iM}\mid U_i, X_i) =  \prod_{j=1}^{M} \mathbb{P}(A_{ij}\mid U_i, X_i)$$
 Moreover, if $U_i$ was observed, then the strong ignorability assumption would hold:
 $$Y_i(\bar{a}_M) \perp (A_{i1}, A_{i2}, \ldots, A_{iM}) | U_i, X_i$$
 where $M$ is the number of treatments, $A_{ij}$ is the $j$-th treatment for 
@@ -232,7 +232,7 @@ individual $i$, and $X_i$ is the observed covariate vector.
 
 The deconfounder recepie is then to fit a latent factor model of the assigned 
 treatments which renders the same treatment conditional independance structure as the true unobserved confounder $U$ by substituting the latent variable $Z$ instead: 
-$$p_{\Theta}(A_{i1}, A_{i2}, \ldots, A_{iM}\mid Z_i, X_i) = \prod_{i=1}^N \prod_{j=1}^{M} p(A_{ij}\mid Z_i, X_i,\theta_j)$$
+$$\mathbb{P}_{\Theta}(A_{i1}, A_{i2}, \ldots, A_{iM}\mid Z_i, X_i) = \prod_{i=1}^N \prod_{j=1}^{M} \mathbb{P}(A_{ij}\mid Z_i, X_i,\theta_j)$$
 where $\theta_j$ is the treatment-specific parameter. Under the assumptions below and SUTVA,  
 this latent variable $Z$ can be used as a substitute for the unobserved confounder $U$ and to retain the ignorability assumption:
 $$Y_i(\bar{a}_M) \perp (A_{i1}, A_{i2}, \ldots, A_{iM}) | Z_i, X_i.$$
@@ -321,7 +321,7 @@ is the most controversial assumption and the implementations of it will
 be discussed in Chapter~\ref{chap:discussion}. A graphical comparison of 
 the sequential deconfounder and the multi-treatment deconfounder is presented In Figure 
 \ref{fig:deconfounder-comparison}.
-
+maybe mention \cite{bouchattaouiCausalDynamicVariational2025}
 \begin{figure}[htbp]
     \centering
 

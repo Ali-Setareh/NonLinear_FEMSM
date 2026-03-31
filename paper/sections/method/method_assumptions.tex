@@ -17,13 +17,13 @@ assumptions, respectively.
 % --- Common assumptions (C1, C2, ...) ---
 % Assumes you already defined the assumpC environment (C-prefix) in the preamble.
 
-\begin{assumpC}[Consistency]\label{ass:C-consistency}
+\begin{idassumpC}[Consistency]\label{ass:C-consistency}
 The observed outcome for each individual under their observed treatment history equals
 the potential outcome under that treatment history. Formally, if $\bar{A}_{iT}=\bar{a}_{iT}$, 
 then $Y_{i}=Y_{i}(\bar{a}_{iT})$. 
 Moreover, $Y_{i} = Y_{i}(\underline{a}_{i,T-k})$ if 
 $\bar{A}_{iT}=\left(\bar{A}_{i,T-k-1},\underline{a}_{i,T-k}\right)$.
-\end{assumpC}
+\end{idassumpC}
 
 \begin{comment}
 
@@ -46,12 +46,12 @@ in the population of interest, and for all $a_t \in \mathcal{A}_t$.
 
 \end{comment}
 
-\begin{assumpC}[No interference]\label{ass:C-no-interference}
+\begin{idassumpC}[No interference]\label{ass:C-no-interference}
 The treatment assignment for one individual does not affect the potential outcomes of
 other individuals. This assumption is also known as the no spillover assumption.
-\end{assumpC}
+\end{idassumpC}
 
-\begin{assumpC}[Time-invariance of unmeasured confounding]\label{ass:C-timeinvariant-uc}
+\begin{idassumpC}[Time-invariance of unmeasured confounding]\label{ass:C-timeinvariant-uc}
 The unmeasured confounding is assumed to be
 time-invariant. That is, $U_{i,t} = U_i$ for $t \in \{1,\dots,T\}$. We can then write 
 conditional ignorability as 
@@ -65,6 +65,19 @@ A_{it}
 U_i. \]
 Note that this assumption is about the true underlying data-generating process and cannot be  
 used for identification directly since $U_i$ is unmeasured. 
-\end{assumpC}
+\end{idassumpC}
+
+\begin{idassumpC}[Positivity]\label{ass:C-positivity}
+For all treatment times $t = T - k + 1, \ldots, T$, 
+and all histories $(\bar{X}_t, \bar{A}_{t-1}, \eta_i)$ 
+with positive probability, every treatment level has positive probability:
+\[
+\mathbb{P}(A_t = a_t \mid \bar{X}_t = \bar{x}_t,\ \bar{A}_{t-1} = 
+\bar{a}_{t-1}, \eta_i) > 0 \quad \text{for all } a_t \in \mathcal{A}_t
+\]
+Where $\eta_i$ represents the unit-specific fixed effect in the FE-MSM model 
+or the confounder substitute in the SeqGPLVM model. This assumption  particularly
+is necessary for the identification of $\mathbb{E}[Y_i(\underline{a}_{T-k})]$.
+\end{idassumpC}
 
 

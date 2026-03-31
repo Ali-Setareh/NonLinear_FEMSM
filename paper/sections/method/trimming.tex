@@ -1,0 +1,11 @@
+\section{Trimming weights}
+\label{sec:trimming}
+Both Seqgplvm and FE-MSM rely on within-unit treatment variations. Even if the 
+population level positivity assumption holds (Assumption~\ref{ass:C-positivity}), 
+it is possible to encounter individuals in the sample who are always 
+treated or never treated. In these cases the fixed-effects in FE-MSM 
+and the latent variable substitutes in SeqGPLVM are not identified. To address this issue, 
+fixed probabilities of $\hat\pi_{it} = 0.01$ for never treated samples 
+and $\hat\pi_{it} = 0.99$ for always treated samples are imputed. 
+
+, the estimated propensity scores may be unstable for units with extreme values of the covariates. To address this issue, we apply trimming to the estimated propensity scores, ensuring that they fall within a reasonable range. This helps to reduce the variance of the IPTW estimator and improve its finite-sample performance.

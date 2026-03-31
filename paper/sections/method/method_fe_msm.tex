@@ -9,7 +9,9 @@ estimated propensity scores in stage one to adjust for
 confounding using IPTW. FE-MSM can be seen as a very direct way of 
 bringing back the sequential 
 ignorability assumption where we suspect of unmeasured time-invariant 
-confounding. More formally, the identification of 
+confounding. The fixed effect acts as a unit specific 
+offset in the propensity score model, capturing all 
+the time-invariant unmeasured confounding. More formally, the identification of 
 the causal effect of interest relies on the following assumption:
 \begin{idassumpFE}[Unit-specific ignorability]\label{ass:FE-unit-specific-ignor}
     Let $\alpha_i$ be a time-invariant unmeasured unidimensional random variable, For 
@@ -29,7 +31,8 @@ Assumption \ref{ass:FE-unit-specific-ignor} states that conditioned on
 the past treatment and covariate history, as well as 
 the unmeasured fixed effect $\alpha_i$, 
 the treatment assignment at time $t$ is independent of the future 
-potential outcomes and covariates. Under this assumption, the truncated potential 
+potential outcomes and covariates. Under this assumption along with 
+the assumptions \ref{ass:C-consistency} to \ref{ass:C-positivity}, the truncated potential 
 outcome $\mathbb{E}[Y_i(\underline{a}_{T-k})]$ can be nonparametrically identified as follows
 
 \begin{equation}
@@ -40,48 +43,114 @@ outcome $\mathbb{E}[Y_i(\underline{a}_{T-k})]$ can be nonparametrically identifi
     {\prod_{t=T-k}^{T} \pi_{it}^{a_t} (1 - \pi_{it})^{1 - a_t}}
     \right].
 \end{equation}
-Where $\pi_{it} = \Pr(A_{it} = 1 \mid \bar X_{it}, \bar A_{i,t-1}, \alpha_i)$. 
-
-In practice, this probability is being estimated from the data using a parametric model. This model 
-requires to be correctly specified up to the unit-specific fixed effect for IPTW to be consistant.
-
-\begin{modassumpFE}[Correct specification of the propensity score model up to time-invariant unmeasured heterogeneity]
-\label{ass:FE-ps-correct}
-The parametric model
-There exists an \emph{unmeasured}, unit-specific, time-constant variable $\alpha_i$ capturing
-time-invariant unmeasured heterogeneity in treatment assignment, and a known model class
-$\{\pi_{it}(\cdot;\theta,z)\}_{\theta\in\Theta}$ (parametric in $\theta$), such that for all individuals $i$
-and times $t$,
-\[
-\mathbb{P}\!\bigl(D_{it}=1 \,\big|\, \bar X_{it},\, \bar A_{i,t-1},\, \alpha_i \bigr)
+Where $\pi_{it} = \mathbb{P}(A_{it} = 1 \mid \bar X_{it}, \bar A_{i,t-1}, \alpha_i)$. 
+In practice, a parametric model such as  
+$
+\pi_{it}(\bar{x}_{it}, \bar{a}_{i,t-1}; \beta_0,\alpha_{i0})
 =
-\pi_{it}\!\left(\bar X_{it},\, \bar A_{i,t-1};\, \theta_0,\, \alpha_i\right),
+\mathbb{P}\!\left(
+A_{it}=1 \mid X_{it}=\bar{x}_{it},\; \bar{A}_{i,t-1}=\bar{a}_{i,t-1}; \beta_0, \alpha_{i0}
+\right)$, 
+is specified; where $\beta_0$ and $\alpha_{i0}$ are the true $k \times 1$ parameter vector and 
+the unit-specific fixed effect respectively. 
+This model is estimated via a
+conditional maximum likelihood estimator. 
+The log-likelihood function for the treatment model can be written as 
+\[
+\ell_{it}(\beta,\alpha_{i})=A_{it}\log \pi_{it}(\beta,\alpha_{i}) + 
+(1-A_{it})\log\{1-\pi_{it}(\beta,\alpha_{i})\}.
 \]
-for some finite-dimensional parameter vector $\theta_0$. In other words, the functional form
-in $\theta$ is correctly specified \emph{conditional on} $\alpha_i$ (i.e., the model is correct \emph{up to}
-the unmeasured heterogeneity $\alpha_i$).
+Let $\alpha_0 = (\alpha_{i0}, \ldots, \alpha_{iN})$, then $\beta_0$ and $\alpha_0$ 
+are the solutions to the following optimization problem: 
+\[ 
+(\beta_0, \alpha_1, \ldots, \alpha_N)
+= \arg\max_{\beta,\alpha_1,\ldots,\alpha_N}
+\sum_{i=1}^{N}\sum_{t=1}^{T}
+\mathbb{E}\!\left[\ell_{it}(\beta,\alpha_i)\mid \alpha_i\right].
+\]
+The estimates $\hat\alpha = (\hat\alpha_1, \ldots, \hat\alpha_N)$ and $\hat\beta$ are 
+obtained by solving the finite-sample analog of this optimization problem. 
+
+Having obtained the estimates of the propensity scores, the weights for the IPTW 
+estimation of the marginal structural model are constructed as
+\begin{equation}
+\widehat{W}_i(\hat\beta,\hat\alpha_i)=\prod_{t=T-K}^{T}
+\left(\frac{1}{\pi_{it}(\hat\beta,\hat\alpha_i)}\right)^{A_{it}}
+\left(\frac{1}{1-\pi_{it}(\hat\beta,\hat\alpha_i)}\right)^{1-A_{it}}
+\label{eq:iptw_weights}
+\end{equation}
+where only the last $K$ time points are included in the product. However, the 
+propensity score model is estimated using the full treatment history. 
+
+If a marginal structural model is specified as $\mathbb{E}[Y_i(\underline{a}_{T-k})] = m(\underline{a}_{T-k}; \gamma_0)$,
+let 
+\[
+\Psi_N(\gamma)
+:=
+\frac{1}{N} \sum_{i=1}^{N}
+\widehat{W}_i(\hat\beta, \hat\alpha_i)\,
+h\!\left(\underbar{A}_{i,T-k}\right)\,
+\left[
+Y_i - m\!\left(\underbar{A}_{i,T-k}; \gamma \right)
+\right].
+\]
+Then, the estimator $\hat{\gamma}$ is defined as a solution to the sample
+estimating equation
+\[
+\Psi_N(\gamma)=0.
+\]
+In this equation $h(\cdot)$ is a user-specified function of the treatment history. 
+If the marginal structural model is specified as a linear model, a common choice is 
+to set $h(\underbar{A}_{i,T-k}) = \underbar{A}_{i,T-k}$. Then the 
+parameters of the marginal structural model can be estimated via a weighted 
+least squares regression of $Y_i$ on $\underbar{A}_{i,T-k}$ using the weights 
+defined in equation \ref{eq:iptw_weights}. The consistency of the $\hat{\gamma}$ relies on the 
+correct specification of the propensity score 
+model up to the unmeasured fixed effect $\alpha_i$. 
+
+\begin{modassumpFE}[Correct specification of the parametric component of the propensity score model]
+\label{ass:ps-correct-spec}
+Suppose there exists a finite-dimensional parameter vector $\beta_0$ and unit-specific effects
+$\alpha_{i0}$ such that, for all $i$ and $t$,
+\[
+\mathbb{P}(A_{it}=1 \mid X_{it}, A_{i,t-1}, \alpha_i)
+=
+\pi_{it}(X_{it}, A_{i,t-1}; \beta_0, \alpha_{i0})
+\qquad \text{a.s.}
+\]
+That is, conditional on the unit-specific effect $\alpha_i$, the treatment assignment mechanism
+is correctly specified as a member of the posited parametric family in $(X_{it},A_{i,t-1})$.
 \end{modassumpFE}
 
-\begin{idassumpFE}[Positivity assumption]
-    
-    
-\end{idassumpFE}
-\begin{figure}
+This assumption only requires the propensity score to be correctly specified up to the 
+unit-specific effect $\alpha_i$ and it does not impose any assumptions on the 
+relationship between $\alpha_i$ and the observed covariates. Based on this assumption and 
+other regularity assumptions, \citeA{blackwellEffectPoliticalAdvertising2024} showed in 
+Theorem 1 that 
+\[
+\sqrt{N}\,(\widehat{\gamma}-\gamma_{0})
+\overset{d}{\to}
+N(0, V_{\gamma_0}),
+\]
+where $V_{\gamma_0}$ is a sandwich-type asymptotic variance that can be consistently estimated using the sample analog of the sandwich formula.
+Figure~\ref{fig:fixed_effect_architecture}, 
+shows a graphical representation of the conditional treatment assignment likelihood. 
+
+\begin{figure}[!b]
     \centering
     \includegraphics[width=0.8\linewidth]{figures/build/fixed_effect_dag.pdf}
     \caption{
     Plate diagram of the the conditional assignment likelihood
     for the fixed-effects propensity-score model. The likelihood factorizes as
     $
-    p(\mathbf{A} \mid \mathbf{X}, \mathbf{Z}, \theta)
+    p(\mathbf{A} \mid \mathbf{X};\alpha, \beta)
     =
     \prod_{i,t}
-    p\!\left(A_{it} \mid A_{i,t-1}, X_{i,t-1}, Z_i, \theta\right).
+    p\!\left(A_{it} \mid A_{i,t-1}, X_{i,t-1}, \alpha_i, \beta\right).
     $
     We do not specify a model for the 
-    joint distribution of $(\mathbf{X}, \mathbf{Z})$. Note that, 
+    joint distribution of $(\mathbf{X}, \alpha)$. Note that, 
     since $\alpha_i$ is considered as a parameter and not a random variable 
-    in this method, 
     it does not have a node around it.
     }
 \label{fig:fixed_effect_architecture}
