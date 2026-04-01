@@ -29,16 +29,16 @@ described below.
 %model. 
 
 \begin{idassumpSG}[CMM(p): Conditional Markov Model of order p]\label{ass:SG-Marcovianity}
-    A latent variable $Z$, a fixed order $p \in \mathbb{N}^*$
+    A latent variable $Z \in \mathbb{R}^d $, a fixed order $p \in \mathbb{N}^*$
     and a parameter vector $\boldsymbol{\gamma} = (\gamma_1, \ldots, \gamma_T)$ exist such that the assigned treatment distribution can be 
     factorized as: 
     \begin{equation}
-    p_{\boldsymbol{\gamma}}(\bar{a}_{T} \mid \bar{\mathbf{x}}_{T}, \mathbf{z}) 
-    = \prod_{t=1}^T p_{\gamma_t}(a_{t} \mid a_{t-p:t-1}, \mathbf{x}_{t}, \mathbf{z}). 
+    p_{\boldsymbol{\gamma}}(\bar{a}_{T} \mid \bar{x}_{T}, z) 
+    = \prod_{t=1}^T p_{\gamma_t}(a_{t} \mid a_{t-p:t-1}, \bar{x}_t, z). 
     \label{eq:cmm}
     \end{equation}
     for $t<1$, $a_t$ is set to $0$ by convention. We then say that the 
-    latent variable Z follows a Conditional Markov Model of order p, 
+    latent variable Z follows a Conditional Markov Model of order $p$, 
     written $Z \sim \text{CMM} (p).$
      
 \end{idassumpSG}
@@ -87,8 +87,9 @@ $f$ such that
 p(z \mid \bar x_T, \bar a_T) = \delta_{f(\bar x_T,\bar a_T)}.
 \]    
 \end{idassumpSG}
-Assumption~\ref{ass:SG-Consistency} implies the uniqueness of the substitute confounder. 
- This assumption is necessary since only the existance of a CMM, does not guaranty the uniqueness of the latent 
+Assumption~\ref{ass:SG-Consistency} implies the uniqueness of the latent variable $Z$ which 
+imposes the $\text{CMM}$ of order $p$. 
+ This assumption is necessary since only the existance of a $\text{CMM}(p)$, does not guaranty the uniqueness of the latent 
  variable \cite{damourMultiCauseApproachesCausal2019}. However, the substitute confounder is not 
  required to coincide with the true confounder $U$ or the true latent factorizer $Z$. It is sufficient 
  to estimate the substitue confounder up to some deterministic bijective 
@@ -107,10 +108,78 @@ substitute confounder $Z_i$, i.e., for all $t \in \{1, \ldots, T\}$ and for all 
 This theorem makes a bridge between the observational world and the potential outcomes world. 
 More importantly, this theorem does not restrict the class of models that can be used to 
 estimate the substitute confounder. It holds for any 
-latent variable model that can estimate a latent variable $Z$ in a CMM of chosen order $p$.
+latent variable model that can estimate a latent variable $Z$ in a CMM of chosen order $p$. 
+The key idea of the deconfounder is that 
+once the substitute confounder is estimated, we can 
+treat it as a \emph{observed-like} covariates and include it in 
+any outcome model—depending on the specific causal target—to adjust for 
+confounding. 
 
 \subsection{SeqGPLVM}
+Sequential Gaussian process latent variable model (SeqGPLVM) 
+is a specific implementation of the sequential deconfounding theory based 
+on the Gaussian process latent variable model (GPLVM)
+\cite{lawrenceGaussianProcessLatent2003, titsiasBayesianGaussianProcess2010}. 
+GPLVM is a non-parametric probabilistic latent variable model that can be 
+used to estimate a low-dimensional 
+latent representation of high-dimensional data. SeqGPLVM extends 
+GPLVM to the sequential setting by modeling the treatment assignment 
+mechanism as a CMM using Gaussian processes. 
 
+%It leverages the 
+%flexibility of Gaussian processes to capture complex, non-linear 
+%relationships between the latent confounder substitutes, observed 
+%covariates, and treatment assignments over time.
+
+The objective of SeqGPLVM is to estimate the joint posterior distribution of the substitute confounders
+$\{Z_i\}_{i=1}^N$ given the observed treatment history and covariates,
+$p(\{Z_i\}_{i=1}^N \mid \{\bar{A}_{iT}\}_{i=1}^N, \{\bar{X}_{iT}\}_{i=1}^N)$, while imposing the CMM structure on the treatment
+assignment mechanism. Here, $Z_i \in \mathbb{R}^d$ denotes the latent confounder substitute
+for individual $i$, where $d$ is the dimension of the latent space. To estimate this posterior 
+using the 
+Bayesian framework, a prior and 
+a likelihood model are specified. We assign the following prior to the 
+latent confounder substitutes assuming they are i.i.d. across individuals and the latent dimensions:
+\[
+p(\{z_i\}_{i=1}^N) = \prod_{i=1}^N p(z_i),
+\qquad \text{where} \qquad
+Z_i \sim \mathcal{N}(0,I_d)
+\quad \text{for } i=1,\ldots,N.
+\]
+
+The SeqGPLVM defines a generative mapping, $f_t$, from the joint space of the latent 
+confounder substitutes, 
+observed previous treatment history and covariates, to the treatment assignment 
+at each time point: 
+\[
+f_t : \mathcal{Z} \times \mathcal{X}_{1} \times \cdots \times \mathcal{X}_t \times \mathcal{A}_{t-p} \times \cdots \times \mathcal{A}_{t-1} \to \mathcal{A}_t.
+\]
+In SeqGPLVM, we model these mappings as non-parametric functions using Gaussian processes (GPs), 
+i.e., \(f_t \sim \mathcal{GP}(0, k_t(\cdot, \cdot))\) for \(t = 1, \ldots, T\), 
+where \(k_t\) is the kernel function at time \(t\). 
+Since the kernels are defined on the joint space of the latent substitutes 
+and the observed history, 
+we have a lot of flexibility to encode different types of interactions between 
+these variables. For the sake 
+of simplicity, we use the same kernel for all time points, but in principle, 
+we can use different kernels at different time points. The generative model then 
+can be written as follows: 
+
+\[
+p(\{\bar{a}_{iT}\}_{i=1}^N, \bar{f}_T  \mid \{\bar{x}_{iT}\}_{i=1}^N, \{z_i\}_{i=1}^N) = \prod_{i=1}^N 
+\prod_{t=1}^T p(a_{it} 
+\mid f_t)p(f_t \mid z_i, \bar{x}_{i,t}, \bar{a}_{i,t-p:t-1})).
+\]
+
+Since the exact posterior distribution is intractable, we adopt the 
+variational inference with inducing point \cite{titsiasBayesianGaussianProcess2010} for inference. 
+Since the GP kernels are defined on \(\mathcal{Z} \times \mathcal{X}_t \times \mathcal{A}_{t-1}\), 
+the dimensionality of the inducing points is \(|\mathcal{Z}| + |\mathcal{X}_t| + |\mathcal{A}_{t-1}|\). 
+The likelihood term \(p(a_{i,t} \mid f_t)\) depends on the type of treatment variable. 
+For instance if \(\mathcal{A_t}\in \{0,1\}\), we can use a Bernoulli likelihood, 
+and if \(\mathcal{A}_t\) is continuous, we can use a Gaussian likelihood. For more 
+details on the inference procedure, see \ref{sec:seqgplvm_loss}. In Fig \ref{fig:seqgplvm_architecture} we show 
+the inference DAG of the SeqGPLVM.
 
 \subsection{Outcome model}
 In \cite{hattSequentialDeconfoundingCausal2024}, the exact procedure for adjusting for unmeasured time-invariant confounding using SeqGPLVM is as follows:
@@ -134,52 +203,7 @@ in our implementation, we use the estimated propensities from the
 SeqGPLVM treatment model directly in the MSM using IPTW. This choice is also conceptually closer to 
 the FE-MSM method described in section \ref{sec:fe-msm}. 
 
-If the treatment assignment mechanism follows a CMM, then the task we need to solve is to find a 
-map from the joint space of the observed covariates' history and treatment history and the latent 
-substitute to the 
-treatment assignment at each time point. This task can be done using any latent variable model that can fit a CMM. Mathematically, we need to find functions \(f_t\) such that 
-\[
-f_t \colon \mathcal{Z} \times \mathcal{X}_t \times \mathcal{A}_{t-1} \rightarrow \mathcal{A}_t
-\]
 
-In SeqGPLVM, we model these functions as non-parametric functions using Gaussian processes (GPs), 
-i.e., \(f_t \sim \mathcal{GP}(0, k_t(\cdot, \cdot))\) for \(t = 1, \ldots, T\), where \(k_t\) is the kernel function at time \(t\). 
-The use of GPs allows for flexible modeling of complex, non-linear 
-relationships between the latent confounders, observed covariates, 
-and treatment assignments over time. Since the kernels are defined on the joint space of the latent substitutes and the observed history, 
-we have a lot of flexibility to encode different types of interactions between these variables. For the sake 
-of simplicity, we use the same kernel for all time points, but in principle, 
-we can use different kernels at different time points. The inference task is then to estimate the joint posterior 
-distribution of the latent confounder substitutes and the latent functions given the observed treatment history and covariates. We can write 
-the joint posterior distribution as follows:
-\begin{align}
-p(\mathbf{Z}, \mathbf{F} \mid \mathbf{A}, \mathbf{X})
-&\propto p(\mathbf{A} \mid \mathbf{F})\, p(\mathbf{F} \mid \mathbf{Z}, \mathbf{X})\, p(\mathbf{Z}\mid \mathbf{X}) \\
-&= \prod_{i=1}^N \prod_{t=1}^T p(a_{i,t} \mid f_t)\, p(f_t \mid \mathbf{z}_i, \mathbf{x}_{i,t})\, p(\mathbf{z}_i)
-\end{align}
-where \(\mathbf{Z} = \{\mathbf{z}_1, \ldots, \mathbf{z}_N\}\) is the set of 
-latent confounder substitutes for all individuals, 
-\(\mathbf{F} = \{f_1, \ldots, f_T\}\) is the set of latent functions for all 
-time points. 
-In the last line we assume the prior distribution over the latent 
-confounding substitute,  \(p(\mathbf{Z}\mid \mathbf{X}) = p(\mathbf{Z})\). 
-This is the called none amortized version of the SeqGPLVM, 
-where we do not condition the prior distribution of the latent 
-confounder substitutes on the observed covariates. 
-In principle, we can also have an amortized version where we use a 
-neural network to parameterize 
-this prior. More details in \ref{discussion}. We also assume that the latent confounder substitutes are distributed 
-i.i.d. across individuals. 
-
-Since the exact posterior distribution is intractable, we adopt the 
-variational inference with inducing point \cite{titsiasBayesianGaussianProcess2010} for inference. 
-Since the GP kernels are defined on \(\mathcal{Z} \times \mathcal{X}_t \times \mathcal{A}_{t-1}\), 
-the dimensionality of the inducing points is \(|\mathcal{Z}| + |\mathcal{X}_t| + |\mathcal{A}_{t-1}|\). 
-The likelihood term \(p(a_{i,t} \mid f_t)\) is dependent on the type of treatment variable. 
-For instance if \(\mathcal{A_t}\in \{0,1\}\), we can use a Bernoulli likelihood, 
-and if \(\mathcal{A}_t\) is continuous, we can use a Gaussian likelihood. For more 
-details on the inference procedure, see \ref{sec:seqgplvm_loss}. In Fig \ref{fig:seqgplvm_architecture} we show 
-the inference DAG of the SeqGPLVM.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\linewidth]{figures/build/fit_seqgplvm_dag.pdf}
