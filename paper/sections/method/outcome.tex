@@ -136,27 +136,3 @@ potential outcomes given the substitute confounder.
 analogously, we enforce practical truncation of estimated probabilities to 
 stabilize estimation in finite samples.
 
-\subsection{FE-MSM}
-The Fixed-Effects MSM (FE-MSM) addresses time-invariant unmeasured confounding by incorporating unit-specific fixed effects directly into the propensity score model.
-
-Unit-Specific Sequential Ignorability: This method relies on the assumption that treatment is randomized conditional on the observed history and a time-constant unit-specific effect $\alpha_i$.
-Estimation Procedure: We obtain estimates for the propensity parameters $\beta$ and the unit effects $\alpha_i$ via **Conditional Maximum Likelihood**. This approach is justified under **large-$N$, large-$T$ asymptotics, where the bias from noisy fixed-effect estimation (the incidental parameters problem) fades over time.
-Weighted Least Squares: Once the fixed-effect weights are constructed, the MSM parameters $\gamma$ are estimated by solving a weighted estimating equation, which reduces to **Weighted Least Squares (WLS)** for our linear specification. We use a **robust (sandwich) variance estimator** to obtain valid Wald confidence intervals.
-
-\subsection{SeqGPLVM}
-
-In contrast to the point-estimate approach of FE-MSM, the SeqGPLVM captures unmeasured confounding by inferring a posterior distribution $q(Z)$ over a latent substitute $Z_i$.
-
-Handling Circular Dependency: To avoid the "circular dependency" created by using $Z_i$ as a covariate in a separate propensity model, we use the estimated propensities from the SeqGPLVM **directly** to build the IPTW weights.
-Multiple Imputation (MI)-Style Procedure: To propagate the latent uncertainty from the GP-based treatment model, we draw $S$ samples $Z^{(s)} \sim q(Z)$. For each draw, we:
-    1.  Compute draw-specific propensities and weights $W^{(s)}$.
-    2.  Fit the weighted MSM to obtain a draw-specific estimate $\hat{\gamma}^{(s)}$ and robust covariance $V^{(s)}$.
-Rubin’s Rules for Pooling: The final point estimate is the average across draws, $\bar{\gamma} = S^{-1}\sum \hat{\gamma}^{(s)}$. The total variance is calculated using **Rubin’s within/between decomposition**, $T = W + (1 + 1/S)B$, which explicitly accounts for the variability induced by the uncertainty in the inferred latent confounder.
-
-
-
-Although the seqgplvm can be used in the settings in which the outcome is observed at every time point, 
-since the asymptotic properties and consistency of their IPTW-FE estimator 
-relies on having less number of N than T (assumption )
-Based on the consistency assumption \ref{ass:C-consistency}, we can define 
-truncated potential outcomes 

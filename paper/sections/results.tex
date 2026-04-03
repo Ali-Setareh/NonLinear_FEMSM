@@ -1,34 +1,5 @@
 \section{Results}
 \label{results}
-\subsection{FE-MSM}
-
-\subsection{SeqGPLVM-MSM}
-To propagate uncertainty from the latent sequential deconfounding stage into the causal estimation stage,
-we adopt a multiple-imputation--style procedure.
-After fitting the SeqGPLVM to the treatment process
-$(\bar{A}_t, \bar{X}_t)$,
-we draw $S$ samples $Z^{(s)} \sim p\!\left(Z \mid \bar{A}_t, \bar{X}_t\right)$
-(approximated via the variational posterior),
-compute the corresponding propensity scores and stabilized inverse-probability weights
-$W^{(s)}$,
-and re-estimate the weighted MSM in each draw to obtain
-$\hat{\gamma}^{(s)}$
-together with a robust (sandwich) covariance estimate $V^{(s)}$.
-We then report the pooled point estimate
-\[
-\bar{\gamma} = S^{-1} \sum_{s=1}^{S} \hat{\gamma}^{(s)}
-\]
-and combine uncertainty using Rubin's within/between decomposition,
-\[
-W = S^{-1} \sum_{s=1}^{S} V^{(s)}, 
-\qquad
-B = \mathrm{Var}_s\!\left(\hat{\gamma}^{(s)}\right),
-\qquad
-T = W + \left(1 + \frac{1}{S}\right) B .
-\]
-This yields confidence intervals that account for both
-(i) sampling variability in the MSM fit conditional on a given latent draw and
-(ii) additional variability induced by uncertainty in the inferred latent confounder.
 
 \textbf{DISCUSSION}
 \hl{While this MI-style propagation provides a principled empirical uncertainty summary,

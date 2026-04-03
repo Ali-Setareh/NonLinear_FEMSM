@@ -154,7 +154,7 @@ at each time point:
 \[
 f_t : \mathcal{Z} \times \mathcal{X}_{1} \times \cdots \times \mathcal{X}_t \times \mathcal{A}_{t-p} \times \cdots \times \mathcal{A}_{t-1} \to \mathcal{A}_t.
 \]
-In SeqGPLVM, we model these mappings as non-parametric functions using Gaussian processes (GPs), 
+We model these mappings as non-parametric functions using Gaussian processes (GPs), 
 i.e., \(f_t \sim \mathcal{GP}(0, k_t(\cdot, \cdot))\) for \(t = 1, \ldots, T\), 
 where \(k_t\) is the kernel function at time \(t\). 
 Since the kernels are defined on the joint space of the latent substitutes 
@@ -172,16 +172,109 @@ p(\{\bar{a}_{iT}\}_{i=1}^N, \bar{f}_T  \mid \{\bar{x}_{iT}\}_{i=1}^N, \{z_i\}_{i
 \]
 
 Since the exact posterior distribution is intractable, we adopt the 
-variational inference with inducing point \cite{titsiasBayesianGaussianProcess2010} for inference. 
-Since the GP kernels are defined on \(\mathcal{Z} \times \mathcal{X}_t \times \mathcal{A}_{t-1}\), 
-the dimensionality of the inducing points is \(|\mathcal{Z}| + |\mathcal{X}_t| + |\mathcal{A}_{t-1}|\). 
-The likelihood term \(p(a_{i,t} \mid f_t)\) depends on the type of treatment variable. 
+variational inference with inducing point for inference \cite{titsiasBayesianGaussianProcess2010}. 
+The dimensionality of the inducing points is \(|\mathcal{Z}| + \sum_{s=1}^{t} |\mathcal{X}_s| + \sum_{s=t-p}^{t-1}|\mathcal{A}_{s}|\). 
+The likelihood term \(p(a_{it} \mid f_t)\) depends on the type of treatment variable. 
 For instance if \(\mathcal{A_t}\in \{0,1\}\), we can use a Bernoulli likelihood, 
-and if \(\mathcal{A}_t\) is continuous, we can use a Gaussian likelihood. For more 
-details on the inference procedure, see \ref{sec:seqgplvm_loss}. In Fig \ref{fig:seqgplvm_architecture} we show 
+and if \(\mathcal{A}_t\) is continuous, we can use a Gaussian likelihood. The details of the 
+variational inference procedure and the optimization of the evidence lower bound (ELBO) are provided 
+in \ref{sec:seqgplvm_loss}. In Fig \ref{fig:seqgplvm_architecture} we show 
 the inference DAG of the SeqGPLVM.
 
 \subsection{Outcome model}
+
+Once the approximate posterior distribution of the substitute confounder is estimated, 
+we can use it to adjust for confounding in the outcome model. This stage 
+closely parallels the FE-MSM procedure described in Section~\ref{sec:fe-msm}. In
+particular, Theorem~1 implies identification of the mean truncated potential outcome
+over the last $K$ time periods through the same IPTW representation as in
+Equation~\ref{eq:truncated_potential_outcome_id}, with the unobserved fixed effect
+$\alpha_i$ replaced by the substitute confounder $Z_i$:
+\begin{equation}
+    \label{eq:truncated_potential_outcome_id_seqgplvm}
+    \mathbb{E}\bigl[Y_i(\underbar{a}_{T-k})\bigr]
+    =
+    \mathbb{E}\left[
+    \frac{\mathbf{1}\bigl(\underbar{A}_{i,T-k} = \underbar{a}_{T-k}\bigr)\, Y_i}
+    {\prod_{t=T-k}^{T} \pi_{it}^{a_t} (1 - \pi_{it})^{1-a_t}}
+    \right],
+\end{equation}
+where
+\[
+\pi_{it}
+=
+\mathbb{P}(A_{it}=1 \mid \bar X_{it}, \bar A_{i,t-1}, Z_i).
+\]
+Hence, as in FE-MSM, estimation proceeds in two steps: first, a parametric model is used
+to estimate the propensity scores, and second, these estimated propensities are used to
+construct inverse-probability weights for fitting the marginal structural model. The key
+difference is that instead of directly estimating a unit-specific fixed effect $\alpha_i$ 
+in the treatment model, we sample from the approximate posterior distribution 
+of the substitute confounder $q(z_i)$ and 
+condition the treatment model on these samples together with the observed history 
+to estimate the propensity scores.
+
+To account for uncertainty in the inferred substitute confounder, we adopt a
+multiple-imputation-style procedure. Specifically, for each posterior draw
+$z_i^{(s)} \sim q(z_i)$, $s=1,\dots,S$, we re-estimate the propensity scores, construct
+the corresponding IPTW weights,
+\[
+\widehat{W}_i(\hat\beta, z_i^{(s)})
+=
+\prod_{t=T-K}^{T}
+\left(\frac{1}{\pi_{it}(\hat\beta,z_i^{(s)})}\right)^{A_{it}}
+\left(\frac{1}{1-\pi_{it}(\hat\beta,z_i^{(s)})}\right)^{1-A_{it}},
+\]
+and fit the same marginal structural model as in the FE-MSM approach. Let
+\[
+\Psi_N(\gamma_s)
+:=
+\frac{1}{N} \sum_{i=1}^{N}
+\widehat{W}_i(\hat\beta, z_i^{(s)})\,
+h\!\left(\underbar{A}_{i,T-k}\right)\,
+\left[
+Y_i - m\!\left(\underbar{A}_{i,T-k}; \gamma_s \right)
+\right].
+\]
+For each draw $s$, the corresponding MSM parameter estimate $\hat\gamma^{(s)}$ is
+obtained by solving
+\[
+\Psi_N(\gamma_s)=0.
+\]
+Equivalently, when the MSM is linear and $h(\underbar{A}_{i,T-k})$ is chosen
+appropriately, this step can be implemented as a weighted least squares regression using
+the draw-specific IPTW weights.
+
+The final point estimate is then obtained by averaging across the $S$ posterior draws,
+\[
+\hat{\gamma} = \frac{1}{S}\sum_{s=1}^{S}\hat{\gamma}^{(s)}.
+\]
+
+This procedure introduces two sources of uncertainty: first, uncertainty about the
+latent substitute confounder induced by the approximate posterior $q(z_i)$, and second,
+the usual sampling uncertainty in the MSM fit conditional on a given latent draw. To
+propagate both sources into the final causal effect estimates, we combine the
+draw-specific estimates using Rubin's within-between decomposition. Let
+$V^{(s)}$ denote the robust (sandwich) covariance estimate associated with
+$\hat{\gamma}^{(s)}$. Then the pooled variance estimator is
+\[
+W = \frac{1}{S}\sum_{s=1}^{S} V^{(s)},
+\qquad
+B = \mathrm{Var}_s\!\left(\hat{\gamma}^{(s)}\right),
+\qquad
+T = W + \left(1+\frac{1}{S}\right)B.
+\]
+The resulting confidence interval $T$ therefore reflect both
+(i) variability in the MSM fit conditional on a latent draw and
+(ii) additional variability due to uncertainty in the inferred substitute confounder.
+
+
+
+
+
+\begin{comment}
+    
+we can use these estimates to adjust for confounding in the outcome model.
 In \cite{hattSequentialDeconfoundingCausal2024}, the exact procedure for adjusting for unmeasured time-invariant confounding using SeqGPLVM is as follows:
 \begin{itemize}
     \item \textbf{Stage 1: Sequential Latent Factor Model.} Fit a latent variable model to the 
@@ -202,15 +295,15 @@ To avoid these issues, and since we are going to use only IPTW/MSM as our outcom
 in our implementation, we use the estimated propensities from the
 SeqGPLVM treatment model directly in the MSM using IPTW. This choice is also conceptually closer to 
 the FE-MSM method described in section \ref{sec:fe-msm}. 
-
+\end{comment}
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\linewidth]{figures/build/fit_seqgplvm_dag.pdf}
     \caption{Plate diagram of the first-stage SeqGPLVM treatment model used to estimate
-time-varying propensity scores. For each time point $t$, a Gaussian process
+time-varying propensity scores for a first order CMM. For each time point $t$, a Gaussian process
 $f_t(\cdot)$ with hyperparameters $\theta_t$ maps the latent state and
-observed history into the assignment probability for $A_{it}$.
+observed history into the assignment probability $A_{it}$.
 The variables $u_t$ denote GP function values at inducing inputs $m_t$
 (shown without nodes as they are treated as parameters).
 Filled nodes indicate observed quantities and unfilled nodes latent quantities.
