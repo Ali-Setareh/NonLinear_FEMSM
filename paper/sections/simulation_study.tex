@@ -29,7 +29,7 @@ the same number of time points.
 In Eq.~\eqref{eq:blackwell_scm}, we present 
 the structural causal equations for the DGP. 
 Here, $\operatorname{expit}(x) = \frac{1}{1 + e^{-x}}$ and 
-$\bar{X}_{iT} = \frac{1}{T}\sum_{t=1}^T X_{it}$.
+$\bar{\mathbf{X}}_{i} = \frac{1}{T}\sum_{t=1}^T \mathbf{X}_{it}$.
 
 \begin{subequations}\label{eq:blackwell_scm}
 \begin{align}
@@ -37,16 +37,16 @@ U_i &:= \varepsilon_i,
 \qquad
 \varepsilon_i \sim \operatorname{Unif}(-a,a).
 \\
-X_{it} &:= -\frac{1}{2}\mathbbm{1} + \varepsilon_{it},
+\mathbf{X}_{it} &:= -\frac{1}{2}\mathbbm{1} + \varepsilon_{it},
 \qquad
 \varepsilon_{it} \sim \mathcal{N}(0,\Sigma).
 \\
 A_{it} &:= \mathbbm{1}\!\left\{\eta_{it} \le
-\operatorname{expit}\!\left(U_i+\varphi A_{i,t-1}+\beta^\top X_{it}\right)\right\},
+\operatorname{expit}\!\left(U_i+\varphi A_{i,t-1}+\boldsymbol{\beta}^\top \mathbf{X}_{it}\right)\right\},
 \qquad \eta_{it} \sim \operatorname{Unif}(0,1)
 \\
 Y_{iT} &:= U_i + \tau_F A_{iT} + \tau_C \sum_{t=T-3}^{T-1} A_{it}
-+ \gamma^\top \bar X_{iT} + \epsilon_{iT},
++ \boldsymbol{\theta}^\top \bar{\mathbf{X}}_{i} + \epsilon_{iT},
 \qquad \epsilon_{iT} \sim \mathcal{N}(0,1)
 \label{eq:blackwell_scm_outcome}
 \end{align}
@@ -57,10 +57,10 @@ contribution of the unmeasured confounder $U_i$ to the variance of the linear pr
 We simulate for two different number of covariates $p \in \{2, 4\}$ 
 to see the effect of the dimensionality 
 of covariates. 
-The coefficients are set to $\beta = (-0.5, -0.5)^{\top}$ when $p=2$ and 
-$\beta = (-0.5, -0.5, 1, -0.5)^{\top}$ when $p=4$. \hl{(add some note about why we chose 
+The coefficients are set to $\boldsymbol{\beta} = (-0.5, -0.5)^{\top}$ when $p=2$ and 
+$\boldsymbol{\beta} = (-0.5, -0.5, 1, -0.5)^{\top}$ when $p=4$. \hl{(add some note about why we chose 
 these coeffs based on the variance or sth)}. We set $\varphi = 0.3$. %Note that we generate 
-The covariates $X_{it}$ are generated exogenously to 
+The covariates $\mathbf{X}_{it}$ are generated exogenously to 
 the treatments solely for the sake of simplicity where  $\Sigma_{jj} = 1$ and $\Sigma_{jj'} = 0.2$ for $j \neq j'$. By doing this, the ground truth 
 values for the causal targets of interests conincide wit the DGP parameters. 
 %So we do not have the 
@@ -68,9 +68,9 @@ values for the causal targets of interests conincide wit the DGP parameters.
 %adjusting for unmeasred time-invariant confounding and make the simulation simpler and it has important 
 %implications in interpreting the causal effects. see section \ref{estimation}. 
 Also note that theere is no dynamics 
-in the covariates and the distribution of $X_{it}$ is the same for all time points. The parameters 
-for the outcome model are set to $\tau_F = 1$, $\tau_C = 0.3$, and $\gamma = (1, 0.5)^{\top}$ 
-when $p=2$ and when $p=4$, $\gamma = (1, 0.5, 1, 1)^{\top}$. The causal DAG for 
+in the covariates and the distribution of $\mathbf{X}_{it}$ is the same for all time points. The parameters 
+for the outcome model are set to $\tau_F = 1$, $\tau_C = 0.3$, and $\boldsymbol{\theta} = (1, 0.5)^{\top}$ 
+when $p=2$ and when $p=4$, $\boldsymbol{\theta} = (1, 0.5, 1, 1)^{\top}$. The causal DAG for 
 the DGP is shown in Figure~\ref{fig:dgp-dag}. 
 \ref{fig:dgp-dag}.
 \begin{figure}[ht]
@@ -85,14 +85,14 @@ the DGP is shown in Figure~\ref{fig:dgp-dag}.
 For defining our causal targets, first we need to specify the 
 causal questions of interest. 
 Define 
-$$S_K(\underbar{a}_{T-K}) := \sum_{t=T-K}^{T-1} a_t 
-\in \{0,1,2,\dots, K\}$$ 
+$$S_k(\underline{\mathbf{a}}_{T-k}) := \sum_{t=T-k}^{T-1} a_t 
+\in \{0,1,2,\dots, k\}$$ 
 as the sum 
-of treatments received in the last $K$ time points before $T$, where $K+1$ 
+of treatments received in the last $k$ time points before $T$, where $k+1$ 
 represents the intervention window.  In real world applications, 
-the choice of $K$ is based on the research question and the domain 
+the choice of $k$ is based on the research question and the domain 
 knowledge about the relevant time window for the treatment effects. 
-In this simulation, we set $K=3$ to match the dependence structure of the 
+In this simulation, we set $k=3$ to match the dependence structure of the 
 outcome on the treatments in the DGP.
 
 We are interested in two causal questions.
@@ -120,37 +120,37 @@ To answer both of these causal questions, a marginal structural
 model is proposed  
 that relates the assigned treatments to the expected potential 
 outcome at the final time: 
-$\mathbb{E\left[Y_{iT}\left(\underbar{a}_{T-k}\right)\right]} = 
-g(\underbar{a}_{T-k}, \gamma_0)$, where 
-$g(\underbar{a}_{T-k}, \gamma_0)$ is the true unkown function 
-parameterized by $\gamma_0$. Our job is 
-to first propose a function $f(\underbar{a}_{T-k}, \gamma)$ 
-and then estimate its parameters $\gamma$. In this 
-DGP, the ground truth function $g$, is: 
+$\mathbb{E\left[Y_{iT}\left(\underline{\mathbf{a}}_{T-k}\right)\right]} = 
+m(\underline{\mathbf{a}}_{T-k}, \boldsymbol{\theta}_0)$, where 
+$m(\underline{\mathbf{a}}_{T-k}, \boldsymbol{\theta}_0)$ is the true unkown function 
+parameterized by $\boldsymbol{\theta}_0$. Our job is 
+to first propose a function $f(\underline{\mathbf{a}}_{T-k}, \boldsymbol{\theta})$ 
+and then estimate its parameters $\boldsymbol{\theta}$. In this 
+DGP, the ground truth function $m$, is: 
 \begin{equation}
     \label{eq:truemsm}
-    g\left(\underline{a}_{T-k}; \gamma_0 \right) = \alpha_0 + \tau_{F} a_T + \tau_{C} \sum_{t=T-3}^{T-1} a_t
+    m\left(\underline{\mathbf{a}}_{T-k}; \boldsymbol{\theta}_0 \right) = \alpha_0 + \tau_{F} a_T + \tau_{C} \sum_{t=T-3}^{T-1} a_t
 \end{equation}
 
 to see this, we begin from Eq.~\eqref{eq:blackwell_scm_outcome}. First note that since this is 
 a sctructural equation model, we can replace the random variables 
 by their interventional values. So we have:
 \[
-Y_{iT}\!\left(\underbar{a}_{T-k}\right)
-= U_i + \tau_F a_T + \tau_C \sum_{t=T-3}^{T-1} a_t + \gamma^\top \bar X_{iT}(\underbar{a}_{T-k}) + \epsilon_{iT}.
+Y_{iT}\!\left(\underline{\mathbf{a}}_{T-k}\right)
+= U_i + \tau_F a_T + \tau_C \sum_{t=T-3}^{T-1} a_t + \boldsymbol{\theta}^\top \bar{\mathbf{X}}_{i}(\underline{\mathbf{a}}_{T-k}) + \epsilon_{iT}.
 \]
 Taking the expectation on both sides and making use of 
 the exogeneity of the covariates and treatments, we have:
 \begin{align}
 \label{eq:truemsmproof}
-\mathbb{E}\!\left[Y_{iT}\!\left(\underbar{a}_{T-k}\right)\right]
+\mathbb{E}\!\left[Y_{iT}\!\left(\underline{\mathbf{a}}_{T-k}\right)\right]
 &= \mathbb{E}[U_i] + \tau_F a_T + \tau_C \sum_{t=T-3}^{T-1} a_t
-   + \gamma^\top \mathbb{E}[\bar X_{iT}] + \mathbb{E}[\epsilon_{iT}] \\
-&= \mathbb{E}\!\left[U_i + \gamma^\top \bar X_{iT}\right]
+   + \boldsymbol{\theta}^\top \mathbb{E}[\bar{\mathbf{X}}_{i}(\underline{\mathbf{a}}_{T-k})] + \mathbb{E}[\epsilon_{iT}] \\
+&= \mathbb{E}\!\left[U_i + \boldsymbol{\theta}^\top \bar{\mathbf{X}}_{i}(\underline{\mathbf{a}}_{T-k})\right]
    + \tau_F a_T + \tau_C \sum_{t=T-3}^{T-1} a_t \\
 &= \alpha_0 + \tau_F a_T + \tau_C \sum_{t=T-3}^{T-1} a_t,
 \qquad
-\alpha_0 := \mathbb{E}\!\left[U_i + \gamma^\top \bar X_{iT}\right]
+\alpha_0 := \mathbb{E}\!\left[U_i + \boldsymbol{\theta}^\top \bar{\mathbf{X}}_{i}(\underline{\mathbf{a}}_{T-k})\right]
 \end{align}
  
 From Eq.~\eqref{eq:truemsm}, it can be seen: 
@@ -164,12 +164,12 @@ outcome model in the DGP is a result of the linearity of the DGP and
 the absence of treatment-confounder feedback. 
 See \ref{sec:msm_ground_truth} for more discussion on this. To only focus 
 on the adjustment for the unmeasred confounder, for both of the methods, 
-we specify $f\left(\underline{a}_{T-k}; \gamma \right)$ as the correctly 
+we specify $f\left(\underline{\mathbf{a}}_{T-k}; \boldsymbol{\theta} \right)$ as the correctly 
 specified linear MSM:
 \begin{equation}
-    f\left(\underline{a}_{T-k}; \gamma \right) = \alpha' + \tau_F' a_T + \tau_C' \sum_{t=T-3}^{T-1} a_t
+    f\left(\underline{\mathbf{a}}_{T-k}; \boldsymbol{\theta} \right) = \alpha' + \tau_F' a_T + \tau_C' \sum_{t=T-3}^{T-1} a_t
 \end{equation}
-where $\gamma = (\alpha', \tau_F', \tau_C')$. 
+where $\boldsymbol{\theta} = (\alpha', \tau_F', \tau_C')$. 
 
 
 

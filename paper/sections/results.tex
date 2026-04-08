@@ -3,7 +3,7 @@
 
 We compared the performance of the proposed methods by estimating the two structural 
 parameters of interest $\tau_F$ and $\tau_C$ using the weighted least squares. 
-For the FE-MSM method, the parameters are estimated by solving the following optimization problem:
+For FE-MSM, the parameters are estimated by solving the following optimization problem:
 \begin{equation}
 \label{eq:least_squares}
 (\widehat{\tau}_F,\widehat{\tau}_C)
@@ -23,19 +23,28 @@ propensity score model is correctly specified (up to a unit-specific fixed effec
 as a logistic regression of the 
 treatment on the past treatment history and covariates, with a unit-specific fixed effect, 
 \[
-p(a_{it} = 1 \mid x_{it}, a_{i,t-1}, z_i^{(s)}) = \operatorname{expit}w_1^\top x_{it} + w_2 a_{i,t-1} + \alpha_i.
+p(a_{it} = 1 \mid x_{it}, a_{i,t-1}, z_i^{(s)}) = \operatorname{expit}(w_1^\top x_{it} + w_2 a_{i,t-1} + \alpha_i).
 \]
 
 
-For the sequential GPLVM method, a $\text{CMM}(1)$ with a one dimensional latent variable 
-(i.e., $Z_i \in \mathbb{R}$ amd $|\mathcal{Z}| = 1$) 
+For the sequential GPLVM, a $\text{CMM}(1)$ with a one dimensional latent variable 
+(i.e., $Z_i \in \mathbb{R}$ and $|\mathcal{Z}| = 1$) 
 is fitted to the treatment data, 
 using a linear kernel: 
 \[
 k_t^{\text{treat}} ((x_t,a_{t-1},z), (x'_t,a'_{t-1},z'))= \nu \left[\sum_{j=1}^{|\mathcal{X_t}|}x_{jt} x'_{jt} 
 + aa' + \sum_{j=1}^{|\mathcal{Z}|} z_{j} z'_{j} \right]
 \]
-where $\nu$ is the variance hyperparameter. The parameters of the MSM are estimated by
+where $\nu$ is the variance hyperparameter. This is equivalent to 
+the Bayesian linear regression with a latent variable. The observed confounders 
+are standardized before fitting the GPLVM. A  
+weakly informative Gamma prior is placed on 
+$\nu$, specifically $\nu \sim \Gamma(2,1)$.
+The parameters of the GPLVM are estimated by minimizing the negative evidence 
+lower bound using the Adam optimizer with learning rate set to 
+$0.01$. The number of iterations is set to $6000$ and the convergence is 
+monitored by checking the change in ELBO.
+The parameters of the MSM are estimated by
 the procedure described in Section~\ref{sec:seqgplvm-outcome} by solving 
 the same optimization problem as in Eq.~\eqref{eq:least_squares} with 
 number of posterior draws set to $S=100$. The following logistic regression 
