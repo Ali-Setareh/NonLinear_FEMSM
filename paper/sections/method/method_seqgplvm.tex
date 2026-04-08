@@ -30,11 +30,11 @@ described below.
 
 \begin{idassumpSG}[CMM(p): Conditional Markov Model of order p]\label{ass:SG-Marcovianity}
     A latent variable $\mathbf{Z}_i \in \mathbb{R}^J $, a fixed order $p \in \mathbb{N}^*$
-    and a parameter vector $\boldsymbol{\gamma} = (\gamma_1, \ldots, \gamma_T)$ exist such that the assigned treatment distribution can be 
+    and a parameter vector $\boldsymbol{\gamma} = (\boldsymbol{\gamma}_1, \ldots, \boldsymbol{\gamma}_T)$ exist such that the assigned treatment distribution can be 
     factorized as: 
     \begin{equation}
     p_{\boldsymbol{\gamma}}(\bar{\mathbf{a}}_{iT} \mid \bar{\mathbf{x}}_{iT}, \mathbf{z}_i) 
-    = \prod_{t=1}^T p_{\gamma_t}(a_{it} \mid \mathbf{a}_{i,t-p:t-1}, \bar{\mathbf{x}}_{\leq t}, \mathbf{z}_i). 
+    = \prod_{t=1}^T p_{\boldsymbol{\gamma}_t}(a_{it} \mid \mathbf{a}_{i,t-p:t-1}, \bar{\mathbf{x}}_{\leq t}, \mathbf{z}_i). 
     \label{eq:cmm}
     \end{equation}
     for $t<1$, $\mathbf{a}_t$ is set to $0$ by convention. We then say that the 
@@ -48,7 +48,7 @@ and \cite{bouchattaouiCausalDynamicVariational2025}). Hence the more general
 form of the CMM assumption is stated.}.
 \end{idassumpSG}
 In Eq.~\eqref{eq:cmm},
-\(\boldsymbol{\gamma} = \{\gamma_1, \ldots, \gamma_T\}\) are the generative 
+\(\boldsymbol{\gamma} = \{\boldsymbol{\gamma}_1, \ldots, \boldsymbol{\gamma}_T\}\) are the generative 
 parameters of the treatment assignment model. Note that the conditional 
 probability 
 distribution at
@@ -257,7 +257,7 @@ This procedure introduces two sources of uncertainty: first, uncertainty about t
 latent substitute confounder induced by the approximate posterior $q(\boldsymbol{Z}_i)$, and second,
 the usual sampling uncertainty in the MSM fit conditional on a given latent draw. To
 propagate both sources into the final causal effect estimates, we combine the
-draw-specific estimates using Rubin's within-between decomposition \cite{rubinMultipleImputationNonresponse2004}. 
+draw-specific estimates using Rubin's within-between decomposition \cite{rubinMultipleImputationNonresponse2009}. 
 Let
 $V_{j}^{(s)}$ denote the robust (sandwich) variance 
 estimate associated with the $j$-th component of the 
@@ -311,10 +311,11 @@ the FE-MSM method described in section \ref{sec:fe-msm}.
     \centering
     \includegraphics[width=\linewidth]{figures/build/fit_seqgplvm_dag.pdf}
     \caption{Plate diagram of the first-stage SeqGPLVM treatment model used to estimate
-time-varying propensity scores for a first order CMM. For each time point $t$, a Gaussian process
-$f_t(\cdot)$ with hyperparameters $\theta_t$ maps the latent state and
+time-varying propensity scores for a first order CMM. For each time point $t$, 
+a Gaussian process
+$f_t(\cdot)$ with hyperparameters $\boldsymbol{\gamma}_t$ maps the latent state and
 observed history into the assignment probability $A_{it}$.
-The variables $u_t$ denote GP function values at inducing inputs $m_t$
+The variables $g_t$ denote GP function values at inducing inputs $m_t$
 (shown without nodes as they are treated as parameters).
 Filled nodes indicate observed quantities and unfilled nodes latent quantities.
 The outer plate indexes individuals $i = 1, \dots, N$ and the temporal structure

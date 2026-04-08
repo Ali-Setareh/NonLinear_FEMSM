@@ -154,7 +154,7 @@ and the latent substitute confounder. If the treatment assignments are
 generated according to a conditional Markov model of order $p$ then the 
 likelihood in Eq.~\eqref{eq:elbo-rewrite} can be factorized as 
 \begin{align}
-p_{\boldsymbol{\gamma}}(\mathbf{a}\mid \mathbf{x},\mathbf{z}) = \prod_{t=1}^T p_{\gamma_t}(\mathbf{a}_{t} \mid \widetilde{\mathbf{x}}_{t}).
+p_{\boldsymbol{\gamma}}(\mathbf{a}\mid \mathbf{x},\mathbf{z}) = \prod_{t=1}^T p_{\boldsymbol{\gamma}_t}(\mathbf{a}_{t} \mid \widetilde{\mathbf{x}}_{t}).
 \end{align}
 Substituting this factorization into the ELBO in Eq.~\eqref{eq:elbo-rewrite} yields
 \begin{align}
@@ -177,11 +177,11 @@ and the latent variables as a nonparametric function $f$ with a Gaussian process
 over it, 
 \[
 A_{it} \mid \widetilde{\mathbf{X}}_{it}, f_t
-\sim p_t\!\left(\,\cdot \mid \boldsymbol{\theta}_{it}\right),
+\sim p_t\!\left(\,\cdot \mid \boldsymbol{\lambda}_{it}\right),
 \qquad
-g_t(\boldsymbol{\theta}_{it}) = f_t(\widetilde{\mathbf{X}}_{it}).
+l_t(\boldsymbol{\lambda}_{it}) = f_t(\widetilde{\mathbf{X}}_{it}).
 \]
-where \(g_t\) is an appropriate link function and \(\boldsymbol{\theta}_{it}\)
+where \(l_t\) is an appropriate link function and \(\boldsymbol{\lambda}_{it}\)
 denotes the parameter, or set of parameters, indexing the conditional distribution of $A_{it}$. 
 The function \(f_t\) is a latent function 
 in this framework, since it is not directly observed in the data.
@@ -321,15 +321,15 @@ To obtain a more scalable approximation, we introduce a set of
 defined on the same augmented input space as \(\widetilde{\mathbf{x}}_t\), 
 together with the corresponding inducing variables 
 \[ 
-\mathbf{u}_t = \{f_t(\mathbf{w}_{mt})\}_{m=1}^{M_t}. 
+\mathbf{g}_t = \{f_t(\mathbf{w}_{mt})\}_{m=1}^{M_t}. 
 \]
 Under the Gaussian process prior, the joint distribution of the random latent
 function values \(\mathbf{f}_t\) at the observed augmented inputs and the
-inducing random variables \(\mathbf{u}_t\) is Gaussian:
+inducing random variables \(\mathbf{g}_t\) is Gaussian:
 \[
 \begin{bmatrix}
 \mathbf{f}_t\\
-\mathbf{u}_t
+\mathbf{g}_t
 \end{bmatrix}
 \;\bigm|\;
 \widetilde{\mathbf{x}}_t,\mathbf{w}_t
@@ -364,29 +364,29 @@ and
 \]
 It follows that
 \[
-p_{\boldsymbol{\gamma}_t}(\mathbf{f}_t,\mathbf{u}_t
+p_{\boldsymbol{\gamma}_t}(\mathbf{f}_t,\mathbf{g}_t
 \mid \widetilde{\mathbf{x}}_t,\mathbf{w}_t)
 =
 p_{\boldsymbol{\gamma}_t}(\mathbf{f}_t
-\mid \mathbf{u}_t,\widetilde{\mathbf{x}}_t,\mathbf{w}_t)\,
-p_{\boldsymbol{\gamma}_t}(\mathbf{u}_t\mid \mathbf{w}_t),
+\mid \mathbf{g}_t,\widetilde{\mathbf{x}}_t,\mathbf{w}_t)\,
+p_{\boldsymbol{\gamma}_t}(\mathbf{g}_t\mid \mathbf{w}_t),
 \]
 where
 \[
-p_{\boldsymbol{\gamma}_t}(\mathbf{u}_t\mid \mathbf{w}_t)
+p_{\boldsymbol{\gamma}_t}(\mathbf{g}_t\mid \mathbf{w}_t)
 =
 \mathcal{N}\!\left(\mathbf{m}_{\mathbf{w},t},\mathbf{K}^{(t)}_{\mathbf{w}\mathbf{w}}\right),
 \]
 and
 \begin{align}
 p_{\boldsymbol{\gamma}_t}(\mathbf{f}_t
-\mid \mathbf{u}_t,\widetilde{\mathbf{x}}_t,\mathbf{w}_t)
+\mid \mathbf{g}_t,\widetilde{\mathbf{x}}_t,\mathbf{w}_t)
 =
 \mathcal{N}\!\Bigl(
 &\mathbf{m}_{\widetilde{\mathbf{x}},t}
 +
 \mathbf{K}^{(t)}_{\widetilde{\mathbf{x}}\mathbf{w}}\bigl(\mathbf{K}^{(t)}_{\mathbf{w}\mathbf{w}}\bigr)^{-1}
-(\mathbf{u}_t-\mathbf{m}_{\mathbf{w},t}),
+(\mathbf{g}_t-\mathbf{m}_{\mathbf{w},t}),
 \nonumber\\
 &
 \mathbf{K}^{(t)}_{\widetilde{\mathbf{x}}\widetilde{\mathbf{x}}}
@@ -397,26 +397,26 @@ p_{\boldsymbol{\gamma}_t}(\mathbf{f}_t
 \end{align}
 We now introduce a variational distribution over the inducing variables,
 \[
-q_{\boldsymbol{\psi}_t}(\mathbf{u}_t)
+q_{\boldsymbol{\psi}_t}(\mathbf{g}_t)
 =
 \mathcal{N}(\boldsymbol{\mu}_t,\mathbf{S}_t),
 \]
 and define the sparse variational family by
 \[
 % EDIT: the induced distribution over function values depends on both \psi_t and \gamma_t
-q_{\boldsymbol{\psi}_t,\boldsymbol{\gamma}_t}(\mathbf{f}_t,\mathbf{u}_t\mid \widetilde{\mathbf{x}}_t)
+q_{\boldsymbol{\psi}_t,\boldsymbol{\gamma}_t}(\mathbf{f}_t,\mathbf{g}_t\mid \widetilde{\mathbf{x}}_t)
 =
-p_{\boldsymbol{\gamma}_t}(\mathbf{f}_t\mid \mathbf{u}_t,\widetilde{\mathbf{x}}_t,\mathbf{w}_t)\,
-q_{\boldsymbol{\psi}_t}(\mathbf{u}_t).
+p_{\boldsymbol{\gamma}_t}(\mathbf{f}_t\mid \mathbf{g}_t,\widetilde{\mathbf{x}}_t,\mathbf{w}_t)\,
+q_{\boldsymbol{\psi}_t}(\mathbf{g}_t).
 \]
-Marginalizing over \(\mathbf{u}_t\) gives the implied variational distribution
+Marginalizing over \(\mathbf{g}_t\) gives the implied variational distribution
 over the latent function values,
 \[
 q_{\boldsymbol{\psi}_t,\boldsymbol{\gamma}_t}(\mathbf{f}_t\mid \widetilde{\mathbf{x}}_t)
 =
 \int
-p_{\boldsymbol{\gamma}_t}(\mathbf{f}_t\mid \mathbf{u}_t,\widetilde{\mathbf{x}}_t,\mathbf{w}_t)\,
-q_{\boldsymbol{\psi}_t}(\mathbf{u}_t)\,d\mathbf{u}_t.
+p_{\boldsymbol{\gamma}_t}(\mathbf{f}_t\mid \mathbf{g}_t,\widetilde{\mathbf{x}}_t,\mathbf{w}_t)\,
+q_{\boldsymbol{\psi}_t}(\mathbf{g}_t)\,d\mathbf{g}_t.
 \]
 Using this variational family, the log-likelihood term at time \(t\) can be written as
 \begin{align}
@@ -424,35 +424,35 @@ Using this variational family, the log-likelihood term at time \(t\) can be writ
 &=
 \log \iint
 p_{\boldsymbol{\gamma}_t}(\mathbf{a}_t\mid \mathbf{f}_t)\,
-p_{\boldsymbol{\gamma}_t}(\mathbf{f}_t\mid \mathbf{u}_t,\widetilde{\mathbf{x}}_t,\mathbf{w}_t)\,
-p_{\boldsymbol{\gamma}_t}(\mathbf{u}_t\mid \mathbf{w}_t)\,
-d\mathbf{f}_t\,d\mathbf{u}_t
+p_{\boldsymbol{\gamma}_t}(\mathbf{f}_t\mid \mathbf{g}_t,\widetilde{\mathbf{x}}_t,\mathbf{w}_t)\,
+p_{\boldsymbol{\gamma}_t}(\mathbf{g}_t\mid \mathbf{w}_t)\,
+d\mathbf{f}_t\,d\mathbf{g}_t
 \nonumber\\
 &=
 \log \iint
-q_{\boldsymbol{\psi}_t}(\mathbf{u}_t)\,
-p_{\boldsymbol{\gamma}_t}(\mathbf{f}_t\mid \mathbf{u}_t,\widetilde{\mathbf{x}}_t,\mathbf{w}_t)\,
+q_{\boldsymbol{\psi}_t}(\mathbf{g}_t)\,
+p_{\boldsymbol{\gamma}_t}(\mathbf{f}_t\mid \mathbf{g}_t,\widetilde{\mathbf{x}}_t,\mathbf{w}_t)\,
 \frac{
 p_{\boldsymbol{\gamma}_t}(\mathbf{a}_t\mid \mathbf{f}_t)\,
-p_{\boldsymbol{\gamma}_t}(\mathbf{u}_t\mid \mathbf{w}_t)
+p_{\boldsymbol{\gamma}_t}(\mathbf{g}_t\mid \mathbf{w}_t)
 }{
-q_{\boldsymbol{\psi}_t}(\mathbf{u}_t)
+q_{\boldsymbol{\psi}_t}(\mathbf{g}_t)
 }
-\,d\mathbf{f}_t\,d\mathbf{u}_t
+\,d\mathbf{f}_t\,d\mathbf{g}_t
 \nonumber\\
 &\ge
 \iint
-q_{\boldsymbol{\psi}_t}(\mathbf{u}_t)\,
-p_{\boldsymbol{\gamma}_t}(\mathbf{f}_t\mid \mathbf{u}_t,\widetilde{\mathbf{x}}_t,\mathbf{w}_t)
+q_{\boldsymbol{\psi}_t}(\mathbf{g}_t)\,
+p_{\boldsymbol{\gamma}_t}(\mathbf{f}_t\mid \mathbf{g}_t,\widetilde{\mathbf{x}}_t,\mathbf{w}_t)
 \log\!\left(
 \frac{
 p_{\boldsymbol{\gamma}_t}(\mathbf{a}_t\mid \mathbf{f}_t)\,
-p_{\boldsymbol{\gamma}_t}(\mathbf{u}_t\mid \mathbf{w}_t)
+p_{\boldsymbol{\gamma}_t}(\mathbf{g}_t\mid \mathbf{w}_t)
 }{
-q_{\boldsymbol{\psi}_t}(\mathbf{u}_t)
+q_{\boldsymbol{\psi}_t}(\mathbf{g}_t)
 }
 \right)
-d\mathbf{f}_t\,d\mathbf{u}_t
+d\mathbf{f}_t\,d\mathbf{g}_t
 \nonumber\\
 &=
 \mathbb{E}_{q_{\boldsymbol{\psi}_t,\boldsymbol{\gamma}_t}(\mathbf{f}_t\mid \widetilde{\mathbf{x}}_t)}
@@ -461,24 +461,24 @@ d\mathbf{f}_t\,d\mathbf{u}_t
 \right]
 -
 \mathrm{KL}\!\left(
-q_{\boldsymbol{\psi}_t}(\mathbf{u}_t)
+q_{\boldsymbol{\psi}_t}(\mathbf{g}_t)
 \,\big\|\,
-p_{\boldsymbol{\gamma}_t}(\mathbf{u}_t\mid \mathbf{w}_t)
+p_{\boldsymbol{\gamma}_t}(\mathbf{g}_t\mid \mathbf{w}_t)
 \right).
 \label{eq:svgp_single_time_bound}
 \end{align}
-The last equality follows by marginalizing over \(\mathbf{u}_t\) to obtain
+The last equality follows by marginalizing over \(\mathbf{g}_t\) to obtain
 \[
 q_{\boldsymbol{\psi}_t,\boldsymbol{\gamma}_t}(\mathbf{f}_t\mid \widetilde{\mathbf{x}}_t)
 =
 \int
-p_{\boldsymbol{\gamma}_t}(\mathbf{f}_t\mid \mathbf{u}_t,\widetilde{\mathbf{x}}_t,\mathbf{w}_t)\,
-q_{\boldsymbol{\psi}_t}(\mathbf{u}_t)\,d\mathbf{u}_t,
+p_{\boldsymbol{\gamma}_t}(\mathbf{f}_t\mid \mathbf{g}_t,\widetilde{\mathbf{x}}_t,\mathbf{w}_t)\,
+q_{\boldsymbol{\psi}_t}(\mathbf{g}_t)\,d\mathbf{g}_t,
 \]
 and by using
 \[
 \int
-p_{\boldsymbol{\gamma}_t}(\mathbf{f}_t\mid \mathbf{u}_t,\widetilde{\mathbf{x}}_t,\mathbf{w}_t)\,
+p_{\boldsymbol{\gamma}_t}(\mathbf{f}_t\mid \mathbf{g}_t,\widetilde{\mathbf{x}}_t,\mathbf{w}_t)\,
 d\mathbf{f}_t = 1.
 \]
 Substituting the bound in Eq.~\eqref{eq:svgp_single_time_bound} into
@@ -500,9 +500,9 @@ Eq.~\eqref{eq:sequential_elbo}, we obtain
 -
 \sum_{t=1}^T
 \mathrm{KL}\!\left(
-q_{\boldsymbol{\psi}_t}(\mathbf{u}_t)
+q_{\boldsymbol{\psi}_t}(\mathbf{g}_t)
 \,\big\|\,
-p_{\boldsymbol{\gamma}_t}(\mathbf{u}_t\mid \mathbf{w}_t)
+p_{\boldsymbol{\gamma}_t}(\mathbf{g}_t\mid \mathbf{w}_t)
 \right)
 -
 \mathrm{KL}\!\left(
@@ -528,9 +528,9 @@ Define
 &-
 \sum_{t=1}^T
 \mathrm{KL}\!\left(
-q_{\boldsymbol{\psi}_t}(\mathbf{u}_t)
+q_{\boldsymbol{\psi}_t}(\mathbf{g}_t)
 \,\big\|\,
-p_{\boldsymbol{\gamma}_t}(\mathbf{u}_t\mid \mathbf{w}_t)
+p_{\boldsymbol{\gamma}_t}(\mathbf{g}_t\mid \mathbf{w}_t)
 \right)
 -
 \mathrm{KL}\!\left(
@@ -580,15 +580,17 @@ which further reduces the computational cost and stabilizes the optimization. Th
 over the latent variable \(\mathbf{Z}\) is typically chosen to 
 be independent of the observed covariates and to be an i.i.d.\ Gaussian distribution,
 \[
-p(\mathbf{z}) = \prod_{i=1}^N \mathcal{N}(\mathbf{z}_i \mid \mathbf{0}, \mathbf{I}_J).
+p(\mathbf{z}) = \prod_{i=1}^N \mathcal{N}(\mathbf{z}_i \mid \mathbf{0}, I_J).
 \]
 Also the variational distribution over the latent variable \(\mathbf{Z}\) is 
-typically chosen to be a mean-field Gaussian distribution, both with respect to the data points and with respect to the dimensions of the latent variable,
+typically chosen to be a mean-field Gaussian distribution, both with respect to 
+the data points and the dimensions of the latent variable,
 \[
 q_{\boldsymbol{\psi}}(\mathbf{z}\mid \mathbf{x}) = \prod_{i=1}^N \prod_{j=1}^J \mathcal{N}(z_{i,j} \mid \mu_{i,j}, \sigma_{i,j}^2),
 \]
 where \(\mu_{i,j}\) and \(\sigma_{i,j}^2\) are 
-the mean and variance parameters for the (\(j\))-th dimension of the \(i\)-th latent variable, respectively. 
+the mean and variance parameters for the (\(j\))-th dimension of the \(i\)-th 
+latent variable, respectively. 
 This 
 is called the non-amortized variational inference setting, 
 since the variational distribution over the latent variables does not depend on the observed covariates. 
@@ -598,8 +600,26 @@ we need to repeat the optimization to find the corresponding mean and variance p
 freazing the fitted Gaussian process hyperparameters, 
 which can be computationally expensive.
 
-The number of inducing points \(M_t\) is a key hyperparameter that 
-controls the trade-off between computational efficiency and approximation quality. 
+The number of inducing points \(M_t\) is a key hyperparameter that governs 
+the trade-off between computational efficiency and approximation quality. 
+There is no universally optimal choice for \(M_t\), and it must generally be 
+tuned to the dataset and available computational resources. In our experiments, 
+at each time point \(t\), the inducing set in the joint covariate--latent space is 
+constructed as the Cartesian product of \(\lfloor \sqrt{N_t} \rfloor\) inducing 
+locations in the observed covariate space and 10 inducing locations in the latent 
+space, where \(N_t\) denotes the number of observations at time point \(t\). 
+The covariate inducing locations are selected from the observed non-missing covariate 
+vectors by greedy farthest-point sampling, that is, points are added sequentially so as 
+to maximize their minimum distance from those already selected, yielding a 
+well-dispersed subset of the empirical covariate space. 
+
+The latent inducing locations 
+are chosen separately from the observation-specific latent variables and are initialized 
+directly in the latent space using Latin hypercube sampling over a bounded interval. In 
+this way, the latent space is 
+partitioned into equally sized strata and 
+one point is drawn from each stratum, 
+yielding inducing locations that are well dispersed across the latent space. 
 
 \begin{comment}
     
