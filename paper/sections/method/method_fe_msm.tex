@@ -13,18 +13,19 @@ confounding. The fixed effect acts as a unit specific
 offset in the propensity score model, capturing all 
 the time-invariant unmeasured confounding. More formally, the identification of 
 the causal effect of interest relies on the following assumption:
-\begin{idassumpFE}[Unit-specific ignorability]\label{ass:FE-unit-specific-ignor}
-    Let $\alpha_i$ be a time-invariant unmeasured unidimensional random variable, For 
-    all $i$, $t$ and $\bar{a}_t$,
-    \[
-    \{ Y_{i}(\bar{a}_{T}),\, \underbar{X}_{i,t+1}(\bar a_t) \}
-\;\perp\!\!\!\perp\;
-A_{it}
-\;\big|\;
-\bar{X}_{it},\,
-\bar A_{i,t-1} = \bar a_{t-1},\,
-\alpha_i. \]
 
+\begin{idassumpFE}[Unit-specific ignorability]\label{ass:FE-unit-specific-ignor}
+Let $\alpha_i$ be a time-invariant, unmeasured, one-dimensional random variable. For all
+$i$, $t$, and $\bar{\mathbf{a}}_T$,
+\[
+\{ Y_i(\bar{\mathbf{a}}_T),\, \underline{\mathbf{X}}_{i,t+1}(\bar{\mathbf{a}}_t) \}
+\perp\!\!\!\perp
+A_{it}
+\mid
+\bar{\mathbf{X}}_{it},\,
+\bar{\mathbf{A}}_{i,t-1} = \bar{\mathbf{a}}_{t-1},\,
+\alpha_i .
+\]
 \end{idassumpFE}
 
 Assumption \ref{ass:FE-unit-specific-ignor} states that conditioned on 
@@ -37,90 +38,98 @@ outcome $\mathbb{E}[Y_i(\underline{a}_{T-k})]$ can be nonparametrically identifi
 
 \begin{equation}
     \label{eq:truncated_potential_outcome_id}
-    \mathbb{E}\bigl[Y_i(\underbar{a}_{T-k})\bigr]
+    \mathbb{E}\bigl[Y_i(\underline{\mathbf{a}}_{T-k})\bigr]
     =
     \mathbb{E}\left[
-    \frac{\mathbf{1}\bigl(\underbar{A}_{i,T-k} = \underbar{a}_{T-k}\bigr)\, Y_i}
+    \frac{\mathbf{1}\bigl(\underline{\mathbf{A}}_{i,T-k} = \underline{\mathbf{a}}_{T-k}\bigr)\, Y_i}
     {\prod_{t=T-k}^{T} \pi_{it}^{a_t} (1 - \pi_{it})^{1 - a_t}}
     \right].
 \end{equation}
-Where $\pi_{it} = \mathbb{P}(A_{it} = 1 \mid \bar X_{it}, \bar A_{i,t-1}, \alpha_i)$. 
+where $\pi_{it} = \mathbb{P}(A_{it} = 1 \mid \bar{\mathbf{X}}_{it}, \bar{\mathbf{A}}_{i,t-1}, \alpha_i)$.
 In practice, a parametric model such as  
 $
-\pi_{it}(\bar{x}_{it}, \bar{a}_{i,t-1}; \beta_0,\alpha_{i0})
+\pi_{it}(\bar{\mathbf{x}}_{it}, \bar{\mathbf{a}}_{i,t-1}; \boldsymbol{\beta_0},\alpha_{i0})
 =
 \mathbb{P}\!\left(
-A_{it}=1 \mid X_{it}=\bar{x}_{it},\; \bar{A}_{i,t-1}=\bar{a}_{i,t-1}; \beta_0, \alpha_{i0}
+A_{it}=1 \mid X_{it}=\bar{x}_{it},\; \bar{\mathbf{A}}_{i,t-1}=\bar{\mathbf{a}}_{i,t-1}; \boldsymbol{\beta_0}, \alpha_{i0}
 \right)$, 
-is specified; where $\beta_0$ and $\alpha_{i0}$ are the true $k \times 1$ parameter vector and 
+is specified; where $\boldsymbol{\beta_0}$ and $\alpha_{i0}$ are the true $b \times 1$ parameter vector and 
 the unit-specific fixed effect respectively. 
 This model is estimated via a
 conditional maximum likelihood estimator. 
 The log-likelihood function for the treatment model can be written as 
 \[
-\ell_{it}(\beta,\alpha_{i})=A_{it}\log \pi_{it}(\beta,\alpha_{i}) + 
-(1-A_{it})\log\{1-\pi_{it}(\beta,\alpha_{i})\}.
+\ell_{it}(\boldsymbol{\beta},\alpha_{i})=A_{it}\log \pi_{it}(\boldsymbol{\beta},\alpha_{i}) + 
+(1-A_{it})\log\{1-\pi_{it}(\boldsymbol{\beta},\alpha_{i})\}.
 \]
-Let $\alpha_0 = (\alpha_{i0}, \ldots, \alpha_{iN})$, then $\beta_0$ and $\alpha_0$ 
+Let $\boldsymbol{\alpha}_0 = (\alpha_{1}, \ldots, \alpha_{N})$, 
+then $\boldsymbol{\beta_0}$ and $\boldsymbol{\alpha}_0$ 
 are the solutions to the following optimization problem: 
 \[ 
-(\beta_0, \alpha_1, \ldots, \alpha_N)
-= \arg\max_{\beta,\alpha_1,\ldots,\alpha_N}
+(\boldsymbol{\beta_0}, \boldsymbol{\alpha}_0)
+= \arg\max_{\boldsymbol{\beta},\alpha_1,\ldots,\alpha_N}
 \sum_{i=1}^{N}\sum_{t=1}^{T}
-\mathbb{E}\!\left[\ell_{it}(\beta,\alpha_i)\mid \alpha_i\right].
+\mathbb{E}\!\left[\ell_{it}(\boldsymbol{\beta},\alpha_i)\mid \alpha_i\right].
 \]
-The estimates $\hat\alpha = (\hat\alpha_1, \ldots, \hat\alpha_N)$ and $\hat\beta$ are 
+The estimates $\hat{\boldsymbol{\alpha}} = (\hat\alpha_1, \ldots, \hat\alpha_N)$ and $\hat{\boldsymbol{\beta}}$ are 
 obtained by solving the finite-sample analog of this optimization problem. 
 
 Having obtained the estimates of the propensity scores, the weights for the IPTW 
 estimation of the marginal structural model are constructed as
 \begin{equation}
-\widehat{W}_i(\hat\beta,\hat\alpha_i)=\prod_{t=T-K}^{T}
-\left(\frac{1}{\pi_{it}(\hat\beta,\hat\alpha_i)}\right)^{A_{it}}
-\left(\frac{1}{1-\pi_{it}(\hat\beta,\hat\alpha_i)}\right)^{1-A_{it}}
+\widehat{W}_i(\hat{\boldsymbol{\beta}},\hat{\boldsymbol{\alpha}}_i)=\prod_{t=T-k}^{T}
+\left(\frac{1}{\pi_{it}(\hat{\boldsymbol{\beta}},\hat{\boldsymbol{\alpha}}_i)}\right)^{A_{it}}
+\left(\frac{1}{1-\pi_{it}(\hat{\boldsymbol{\beta}},\hat{\boldsymbol{\alpha}}_i)}\right)^{1-A_{it}}
 \label{eq:iptw_weights}
 \end{equation}
-where only the last $K$ time points are included in the product. However, the 
+where only the last $k$ time points are included in the product. However, the 
 propensity score model is estimated using the full treatment history. 
 
-If a marginal structural model is specified as $\mathbb{E}[Y_i(\underline{a}_{T-k})] = m(\underline{a}_{T-k}; \gamma_0)$,
+If a marginal structural model is specified as 
+$\mathbb{E}[Y_i(\underline{\mathbf{a}}_{T-k})] = m(\underline{\mathbf{a}}_{T-k}; \boldsymbol{\theta_0})$,
 let 
-\[
-\Psi_N(\gamma)
+\begin{equation}
+\Psi_N(\boldsymbol{\theta})
 :=
 \frac{1}{N} \sum_{i=1}^{N}
-\widehat{W}_i(\hat\beta, \hat\alpha_i)\,
-h\!\left(\underbar{A}_{i,T-k}\right)\,
+\widehat{W}_i(\hat{\boldsymbol{\beta}}, \hat{\boldsymbol{\alpha}}_i)\,
+\mathbf{h}\!\left(\underline{\mathbf{A}}_{i,T-k}\right)\,
 \left[
-Y_i - m\!\left(\underbar{A}_{i,T-k}; \gamma \right)
+Y_i - m\!\left(\underline{\mathbf{A}}_{i,T-k}; \boldsymbol{\theta} \right)
 \right].
-\]
-Then, the estimator $\hat{\gamma}$ is defined as a solution to the sample
+\label{eq:msm_est_equation}
+\end{equation}
+Then, the estimator $\hat{\boldsymbol{\theta}}$ is defined as a solution to the sample
 estimating equation
 \[
-\Psi_N(\gamma)=0.
+\Psi_N(\boldsymbol{\theta})=0.
 \]
-In this equation $h(\cdot)$ is a user-specified function of the treatment history. 
+In Eq.~\eqref{eq:msm_est_equation}, $\mathbf{h}(\cdot)$ is a user-specified function of the treatment history. 
 If the marginal structural model is specified as a linear model, a common choice is 
-to set $h(\underbar{A}_{i,T-k}) = \underbar{A}_{i,T-k}$. Then the 
+to set $h(\underline{\mathbf{A}}_{i,T-k}) = \underline{\mathbf{A}}_{i,T-k}$. Then the 
 parameters of the marginal structural model can be estimated via a weighted 
-least squares regression of $Y_i$ on $\underbar{A}_{i,T-k}$ using the weights 
-defined in Eq.~\eqref{eq:iptw_weights}. The consistency of the $\hat{\gamma}$ relies on the 
+least squares regression of $Y_i$ on $\underline{\mathbf{A}}_{i,T-k}$ using the weights 
+defined in Eq.~\eqref{eq:iptw_weights}. 
+
+The consistency of the $\hat{\boldsymbol{\theta}}$ relies on the 
 correct specification of the propensity score 
 model up to the unmeasured fixed effect $\alpha_i$. 
 
 \begin{modassumpFE}[Correct specification of the parametric component of the propensity score model]
 \label{ass:ps-correct-spec}
-Suppose there exists a finite-dimensional parameter vector $\beta_0$ and unit-specific effects
+Suppose there exists a finite-dimensional parameter vector $\boldsymbol{\beta}_0$ 
+and unit-specific effects
 $\alpha_{i0}$ such that, for all $i$ and $t$,
 \[
-\mathbb{P}(A_{it}=1 \mid X_{it}, A_{i,t-1}, \alpha_i)
+\mathbb{P}(A_{it}=1 \mid \mathbf{\bar{X}}_{it}, \mathbf{\bar{A}}_{i,t-1}, \alpha_i)
 =
-\pi_{it}(X_{it}, A_{i,t-1}; \beta_0, \alpha_{i0})
+\pi_{it}(\mathbf{\bar{X}}_{it}, \mathbf{\bar{A}}_{i,t-1}; \boldsymbol{\beta}_0, \alpha_{i0})
 \qquad \text{a.s.}
 \]
-That is, conditional on the unit-specific effect $\alpha_i$, the treatment assignment mechanism
-is correctly specified as a member of the posited parametric family in $(X_{it},A_{i,t-1})$.
+That is, conditional on the unit-specific effect $\alpha_i$, 
+the treatment assignment mechanism
+is correctly specified as a member of the posited parametric family 
+in $(\mathbf{\bar{X}}_{it},\mathbf{\bar{A}}_{i,t-1})$.
 \end{modassumpFE}
 
 This assumption only requires the propensity score to be correctly specified up to the 
@@ -129,11 +138,11 @@ relationship between $\alpha_i$ and the observed covariates. Based on this assum
 other regularity assumptions, \citeA{blackwellEffectPoliticalAdvertising2024} showed in 
 Theorem 1 that 
 \[
-\sqrt{N}\,(\widehat{\gamma}-\gamma_{0})
+\sqrt{N}\,(\widehat{\boldsymbol{\theta}}-\boldsymbol{\theta}_{0})
 \overset{d}{\to}
-N(0, V_{\gamma_0}),
+N(0, V_{\boldsymbol{\theta}_0}),
 \]
-where $V_{\gamma_0}$ is a sandwich-type asymptotic variance that can be consistently estimated using the sample analog of the sandwich formula.
+where $V_{\boldsymbol{\theta}_0}$ is a sandwich-type asymptotic variance that can be consistently estimated using the sample analog of the sandwich formula.
 Figure~\ref{fig:fixed_effect_architecture}, 
 shows a graphical representation of the conditional treatment assignment likelihood. 
 
@@ -141,17 +150,19 @@ shows a graphical representation of the conditional treatment assignment likelih
     \centering
     \includegraphics[width=0.8\linewidth]{figures/build/fixed_effect_dag.pdf}
     \caption{
-    Plate diagram of the the conditional assignment likelihood
-    for the fixed-effects propensity-score model. The likelihood factorizes as
+    Plate diagram of the conditional assignment likelihood under 
+    the fixed-effects propensity-score model, assuming the true 
+    treatment assignment mechanism depends only on past treatment 
+    and covariate values. The likelihood factorizes as
     $
-    p(\mathbf{A} \mid \mathbf{X};\alpha, \beta)
+    p(\mathbf{a} \mid \mathbf{x};\alpha, \boldsymbol{\beta})
     =
     \prod_{i,t}
-    p\!\left(A_{it} \mid A_{i,t-1}, X_{i,t-1}, \alpha_i, \beta\right).
+    p\!\left(A_{it} \mid A_{i,t-1}, X_{i,t-1}, \alpha_i, \boldsymbol{\beta}\right).
     $
     We do not specify a model for the 
     joint distribution of $(\mathbf{X}, \alpha)$. Note that, 
-    since $\alpha_i$ is considered as a parameter and not a random variable 
+    since $\alpha_i$ is considered as a parameter and not a random variable, 
     it does not have a node around it.
     }
 \label{fig:fixed_effect_architecture}

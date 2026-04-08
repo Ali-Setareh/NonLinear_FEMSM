@@ -29,27 +29,26 @@ described below.
 %model. 
 
 \begin{idassumpSG}[CMM(p): Conditional Markov Model of order p]\label{ass:SG-Marcovianity}
-    A latent variable $Z \in \mathbb{R}^d $, a fixed order $p \in \mathbb{N}^*$
+    A latent variable $\mathbf{Z}_i \in \mathbb{R}^J $, a fixed order $p \in \mathbb{N}^*$
     and a parameter vector $\boldsymbol{\gamma} = (\gamma_1, \ldots, \gamma_T)$ exist such that the assigned treatment distribution can be 
     factorized as: 
     \begin{equation}
-    p_{\boldsymbol{\gamma}}(\bar{a}_{T} \mid \bar{x}_{T}, z) 
-    = \prod_{t=1}^T p_{\gamma_t}(a_{t} \mid a_{t-p:t-1}, \bar{x}_t, z). 
+    p_{\boldsymbol{\gamma}}(\bar{\mathbf{a}}_{iT} \mid \bar{\mathbf{x}}_{iT}, \mathbf{z}_i) 
+    = \prod_{t=1}^T p_{\gamma_t}(a_{it} \mid \mathbf{a}_{i,t-p:t-1}, \bar{\mathbf{x}}_{\leq t}, \mathbf{z}_i). 
     \label{eq:cmm}
     \end{equation}
-    for $t<1$, $a_t$ is set to $0$ by convention. We then say that the 
-    latent variable Z follows a Conditional Markov Model of order $p$, 
-    written $Z \sim \text{CMM} (p).$
-     
-\end{idassumpSG}
-The original version of this assumption 
+    for $t<1$, $\mathbf{a}_t$ is set to $0$ by convention. We then say that the 
+    latent variable $\mathbf{Z}_i$ follows a Conditional Markov Model of order $p$, 
+    written $\mathbf{Z}_i \sim \text{CMM} (p)$\footnote{The original version of this assumption 
 in \citeA{hattSequentialDeconfoundingCausal2024} is stated only for a first-order CMM. However, 
 the proof of their Theorem 1 using Preposition 7.6 in \citeA{kallenbergFoundationsModernProbability}, 
 can be easily extended to higher-order CMMs as well 
 (see \href{https://chatgpt.com/share/69c7c2fe-2f64-8388-8843-b0d989e7b267}{link} 
 and \cite{bouchattaouiCausalDynamicVariational2025}). Hence the more general 
-form of the CMM assumption is stated above. In Eq.~\eqref{eq:cmm},
-\(\gamma = \{\gamma_0, \gamma_2, \ldots, \gamma_T\}\) are the \emph{generative} 
+form of the CMM assumption is stated.}.
+\end{idassumpSG}
+In Eq.~\eqref{eq:cmm},
+\(\boldsymbol{\gamma} = \{\gamma_1, \ldots, \gamma_T\}\) are the generative 
 parameters of the treatment assignment model. Note that the conditional 
 probability 
 distribution at
@@ -78,37 +77,42 @@ varry with time.
 
 \begin{idassumpSG}[Consistency of the substitute confounder]
     \label{ass:SG-Consistency}
-The sequential deconfounder assumes that all latent variables $Z\sim\text{CMM}(p)$ for a particular 
+The sequential deconfounder assumes that all latent variables $\mathbf{Z}_i\sim\text{CMM}(p)$ for a particular 
 $p$ are pinpointed 
 by a single deterministic function of treatment and observed covariates history. 
 Formally, there exists a measurable function
 $f$ such that
 \[
-p(z \mid \bar x_T, \bar a_T) = \delta_{f(\bar x_T,\bar a_T)}.
+p(\mathbf{z}_i \mid \bar{\mathbf{x}}_{iT}, \bar{\mathbf{a}}_{iT}) = 
+\delta_{f(\bar{\mathbf{x}}_{iT},\bar{\mathbf{a}}_{iT})}.
 \]    
 \end{idassumpSG}
-Assumption~\ref{ass:SG-Consistency} implies the uniqueness of the latent variable $Z$ which 
+Assumption~\ref{ass:SG-Consistency} implies the uniqueness of the latent variable $\mathbf{Z}_i$ which 
 imposes the $\text{CMM}$ of order $p$. 
  This assumption is necessary since only the existance of a $\text{CMM}(p)$, does not guaranty the uniqueness of the latent 
- variable \cite{damourMultiCauseApproachesCausal2019}. However, the substitute confounder is not 
- required to coincide with the true confounder $U$ or the true latent factorizer $Z$. It is sufficient 
+ variable. The violation of this assumption can lead to 
+ contradictory causal estimates \cite{damourMultiCauseApproachesCausal2019}. 
+ However, the substitute confounder $\hat{\mathbf{Z}}_i$ is not 
+ required to coincide with the true confounder $\mathbf{U}_i$ or the true latent factorizer 
+ $\mathbf{Z}_i$. It is sufficient 
  to estimate the substitue confounder up to some deterministic bijective 
- transformation,e.g., a linear 
+ transformation, e.g., a linear 
  transformation.  
 
 Under these assumptions
 and the common assumptions, Theorem 1 in \citeA{hattSequentialDeconfoundingCausal2024} 
 states that we obtain sequential ignorability 
-conditioned on the observed covariates' history, treatment history and the
-substitute confounder $Z_i$, i.e., for all $t \in \{1, \ldots, T\}$ and for all $\bar{a}_t$,
+conditioned on the observed covariates' history, treatment history and the 
+latent variables $\mathbf{Z}_i$. For all $t \in \{1, \ldots, T\}$ and for all 
+$\bar{\mathbf{a}}_{it}$,
 \begin{equation}
     \label{eq:seqgplvm-single-unit-seqignorability}
-    Y_{i}(\bar{a}_{T}) \perp A_t \mid \bar{X}_{it}, \bar{A}_{i,t-1} ,Z_{i}.
+    Y_{i}(\bar{\mathbf{a}}_{T}) \perp A_t \mid \bar{\mathbf{X}}_{it}, \bar{\mathbf{A}}_{i,t-1} ,\mathbf{Z}_{i}.
 \end{equation}
 This theorem makes a bridge between the observational world and the potential outcomes world. 
 More importantly, this theorem does not restrict the class of models that can be used to 
 estimate the substitute confounder. It holds for any 
-latent variable model that can estimate a latent variable $Z$ in a CMM of chosen order $p$. 
+latent variable model that can estimate a latent variable $\mathbf{Z}_i$ in a CMM of chosen order $p$. 
 The key idea of the deconfounder is that 
 once the substitute confounder is estimated, we can 
 treat it as a \emph{observed-like} covariates and include it in 
@@ -131,19 +135,18 @@ mechanism as a CMM using Gaussian processes.
 %relationships between the latent confounder substitutes, observed 
 %covariates, and treatment assignments over time.
 
-The objective of SeqGPLVM is to estimate the joint posterior distribution of the substitute confounders
-$\{Z_i\}_{i=1}^N$ given the observed treatment history and covariates,
-$p(\{Z_i\}_{i=1}^N \mid \{\bar{A}_{iT}\}_{i=1}^N, \{\bar{X}_{iT}\}_{i=1}^N)$, while imposing the CMM structure on the treatment
-assignment mechanism. Here, $Z_i \in \mathbb{R}^d$ denotes the latent confounder substitute
-for individual $i$, where $d$ is the dimension of the latent space. To estimate this posterior 
+The objective of SeqGPLVM is to estimate the posterior distribution of 
+the latent variable $\mathbf{Z}_i$ with a chosen dimension $J$, given the observed treatment history and covariates,
+$p(\mathbf{z}_i \mid \bar{\mathbf{a}}_{iT}, \bar{\mathbf{x}}_{iT})$, while imposing the CMM structure on the treatment
+assignment mechanism. To estimate this posterior 
 using the 
 Bayesian framework, a prior and 
 a likelihood model are specified. We assign the following prior to the 
-latent confounder substitutes assuming they are i.i.d. across individuals and the latent dimensions:
+latent variables assuming they are i.i.d. across individuals and the latent dimensions:
 \[
-p(\{z_i\}_{i=1}^N) = \prod_{i=1}^N p(z_i),
+p(\mathbf{z}) = \prod_{i=1}^N p(\mathbf{z}_i),
 \qquad \text{where} \qquad
-Z_i \sim \mathcal{N}(0,I_d)
+\mathbf{Z}_i \sim \mathcal{N}(0,I_J)
 \quad \text{for } i=1,\ldots,N.
 \]
 
@@ -152,50 +155,50 @@ confounder substitutes,
 observed previous treatment history and covariates, to the treatment assignment 
 at each time point: 
 \[
-f_t : \mathcal{Z} \times \mathcal{X}_{1} \times \cdots \times \mathcal{X}_t \times \mathcal{A}_{t-p} \times \cdots \times \mathcal{A}_{t-1} \to \mathcal{A}_t.
+f_t : \mathcal{Z} \times \mathcal{X}_{1} \times \cdots \times \mathcal{X}_{\leq t} \times \mathcal{A}_{t-p} \times \cdots \times \mathcal{A}_{t-1} \to \mathcal{A}_t.
 \]
 We model these mappings as non-parametric functions using Gaussian processes (GPs), 
 i.e., \(f_t \sim \mathcal{GP}(0, k_t(\cdot, \cdot))\) for \(t = 1, \ldots, T\), 
 where \(k_t\) is the kernel function at time \(t\). 
 Since the kernels are defined on the joint space of the latent substitutes 
 and the observed history, 
-we have a lot of flexibility to encode different types of interactions between 
+there is a lot of flexibility to encode different types of interactions between 
 these variables. For the sake 
 of simplicity, we use the same kernel for all time points, but in principle, 
 we can use different kernels at different time points. The generative model then 
 can be written as follows: 
 
 \[
-p(\{\bar{a}_{iT}\}_{i=1}^N, \bar{f}_T  \mid \{\bar{x}_{iT}\}_{i=1}^N, \{z_i\}_{i=1}^N) = \prod_{i=1}^N 
+p(\bar{\mathbf{a}}_{iT}, \bar{\mathbf{f}}_T  \mid \bar{\mathbf{x}}_{iT}, \mathbf{z}_i) = 
 \prod_{t=1}^T p(a_{it} 
-\mid f_t)p(f_t \mid z_i, \bar{x}_{i,t}, \bar{a}_{i,t-p:t-1})).
+\mid f_t)p(f_t \mid \mathbf{z}_i, \bar{\mathbf{x}}_{i,\leq t}, \bar{\mathbf{a}}_{i,t-p:t-1})).
 \]
 
 Since the exact posterior distribution is intractable, we adopt the 
 variational inference with inducing point for inference \cite{titsiasBayesianGaussianProcess2010}. 
-The dimensionality of the inducing points is \(|\mathcal{Z}| + \sum_{s=1}^{t} |\mathcal{X}_s| + \sum_{s=t-p}^{t-1}|\mathcal{A}_{s}|\). 
+The dimensionality of the inducing points is \(|\mathcal{Z}| + \sum_{s=1}^{\leq t} |\mathcal{X}_s| + \sum_{s=t-p}^{t-1}|\mathcal{A}_{s}|\). 
 The likelihood term \(p(a_{it} \mid f_t)\) depends on the type of treatment variable. 
 For instance if \(\mathcal{A_t}\in \{0,1\}\), we can use a Bernoulli likelihood, 
-and if \(\mathcal{A}_t\) is continuous, we can use a Gaussian likelihood. The details of the 
+or for a continuous treatment, we can use a Gaussian likelihood. The details of the 
 variational inference procedure and the optimization of the evidence lower bound (ELBO) are provided 
-in \ref{sec:seqgplvm_loss}. In Fig \ref{fig:seqgplvm_architecture} we show 
-the inference DAG of the SeqGPLVM.
+in Appendix~\ref{sec:seqgplvm_loss}. In Fig \ref{fig:seqgplvm_architecture} a 
+graphical representation of the SeqGPLVM is shown.
 
 \subsection{Outcome model}
 \label{sec:seqgplvm-outcome}
 Once the approximate posterior distribution of the substitute confounder is estimated, 
-we can use it to adjust for confounding in the outcome model. This stage 
+it can be used to adjust for confounding in the outcome model. This stage 
 closely parallels the FE-MSM procedure described in Section~\ref{sec:fe-msm}. In
 particular, Theorem~1 implies identification of the mean truncated potential outcome
-over the last $K$ time periods through the same IPTW representation as in
+over the last $k$ time periods through the same IPTW representation as in
 Eq.~\eqref{eq:truncated_potential_outcome_id}, with the unobserved fixed effect
-$\alpha_i$ replaced by the substitute confounder $Z_i$:
+$\alpha_i$ replaced by the latent variable $\boldsymbol{Z}_i$:
 \begin{equation}
     \label{eq:truncated_potential_outcome_id_seqgplvm}
-    \mathbb{E}\bigl[Y_i(\underbar{a}_{T-k})\bigr]
+    \mathbb{E}\bigl[Y_i(\underline{\mathbf{a}}_{T-k})\bigr]
     =
     \mathbb{E}\left[
-    \frac{\mathbf{1}\bigl(\underbar{A}_{i,T-k} = \underbar{a}_{T-k}\bigr)\, Y_i}
+    \frac{\mathbf{1}\bigl(\underline{\mathbf{A}}_{i,T-k} = \underline{\mathbf{a}}_{T-k}\bigr)\, Y_i}
     {\prod_{t=T-k}^{T} \pi_{it}^{a_t} (1 - \pi_{it})^{1-a_t}}
     \right],
 \end{equation}
@@ -203,70 +206,71 @@ where
 \[
 \pi_{it}
 =
-\mathbb{P}(A_{it}=1 \mid \bar X_{it}, \bar A_{i,t-1}, Z_i).
+\mathbb{P}(A_{it}=1 \mid \bar{\mathbf{X}}_{it}, \bar{\mathbf{A}}_{i,t-1}, \boldsymbol{Z}_i).
 \]
 Hence, as in FE-MSM, estimation proceeds in two steps: first, a parametric model is used
 to estimate the propensity scores, and second, these estimated propensities are used to
 construct inverse-probability weights for fitting the marginal structural model. The key
 difference is that instead of directly estimating a unit-specific fixed effect $\alpha_i$ 
-in the treatment model, we sample from the approximate posterior distribution 
-of the substitute confounder $q(z_i)$ and 
+in the treatment model, a sample is drawn from the approximate posterior distribution 
+of the substitute confounder $q(\boldsymbol{Z}_i)$ and 
 condition the treatment model on these samples together with the observed history 
 to estimate the propensity scores.
 
 To account for uncertainty in the inferred substitute confounder, we adopt a
-multiple-imputation-style procedure. Specifically, for each posterior draw
-$z_i^{(s)} \sim q(z_i)$, $s=1,\dots,S$, we re-estimate the propensity scores, construct
-the corresponding IPTW weights,
+multiple-imputation-style procedure. Specifically, for each posterior draw 
+$\mathbf{z}_i^{(s)} \sim q(\boldsymbol{Z}_i)$, $s=1,\dots,S$, the propensity scores are 
+re-estimated and the corresponding IPTW weights are computed as,
 \[
-\widehat{W}_i(\hat\beta, z_i^{(s)})
+\widehat{W}_i(\hat\beta, \mathbf{z}_i^{(s)})
 =
-\prod_{t=T-K}^{T}
-\left(\frac{1}{\pi_{it}(\hat\beta,z_i^{(s)})}\right)^{A_{it}}
-\left(\frac{1}{1-\pi_{it}(\hat\beta,z_i^{(s)})}\right)^{1-A_{it}},
+\prod_{t=T-k}^{T}
+\left(\frac{1}{\pi_{it}(\hat{\boldsymbol{\beta}},\mathbf{z}_i^{(s)})}\right)^{A_{it}}
+\left(\frac{1}{1-\pi_{it}(\hat{\boldsymbol{\beta}},\mathbf{z}_i^{(s)})}\right)^{1-A_{it}},
 \]
 and fit the same marginal structural model as in the FE-MSM approach. Let
 \[
-\Psi_N(\gamma_s)
+\Psi_N(\boldsymbol{\theta}_s)
 :=
 \frac{1}{N} \sum_{i=1}^{N}
-\widehat{W}_i(\hat\beta, z_i^{(s)})\,
-h\!\left(\underbar{A}_{i,T-k}\right)\,
+\widehat{W}_i(\hat\beta, \mathbf{z}_i^{(s)})\,
+\mathbf{h}\!\left(\underline{\mathbf{A}}_{i,T-k}\right)\,
 \left[
-Y_i - m\!\left(\underbar{A}_{i,T-k}; \gamma_s \right)
+Y_i - m\!\left(\underline{\mathbf{A}}_{i,T-k}; \boldsymbol{\theta}_s \right)
 \right].
 \]
-For each draw $s$, the corresponding MSM parameter estimate $\hat\gamma^{(s)}$ is
+For each draw $s$, the corresponding MSM parameter estimate $\hat{\boldsymbol{\theta}}^{(s)}$ is
 obtained by solving
 \[
-\Psi_N(\gamma_s)=0.
+\Psi_N(\boldsymbol{\theta}_s)=0.
 \]
-Equivalently, when the MSM is linear and $h(\underbar{A}_{i,T-k})$ is chosen
+Equivalently, when the MSM is linear and $\mathbf{h}(\underline{\mathbf{A}}_{i,T-k})$ is chosen
 appropriately, this step can be implemented as a weighted least squares regression using
 the draw-specific IPTW weights.
 
 The final point estimate is then obtained by averaging across the $S$ posterior draws,
 \[
-\hat{\gamma} = \frac{1}{S}\sum_{s=1}^{S}\hat{\gamma}^{(s)}.
+\hat{\boldsymbol{\theta}} = \frac{1}{S}\sum_{s=1}^{S}\hat{\boldsymbol{\theta}}^{(s)}.
 \]
 
 This procedure introduces two sources of uncertainty: first, uncertainty about the
-latent substitute confounder induced by the approximate posterior $q(z_i)$, and second,
+latent substitute confounder induced by the approximate posterior $q(\boldsymbol{Z}_i)$, and second,
 the usual sampling uncertainty in the MSM fit conditional on a given latent draw. To
 propagate both sources into the final causal effect estimates, we combine the
-draw-specific estimates using Rubin's within-between decomposition. Let
+draw-specific estimates using Rubin's within-between decomposition \cite{rubinMultipleImputationNonresponse2004}. 
+Let
 $V_{j}^{(s)}$ denote the robust (sandwich) variance 
 estimate associated with the $j$-th component of the 
-MSM parameter vector $\hat{\gamma}^{(s)}$ for draw $s$, 
+MSM parameter vector $\hat{\boldsymbol{\theta}}^{(s)}$ for draw $s$, 
 and let $Q_j$ represent the average of these variances across 
 draws for this component, 
 then the total variance estimator for 
-the $j$-th component of $\hat{\gamma}$ is given by
+the $j$-th component of $\hat{\boldsymbol{\theta}}$ is given by
 
 \[
 Q_j = \frac{1}{S}\sum_{s=1}^{S} V_{j}^{(s)},
 \qquad
-B_j = \frac{1}{S - 1}\sum_{s=1}^{S}\left(\hat{\gamma}_j^{(s)} - \bar{\gamma}_j\right)^2,
+B_j = \frac{1}{S - 1}\sum_{s=1}^{S}\left(\hat{\boldsymbol{\theta}}_j^{(s)} - \bar{\boldsymbol{\theta}}_j\right)^2,
 \qquad
 T_j = Q_j + \left(1+\frac{1}{S}\right)B_j.
 \]

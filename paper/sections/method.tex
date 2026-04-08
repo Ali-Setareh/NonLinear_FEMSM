@@ -11,41 +11,78 @@ into the details of the steps of each method.
 
 \section{Notation and problem setup}
 \label{sec:notation}
-Let $i=1, \ldots, N$ index the individuals in the study and let $t=0, \ldots, T$ 
-index the time points at which measurements are taken. The treatment 
-variable is denoted as $A_{it}$, which can take on values from a 
-predefined set of treatment options $\mathcal{A}_t$. In this thesis, 
-the treatments are assumed to be binary, so that $A_{it} \in \{0,1\}$. We adopt the convention that treatment 
-is absent at the beginning of the study. Therefore, $A_{i0} = 0$ 
-for all individuals. 
-The single measured outcome variable at the end of the study is defined as $Y_{i}$. The 
-observed covariate vector is denoted by $X_{it}$ and may include 
-both time-invariant and time-varying covariates.
-The history of treatment and covariates up to time $t$ is represented as
-$\bar{A}_{it} = (A_{i1}, A_{i2}, \ldots, A_{it})$ and $\bar{X}_{it} = (X_{i1}, X_{i2}, \ldots, X_{it})$, 
-respectively. The potential outcome under a specific treatment
-regime $\bar{a}_T = (a_1, a_2, \ldots, a_T)$ is denoted by $Y_{i}(\bar{a}_T)$. Finally, we use $U_i$ 
-to represent \emph{structural} unmeasured confounders that are time-invariant for individual $i$. The truncated treatment histories 
-are defined as the last $k$ treatment values, 
-denoted as $\underline{A}_{i,T-k} = (A_{i,T-k+1}, A_{i,T-k+2}, \ldots, A_{i,T})$. Similarly, 
-the truncated covariate histories are defined as 
-$\underline{X}_{i,T-k} = (X_{i,T-k+1}, X_{i,T-k+2}, \ldots, X_{i,T})$. Based on the 
-definition of the truncated treatment history, the truncated potential outcomes can be defined 
-as $Y_{i}(\underline{a}_{T-k}) \equiv Y_{i}(\overline{A}_{i,T-k-1},\, \underline{a}_{i,T-k})$.
-$\underline{a}_{T-k} = (a_{T-k+1}, a_{T-k+2}, \ldots, a_{T})$. This definition 
-represents the potential outcome of manipulating the last $k$ treatment values, 
-while leaving the earlier treatment values as observed. In this way, 
-the earlier treatments before the last $k$ time points can be 
-thought of as part of the baseline covariates. 
+
+We use uppercase letters for random quantities and the corresponding lowercase
+letters for their realizations. Boldface denotes vectors or collections, and plain
+letters denote scalars. Individuals are indexed by \(i \in \{1,\dots,N\}\) and time
+by \(t \in \{1,\dots,T\}\). Let \(\mathbf{X}_{it} \in \mathbb{R}^D\) denote the observed covariate vector for
+individual \(i\) at time \(t\), and let \(A_{it} \in \mathcal{A}_t\) denote the
+treatment at time \(t\). In this thesis, treatments are assumed to be binary, so
+that \(A_{it} \in \{0,1\}\), although most notation and derivations extend directly
+to more general treatment spaces. We adopt the convention that treatment is absent at the
+beginning of the study, so \(A_{i0}=0\) for all \(i\). The terminal outcome is denoted by \(Y_i\). 
+
+For each time point \(t\), define the collections
+$
+\mathbf{X}_t := \{\mathbf{X}_{it}\}_{i=1}^N
+$ and
+$
+\mathbf{A}_t := \{A_{it}\}_{i=1}^N.
+$
+The full covariate and treatment collections are
+$
+\mathbf{X} := \{\mathbf{X}_t\}_{t=1}^T 
+$ and 
+$
+\mathbf{A} := \{\mathbf{A}_t\}_{t=1}^T,
+$
+with realizations \(\mathbf{x}\) and \(\mathbf{a}\), respectively. 
+The treatment and covariate histories up to time \(t\) are written as
+$
+\bar{\mathbf{A}}_{it} := (A_{i1},\dots,A_{it})
+$ and 
+$
+\bar{\mathbf{X}}_{it} := (\mathbf{X}_{i1},\dots,\mathbf{X}_{it}).
+$
+For a treatment regime \(\bar{\mathbf{a}}_T = (a_1,\dots,a_T)\), the corresponding potential
+outcome is denoted by \(Y_i(\bar{\mathbf{a}}_T)\).
+
+We use \(\mathbf{U}_i \in \mathbb{R}^C\) to denote the structural unmeasured confounder for
+individual \(i\), assumed to be time-invariant with dimension \(C\). In the latent-variable formulation,
+we write \(\mathbf{Z} := \{\mathbf{Z}_i\}_{i=1}^N\) for the collection of
+time-invariant latent variables, where \(\mathbf{Z}_i \in \mathbb{R}^J\) and \(J\)
+is the latent dimension. The truncated treatment and covariate histories over the last \(k\) periods are
+defined as
+\[
+\underline{\mathbf{A}}_{i,T-k} := (A_{i,T-k+1},\dots,A_{iT}),
+\qquad
+\underline{\mathbf{X}}_{i,T-k} := (\mathbf{X}_{i,T-k+1},\dots,\mathbf{X}_{iT}).
+\]
+For \(\underline{\mathbf{a}}_{T-k} = (a_{T-k+1},\dots,a_T)\), the corresponding truncated
+potential outcome is defined by
+\[
+Y_i(\underline{\mathbf{a}}_{T-k})
+\equiv
+Y_i(\bar{\mathbf{A}}_{i,T-k-1},\,\underline{\mathbf{a}}_{T-k}),
+\]
+that is, the last \(k\) treatment values are intervened on while the earlier
+treatment history is left as observed. 
+
+Finally, in context of SeqGPLVM, \(\boldsymbol{\gamma}\) denotes generative 
+hyperparameters and \(\boldsymbol{\psi}\) variational hyperparameters. 
+Generative hyperparameters are 
+those that define how the data is generated and enter the prior and likelihood, e.g., 
+the kernel lengthscale and variance in GPs, while variational hyperparameters are those 
+that define the variational family, e.g., the mean and variance in Gaussian variational 
+distributions.
 
 \paragraph{Target causal estimand.} To avoid the usual incildental parameters 
-problem in the estimation of non-linear fixed effects models, 
-\citeA{blackwellEffectPoliticalAdvertising2024} propose to focus on the average 
-truncated potential outcome as the causal target of interest instead of the usual 
-potential outcome under a full treatment intervention. Although, SeqGPLVM can be used for 
-identification of a wider range of causal targets 
-including $\mathbb{E}[Y_i(\bar{a}_{T})]$, to maintain comparability with FE-MSM, 
-we also focus on the average truncated potential outcome, $\mathbb{E}[Y_i(\underline{a}_{T-k})]$, 
+problem in the estimation of non-linear fixed effects models, FE-MSM 
+is limited to estimating only the average truncated potential outcome. 
+Although, the sequential deconfounding approach and SeqGPLVM can be used for 
+identification and estimation of a wider range of causal targets 
+including $\mathbb{E}[Y_i(\bar{\mathbf{a}}_{T})]$, to maintain comparability with FE-MSM, 
+we also focus on the average truncated potential outcome, $\mathbb{E}[Y_i(\underline{\mathbf{a}}_{T-k})]$, 
 as the causal target of interest in this thesis. 
 
 \input{sections/method/method_assumptions.tex}

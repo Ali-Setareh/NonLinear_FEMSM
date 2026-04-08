@@ -4,7 +4,7 @@ The common assumptions for both FE-MSM and SeqGPLVM-MSM are stated below.
 The assumptions can be categorized into two groups: identification assumptions and 
 modeling assumptions. Identification assumptions, 
 are the assumptions which are needed to write target causal estimands such as 
-$\mathbb{E}[Y_i(\underline{a}_{T-k})]$ in terms of observed data. 
+$\mathbb{E}[Y_i(\underline{\mathbf{a}}_{T-k})]$ in terms of observed data. 
 Based on the identification strategy and the estimator of choice, 
 certain quantities must be modeled. 
 For example, estimating a marginal structural model for the target causal estimand using 
@@ -19,10 +19,10 @@ assumptions, respectively.
 
 \begin{idassumpC}[Consistency]\label{ass:C-consistency}
 The observed outcome for each individual under their observed treatment history equals
-the potential outcome under that treatment history. Formally, if $\bar{A}_{iT}=\bar{a}_{iT}$, 
-then $Y_{i}=Y_{i}(\bar{a}_{iT})$. 
-Moreover, $Y_{i} = Y_{i}(\underline{a}_{i,T-k})$ if 
-$\bar{A}_{iT}=\left(\bar{A}_{i,T-k-1},\underline{a}_{i,T-k}\right)$.
+the potential outcome under that treatment history. Formally, if $\bar{A}_{iT}=\bar{\mathbf{a}}_{iT}$, 
+then $Y_{i}=Y_{i}(\bar{\mathbf{a}}_{iT})$. 
+Moreover, $Y_{i} = Y_{i}(\underline{\mathbf{a}}_{i,T-k})$ if 
+$\bar{\mathbf{A}}_{iT}=\left(\bar{\mathbf{A}}_{i,T-k-1},\underline{\mathbf{a}}_{i,T-k}\right)$.
 \end{idassumpC}
 
 \begin{comment}
@@ -53,31 +53,32 @@ other individuals. This assumption is also known as the no spillover assumption.
 
 \begin{idassumpC}[Time-invariance of unmeasured confounding]\label{ass:C-timeinvariant-uc}
 The unmeasured confounding is assumed to be
-time-invariant. That is, $U_{i,t} = U_i$ for $t \in \{1,\dots,T\}$. We can then write 
+time-invariant. That is, $\mathbf{U}_{i,t} = \mathbf{U}_i$ for $t \in \{1,\dots,T\}$. We can then write 
 conditional ignorability as 
 \[
-    \{ Y_{i,t+1}(\bar{a}_{t}),\, \bar X_{i,t+1}(\bar a_t) \}
-\;\perp\!\!\!\perp\;
+\{ Y_{i,t+1}(\bar{\mathbf{a}}_{t}),\, \bar{\mathbf{X}}_{i,t+1}(\bar{\mathbf{a}}_{t}) \}
+\perp\!\!\!\perp
 A_{it}
-\;\big|\;
-\bar X_{it},\,
-\bar A_{i,t-1} = \bar a_{t-1},\,
-U_i. \]
+\mid
+\bar{\mathbf{X}}_{it},\,
+\bar{\mathbf{A}}_{i,t-1} = \bar{\mathbf{a}}_{t-1},\,
+\mathbf{U}_i .
+\]
 Note that this assumption is about the true underlying data-generating process and cannot be  
-used for identification directly since $U_i$ is unmeasured. 
+used for identification directly since $\mathbf{U}_i$ is unmeasured. 
 \end{idassumpC}
 
 \begin{idassumpC}[Positivity]\label{ass:C-positivity}
 For all treatment times $t = T - k + 1, \ldots, T$, 
-and all histories $(\bar{X}_t, \bar{A}_{t-1}, \eta_i)$ 
+and all histories $(\bar{\mathbf{X}}_t, \bar{\mathbf{A}}_{t-1}, \boldsymbol{\eta}_i)$ 
 with positive probability, every treatment level has positive probability:
 \[
-\mathbb{P}(A_t = a_t \mid \bar{X}_t = \bar{x}_t,\ \bar{A}_{t-1} = 
-\bar{a}_{t-1}, \eta_i) > 0 \quad \text{for all } a_t \in \mathcal{A}_t
+\mathbb{P}(A_t = a_t \mid \bar{\mathbf{X}}_t = \bar{\mathbf{x}}_t,\ \bar{\mathbf{A}}_{t-1} = 
+\bar{\mathbf{a}}_{t-1}, \boldsymbol{\eta}_i) > 0 \quad \text{for all } a_t \in \mathcal{A}_t
 \]
-Where $\eta_i$ represents the unit-specific fixed effect in the FE-MSM model 
+Where $\boldsymbol{\eta}_i$ represents the unit-specific fixed effect in the FE-MSM model 
 or the confounder substitute in the SeqGPLVM model. This assumption  particularly
-is necessary for the identification of $\mathbb{E}[Y_i(\underline{a}_{T-k})]$.
+is necessary for the identification of $\mathbb{E}[Y_i(\underline{\mathbf{a}}_{T-k})]$.
 \end{idassumpC}
 
 
