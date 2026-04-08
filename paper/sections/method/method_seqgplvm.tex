@@ -182,7 +182,7 @@ in \ref{sec:seqgplvm_loss}. In Fig \ref{fig:seqgplvm_architecture} we show
 the inference DAG of the SeqGPLVM.
 
 \subsection{Outcome model}
-
+\label{sec:seqgplvm-outcome}
 Once the approximate posterior distribution of the substitute confounder is estimated, 
 we can use it to adjust for confounding in the outcome model. This stage 
 closely parallels the FE-MSM procedure described in Section~\ref{sec:fe-msm}. In
@@ -255,16 +255,22 @@ latent substitute confounder induced by the approximate posterior $q(z_i)$, and 
 the usual sampling uncertainty in the MSM fit conditional on a given latent draw. To
 propagate both sources into the final causal effect estimates, we combine the
 draw-specific estimates using Rubin's within-between decomposition. Let
-$V^{(s)}$ denote the robust (sandwich) covariance estimate associated with
-$\hat{\gamma}^{(s)}$. Then the pooled variance estimator is
+$V_{j}^{(s)}$ denote the robust (sandwich) variance 
+estimate associated with the $j$-th component of the 
+MSM parameter vector $\hat{\gamma}^{(s)}$ for draw $s$, 
+and let $Q_j$ represent the average of these variances across 
+draws for this component, 
+then the total variance estimator for 
+the $j$-th component of $\hat{\gamma}$ is given by
+
 \[
-W = \frac{1}{S}\sum_{s=1}^{S} V^{(s)},
+Q_j = \frac{1}{S}\sum_{s=1}^{S} V_{j}^{(s)},
 \qquad
-B = \mathrm{Var}_s\!\left(\hat{\gamma}^{(s)}\right),
+B_j = \frac{1}{S - 1}\sum_{s=1}^{S}\left(\hat{\gamma}_j^{(s)} - \bar{\gamma}_j\right)^2,
 \qquad
-T = W + \left(1+\frac{1}{S}\right)B.
+T_j = Q_j + \left(1+\frac{1}{S}\right)B_j.
 \]
-The resulting confidence interval $T$ therefore reflect both
+The resulting confidence interval $T_j$ therefore reflect both
 (i) variability in the MSM fit conditional on a latent draw and
 (ii) additional variability due to uncertainty in the inferred substitute confounder.
 

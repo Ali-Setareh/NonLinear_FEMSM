@@ -1,0 +1,104 @@
+\section{SeqGPLVM hyperparameters}
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.2}
+\begin{threeparttable}
+\caption{SeqGPLVM hyperparameters and initialization procedures in the final run}
+\label{tab:seqgplvm_hparams_final}
+\begin{tabularx}{\textwidth}{
+    >{\raggedright\arraybackslash}p{0.24\textwidth}
+    >{\raggedright\arraybackslash}p{0.28\textwidth}
+    >{\raggedright\arraybackslash}X
+}
+\toprule
+\textbf{Hyperparameter / process} & \textbf{Actual value in final run} & \textbf{Possible values / procedures available in code} \\
+\midrule
+
+\texttt{latent\_dim}
+& 1
+& Any integer. \\
+
+\texttt{num\_inducing / n\_inducing\_x}
+& 31
+& Any integer. In the sweep, it is set as
+\(\lfloor \sqrt{\texttt{train\_test\_split} \cdot n} \rfloor\). \\
+
+\texttt{num\_inducing\_hidden}
+& 13
+& Any integer. \\
+
+\texttt{treatment\_model}
+& \texttt{BernoulliLikelihood}
+& Any likelihood factory/class accepted by the model. The code explicitly handles \texttt{BernoulliLikelihood} and \texttt{GaussianLikelihood}; the Titsias branch requires \texttt{GaussianLikelihood}. \\
+
+\texttt{z\_prior}
+& \texttt{"normal"}
+& \texttt{"normal"} or \texttt{"uniform"}. \\
+
+\texttt{init\_z}
+& \texttt{None}
+& Either a user-supplied tensor/parameter or \texttt{None}. If \texttt{None}, the latent variables are initialized internally by random normal draws. \\
+
+\texttt{z\_initializer}
+& \texttt{"uniform"}
+& \texttt{"uniform"} or \texttt{"normal"}. These map to different latent inducing-point initialization procedures. \\
+
+\texttt{uniform\_halfwidth}
+& 1
+& Any positive float or \texttt{None}. Used by uniform latent inducing-point initialization. In the launched run, the sweep overwrites this value with \(a\). \\
+
+\texttt{prior\_std}
+& \texttt{None}
+& Any positive float or \texttt{None}. Used by normal latent inducing-point initialization. \\
+
+\texttt{learn\_inducing\_locations}
+& \texttt{False}
+& \texttt{True} or \texttt{False}. \\
+
+\texttt{kernel} in \texttt{GPLVM}
+& \texttt{"linear"}
+& \texttt{"RBF"}, \texttt{"linear"}, \texttt{"rbf+linear"}, \texttt{"linear+rbf"}, \texttt{"rbf\_linear"}. \\
+
+\texttt{optimize\_hyperparams["lr"]}
+& \(10^{-2}\)
+& Any numeric learning rate in the optimizer configuration. \\
+
+\texttt{optimize\_hyperparams["num\_epochs"]}
+& 6000
+& Any positive integer. \\
+
+\texttt{optimizer}
+& \texttt{Adam}
+& Only \texttt{torch.optim.Adam(model.parameters(), lr=...)} is implemented in the uploaded code. \\
+
+\texttt{init\_z} initializer
+& \(\texttt{torch.randn}(N,\texttt{latent\_dim})\)
+& Two procedures are available: supply \texttt{init\_z} explicitly, or let the model initialize it by standard normal random draws. \\
+
+Covariate inducing-point initialization
+& Greedy farthest-point sampling via \texttt{farthest\_points(covs, n\_inducing\_x)}
+& Active code path: greedy farthest-point sampling on observed non-missing covariates at each time point. The helper allows seeded or unseeded starts; the current call uses the default seeded behavior. \\
+
+Latent Normal prior std
+& 2.0
+& Fixed at 2.0 in the current code when \texttt{z\_prior = "normal"}. Not exposed as a config hyperparameter. \\
+
+GPLVM kernel priors
+& For the effective \texttt{"linear"} kernel: \texttt{GammaPrior(2.0, 1.0)} on the linear variance, initialized at 1.0
+& \texttt{"RBF"}: \texttt{GammaPrior(2.0,1.0)} on lengthscale and outputscale. \newline
+\texttt{"linear"}: \texttt{GammaPrior(2.0,1.0)} on variance. \newline
+\texttt{"rbf+linear"} variants: \texttt{GammaPrior(2.0,1.0)} on RBF lengthscale, RBF outputscale, and linear variance. \\
+
+\bottomrule
+\end{tabularx}
+
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item The ``final run'' refers to the actually launched run in the newest sweep script, i.e.\ the first selected configuration.
+\item Although \texttt{uniform\_halfwidth} appears as 2.0 in the base training configuration, it is overwritten by the sweep with the current value of \(a\); hence the launched run uses \texttt{uniform\_halfwidth} \(=1\).
+\item The effective \texttt{GPLVM} kernel is \texttt{"linear"} because the model constructor is called without explicitly overriding the default kernel.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

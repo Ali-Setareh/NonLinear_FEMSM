@@ -1,6 +1,59 @@
 \section{Results}
 \label{results}
 
+We compared the performance of the proposed methods by estimating the two structural 
+parameters of interest $\tau_F$ and $\tau_C$ using the weighted least squares. 
+For the FE-MSM method, the parameters are estimated by solving the following optimization problem:
+\begin{equation}
+\label{eq:least_squares}
+(\widehat{\tau}_F,\widehat{\tau}_C)
+=
+\arg\min_{\tau_F',\tau_C'}
+\sum_{i=1}^{n}
+\widehat{W}_i
+\left\{
+Y_i-\alpha-\tau_F' A_{iT}
+-\tau_C' \sum_{t=T-1}^{T-3} A_{it}
+\right\}^{2}
+\end{equation}
+Where $\widehat{W}_i$ are the stabilized version of 
+IPTW weights defined in Eq.~\eqref{eq:iptw_weights}. 
+The parametric 
+propensity score model is correctly specified (up to a unit-specific fixed effect) 
+as a logistic regression of the 
+treatment on the past treatment history and covariates, with a unit-specific fixed effect, 
+\[
+p(a_{it} = 1 \mid x_{it}, a_{i,t-1}, z_i^{(s)}) = \operatorname{expit}w_1^\top x_{it} + w_2 a_{i,t-1} + \alpha_i.
+\]
+
+
+For the sequential GPLVM method, a $\text{CMM}(1)$ with a one dimensional latent variable 
+(i.e., $Z_i \in \mathbb{R}$ amd $|\mathcal{Z}| = 1$) 
+is fitted to the treatment data, 
+using a linear kernel: 
+\[
+k_t^{\text{treat}} ((x_t,a_{t-1},z), (x'_t,a'_{t-1},z'))= \nu \left[\sum_{j=1}^{|\mathcal{X_t}|}x_{jt} x'_{jt} 
++ aa' + \sum_{j=1}^{|\mathcal{Z}|} z_{j} z'_{j} \right]
+\]
+where $\nu$ is the variance hyperparameter. The parameters of the MSM are estimated by
+the procedure described in Section~\ref{sec:seqgplvm-outcome} by solving 
+the same optimization problem as in Eq.~\eqref{eq:least_squares} with 
+number of posterior draws set to $S=100$. The following logistic regression 
+model is used to estimate the propensity scores for the IPTW estimation 
+of the MSM parameters:
+\[
+p(a_{it} = 1 \mid x_{it}, a_{i,t-1}, z_i^{(s)}) = 
+\operatorname{expit}\!\left(w_3^\top x_{it} + w_4 a_{i,t-1}+ w_5 z_i^{(s)}+ w_6 \right),
+\]
+
+For both methods, the weighting is stabilized by multiplying the weights with 
+conditional probabilities of the current treatment given only the previous treatment using 
+the following logistic regression model:
+\[
+p(a_{it} = 1 \mid a_{i,t-1}) = \operatorname{expit}\!\left(w_7 a_{i,t-1} + w_8\right).
+\]
+
+
 \textbf{DISCUSSION}
 \hl{While this MI-style propagation provides a principled empirical uncertainty summary,
 it does not close the main theoretical gap in the sequential deconfounding approach.

@@ -39,6 +39,10 @@
 \usepackage{comment}
 \usepackage{siunitx} % optional, but nice for numbers
 
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{threeparttable}
+
 %\sethlcolor{red}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -46,6 +50,21 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{etoolbox}   % for \ifstrempty
 \usepackage[nameinlink,noabbrev]{cleveref} % optional, for \cref
+
+\usepackage{titlesec}
+
+% Numbered chapters: 6 Discussion
+\titleformat{\chapter}[hang]
+  {\normalfont\Huge\bfseries}
+  {\thechapter}{1em}{}
+
+% Unnumbered chapters: Discussion
+\titleformat{name=\chapter,numberless}[hang]
+  {\normalfont\Huge\bfseries}
+  {}{0pt}{}
+
+% Spacing: left, before, after
+\titlespacing*{\chapter}{0pt}{0pt}{2em}
 
 
 % --- Theorem style: "Assumption C1. (Consistency.)"
@@ -125,8 +144,12 @@
 \input{sections/simulation_study}
 \input{sections/results}
 \input{sections/discussion}
-\input{sections/appendix}
-\input{sections/supplementary}
+
 \bibliographystyle{apacite}
 \bibliography{references}
+\clearpage
+
+\input{sections/appendix}
+\input{sections/supplementary}
+
 \end{document}
