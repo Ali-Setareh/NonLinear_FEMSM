@@ -22,9 +22,10 @@ The parametric
 propensity score model is correctly specified (up to a unit-specific fixed effect) 
 as a logistic regression of the 
 treatment on the past treatment history and covariates, with a unit-specific fixed effect, 
-\[
+\begin{equation}
+\label{eq:ps_model}
 p(a_{it} = 1 \mid x_{it}, a_{i,t-1}, z_i^{(s)}) = \operatorname{expit}(w_1^\top x_{it} + w_2 a_{i,t-1} + \alpha_i).
-\]
+\end{equation}
 
 
 For the sequential GPLVM, a $\text{CMM}(1)$ with a one dimensional latent variable 
@@ -50,19 +51,80 @@ the same optimization problem as in Eq.~\eqref{eq:least_squares} with
 number of posterior draws set to $S=100$. The following logistic regression 
 model is used to estimate the propensity scores for the IPTW estimation 
 of the MSM parameters:
-\[
+\begin{equation}
+\label{eq:ps_model_seqgplvm}
 p(a_{it} = 1 \mid x_{it}, a_{i,t-1}, z_i^{(s)}) = 
 \operatorname{expit}\!\left(w_3^\top x_{it} + w_4 a_{i,t-1}+ w_5 z_i^{(s)}+ w_6 \right),
-\]
+\end{equation}
+where $z_i^{(s)}$ is the $s$-th posterior draw of the latent variable for individual $i$.
 
 For both methods, the weighting is stabilized by multiplying the weights with 
 conditional probabilities of the current treatment given only the previous treatment using 
 the following logistic regression model:
-\[
+\begin{equation}
+\label{eq:ps_model_stabilized}
 p(a_{it} = 1 \mid a_{i,t-1}) = \operatorname{expit}\!\left(w_7 a_{i,t-1} + w_8\right).
-\]
+\end{equation}
+
+Figure~\ref{fig:simulation_results} shows the results of the simulation study for the 
+two covariate case. Bias, standard deviation, and coverage of the 
+95\% confidence intervals are reported based on 500 simulation runs. The first 
+two columns correspond to the weak unmeasured confounding setting where 
+$U_i \in [-1,1]$ and 
+the last two columns correspond to the strong unmeasured confounding 
+setting where $U_i \in [-2,2]$. Solid lines in grey show the results using the 
+true propensity scores (\texttt{IPTW-True}). Solid orange lines 
+show the results for FE-MSM (\texttt{IPTW-FE-impute}) and dashed 
+purple lines show the results for SeqGPLVM (\texttt{IPTW-SeqGPLVM-impute}). 
+Dashed blue lines 
+represent the results for the naive IPTW estimaton of the specified MSM assuming 
+sequential ignorability without adjusting for the unmeasured confounder (\texttt{IPTW}). 
+In this case we used the same logistic regression as 
+in Eq.~\eqref{eq:ps_model} to estimate the propensity scores by replacing 
+the individual 
+fixed effects $\alpha_i$ with a global intercept (\texttt{IPTW}). Shapes 
+correspond to the $n$ to $T$ ratio. Squares represent $\rho = 5$ (the largest number of time points), 
+circles represent $\rho = 10$, and triangles represent $\rho = 50$ (the smallest number of time points). 
+
+\begin{itemize}
+    \item worst case for both method is for rho = 50 but specially this is visible for 
+    seqgplvm more than femsm. in the smallest 
+    individual size N = 200, performs equally as the naieve IPTW (a = 1) or even more biased (a = 2) in both case 
+    with larger standard error. Hence, femsm performs 
+    better with shorter time periods. This is expected since seqgplvm has much more parameters 
+    and requires more data for training
+    \item as the number of time points increases, the gap between the bias of two methods 
+    decreases and they perform more similarly although the Fe-MSM bias remains lower in terms of bias and standard error.
+    \item under the weak unmeasured confoundedness the where the unmeansured confounder explains roughly 1/3 
+    of the variance of the treatment assignments, the confidence interval estimates of 
+    the two methods stays close to the nominal coverage across different values of n and p. 
+    Under this scenario FE-MSM performs almost the same as the true propensity case even for 
+    the shortest treatment sequence t = 4. 
+    \item in the stronger unmeasured confoundedness case where the unmeasured confounder explains 
+    2/3 of the variance in the treatment, both methods perform more poorly 
+    than the weaker case in terms of the bias while FE msm perfroms slightly better across all rhos and 
+    sample sizes. in this case there 
 
 
+\end{itemize}
+
+
+naive model that does not adjust for the unmeasured confounder 
+(\texttt{IPTW}), dashed line in light blue shows the results for the
+dashed line in green shows the results for the
+IPTW method using the estimated propensity scores from the correctly specified logistic regression model (\texttt{IPTW}), dashed line
+in orange shows the results for the 
+FE-MSM method and dashed line in purple shows the results for the 
+sequential GPLVM. The first two columns correspond to the weak unmeasured confounding setting ($\rho=5$)
+
+ and the last two columns correspond to the strong unmeasured confounding setting ($\rho=50$). The first row corresponds to the estimation of $\tau_F$ and the second row corresponds to the estimation of $\tau_C$. The results for $a=1$ and $a=2$ are shown in the left and right panels, respectively. 
+The results show that both methods can estimate the parameters of interest with low bias and good coverage, especially as the number of individuals increases. However, the FE-MSM method tends to have slightly lower bias and better coverage compared to the sequential GPLVM method, particularly for smaller sample sizes. This may be due to the fact that the FE-MSM method relies on a correctly specified parametric model for the propensity scores, while the sequential GPLVM method is more flexible but may require larger sample sizes to achieve similar performance.
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\textwidth]{figures/build/simulation_results.pdf}
+    \caption{Simulation results for FE-MSM and sequential GPLVM.}
+    \label{fig:simulation_results}
+\end{figure}
 \textbf{DISCUSSION}
 \hl{While this MI-style propagation provides a principled empirical uncertainty summary,
 it does not close the main theoretical gap in the sequential deconfounding approach.

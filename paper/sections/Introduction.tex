@@ -49,8 +49,7 @@ which combines the marginal structural model (MSM)
 \cite{robinsMarginalStructuralModels2000} with unit fixed effects. The second method 
 is the sequential Gaussian process latent variable model (SeqGPLVM) introduced by 
 \citeA{hattSequentialDeconfoundingCausal2024}. This method may be interpreted as the 
-sequential extension of the deconfounder method of 
-\citeA{wangBlessingsMultipleCauses2019}.
+sequential extension of the deconfounder theory \cite{wangBlessingsMultipleCauses2019}.
 
 %where 
 %a latent variable is used to estimate a statistically sufficient substitute for the unmeasured confounders. This allows the method to retain the sequential ignorability 
@@ -85,7 +84,7 @@ variance and confidence interval coverage.
 
 Beyond the simulation study, a detailed derivation of the loss function for 
 SeqGPLVM is provided, which was not fully elaborated in the original paper. 
-Moreover, for the first time, a modular implementation of SeqGPLVM is 
+Moreover, a modular implementation of SeqGPLVM is 
 developed using the \texttt{GPyTorch} library \cite{gardnerGPyTorchBlackboxMatrixMatrix2021}. 
 This implementation is designed to accommodate different treatment types and intended for 
 practical reuse in future research\footnote{Code available at \url{https://github.com/Ali-Setareh/SeqGPLVM_FEMSM}}.

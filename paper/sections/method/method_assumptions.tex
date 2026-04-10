@@ -53,7 +53,7 @@ other individuals. This assumption is also known as the no spillover assumption.
 
 \begin{idassumpC}[Time-invariance of unmeasured confounding]\label{ass:C-timeinvariant-uc}
 The unmeasured confounding is assumed to be
-time-invariant. That is, $\mathbf{U}_{i,t} = \mathbf{U}_i$ for $t \in \{1,\dots,T\}$. We can then write 
+time-invariant. That is, $\mathbf{U}_{it} = \mathbf{U}_i$ for $t \in \{1,\dots,T\}$. We can then write 
 conditional ignorability as 
 \[
 \{ Y_{i,t+1}(\bar{\mathbf{a}}_{t}),\, \bar{\mathbf{X}}_{i,t+1}(\bar{\mathbf{a}}_{t}) \}
@@ -76,8 +76,8 @@ with positive probability, every treatment level has positive probability:
 \mathbb{P}(A_t = a_t \mid \bar{\mathbf{X}}_t = \bar{\mathbf{x}}_t,\ \bar{\mathbf{A}}_{t-1} = 
 \bar{\mathbf{a}}_{t-1}, \boldsymbol{\eta}_i) > 0 \quad \text{for all } a_t \in \mathcal{A}_t
 \]
-Where $\boldsymbol{\eta}_i$ represents the unit-specific fixed effect in the FE-MSM model 
-or the confounder substitute in the SeqGPLVM model. This assumption  particularly
+Where $\boldsymbol{\eta}_i$ represents the unit-specific fixed effect in FE-MSM 
+or the latent variable in the SeqGPLVM model. This assumption  particularly
 is necessary for the identification of $\mathbb{E}[Y_i(\underline{\mathbf{a}}_{T-k})]$.
 \end{idassumpC}
 

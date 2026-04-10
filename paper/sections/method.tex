@@ -47,7 +47,7 @@ $
 For a treatment regime \(\bar{\mathbf{a}}_T = (a_1,\dots,a_T)\), the corresponding potential
 outcome is denoted by \(Y_i(\bar{\mathbf{a}}_T)\).
 
-We use \(\mathbf{U}_i \in \mathbb{R}^C\) to denote the structural unmeasured confounder for
+We use \(\mathbf{U}_i \in \mathbb{R}^C\) to denote the true structural unmeasured confounder for
 individual \(i\), assumed to be time-invariant with dimension \(C\). In the latent-variable formulation,
 we write \(\mathbf{Z} := \{\mathbf{Z}_i\}_{i=1}^N\) for the collection of
 time-invariant latent variables, where \(\mathbf{Z}_i \in \mathbb{R}^J\) and \(J\)
@@ -68,7 +68,7 @@ Y_i(\bar{\mathbf{A}}_{i,T-k-1},\,\underline{\mathbf{a}}_{T-k}),
 that is, the last \(k\) treatment values are intervened on while the earlier
 treatment history is left as observed. 
 
-Finally, in context of SeqGPLVM, \(\boldsymbol{\gamma}\) denotes generative 
+Finally, in the context of SeqGPLVM, \(\boldsymbol{\gamma}\) denotes generative 
 hyperparameters and \(\boldsymbol{\psi}\) variational hyperparameters. 
 Generative hyperparameters are 
 those that define how the data is generated and enter the prior and likelihood, e.g., 
@@ -76,7 +76,7 @@ the kernel lengthscale and variance in GPs, while variational hyperparameters ar
 that define the variational family, e.g., the mean and variance in Gaussian variational 
 distributions.
 
-\paragraph{Target causal estimand.} To avoid the usual incildental parameters 
+\paragraph{Target causal estimand.} To avoid the usual incidental parameters 
 problem in the estimation of non-linear fixed effects models, FE-MSM 
 is limited to estimating only the average truncated potential outcome. 
 Although, the sequential deconfounding approach and SeqGPLVM can be used for 
@@ -88,8 +88,8 @@ as the causal target of interest in this thesis.
 \input{sections/method/method_assumptions.tex}
 \input{sections/method/method_fe_msm.tex}
 \input{sections/method/method_seqgplvm.tex}
-\input{sections/method/method_comparison.tex}
-\input{sections/method/trimming.tex}
-\input{sections/method/outcome.tex}
+%\input{sections/method/method_comparison.tex}
+%\input{sections/method/trimming.tex}
+%\input{sections/method/outcome.tex}
 
 
