@@ -1,5 +1,138 @@
 \chapter{Discussion}
 \label{chap:discussion}
+
+This thesis aimed to clarify the assumptions and the finite-sample performance of two 
+approaches to address 
+time-constant unmeasured confounding in the context of time-varying treatments. 
+Although the simulation results show improvements in the bias of the 
+causal effect estimates for both methods, there are still some limitations and 
+open questions which make these methods not yet ready for 
+widespread use in practice. The fundamental requirement behind both of these methods 
+is another form of ignorability assumption which includes a time-invariant latent variable 
+in the conditioning set which make the treatment assignment independent of the potential 
+outcomes. 
+
+In FE-MSM this requirement is directly assumed and is formalized by 
+Assumption~\ref{ass:FE-unit-specific-ignor}. The restriction they put in this assumption 
+on the unmeasured confounder is that using a latent scalar variable $\alpha_i$, 
+all the 
+time-invariant unmeasured confounding in the treatment process 
+can be captured. Effectively, this assumption restricts the class 
+of DGPs which this method can address to the class of DGPs where the unmeasured confounder 
+only enters the treatment process as a scalar or, at least, where those confounders can be summarized 
+into one scalar. This is a strong structural assumption which cannot be verified 
+using observed data. For instance, this method cannot be used in cases where 
+the unmeasured confounding modifies not only the intercept but also 
+the effect of other covariates or treatments (interaction effects). 
+
+On the other hand, in SeqGPLVM, this requirement 
+is justified by means of assuming a set of auxiliary 
+assumptions (Assumptions~\ref{ass:SG-Marcovianity}-\ref{ass:SG-Consistency}). 
+Among these assumptions, the assumption of consistency of the latent variable 
+plays the most crucial role. This assumption is not only impossible to verify in 
+real-world problems, but it is not straightforward to establish even in simulation studies where 
+the DGP is known. To verify this assumption for a given DGP, one would need to show that the 
+relevant latent confounder is uniquely identified, up to trivial transformations, 
+by the observed data. Note that the notion of identifiability considered here 
+is closer to structural identifiability, since the issue is whether the 
+latent confounder is uniquely implied by the data-generating structure, 
+rather than whether a parameter can be estimated within a fixed statistical model. 
+This is a much 
+stronger requirement than merely showing that there exists some latent-variable representation 
+of the treatment process. In general, different latent structures may induce the same observed 
+distribution of the treatments, and therefore the same observed data may be compatible with 
+multiple candidate substitute confounders. In such a case, even if a latent-variable model fits 
+the treatment process well, it does not follow that the recovered latent variable corresponds to 
+the confounder needed for causal identification. In other words, SeqGPLVM 
+may recover a latent factor that explains the dependence structure among the treatments, 
+but this alone does not guarantee that this latent factor is the correct one for the 
+causal problem. This is a fundamental issue for all methods that rely on latent 
+variable models for deconfounding, and it is not specific to SeqGPLVM.
+
+Consequently, the favorable simulation results for SeqGPLVM should be 
+interpreted with caution. This method is shown to work in a specific DGP and for larger 
+sample sizes, but the satisfaction of the concistency assumption is left for 
+future work. More broadly, the method shifts the 
+burden of the usual sequential ignorability assumption to a different and 
+arguably less transparent set of 
+structural assumptions about the existence, uniqueness, and causal relevance of a 
+latent substitute 
+confounder. Despite these theoretical limitations, the flexibility of SeqGPLVM 
+in modeling complex relationships 
+between the observed covariates, treatments, and the latent confounder for longitudinal data, 
+can be studied further as a non-parametric latent variable model for time series data. 
+
+A future direction is to add dynamics to the latent variable structure. Also another 
+interesting direction is to implement an amortized version of SeqGPLVM which can 
+be more efficient for new data by parametrizing the posterior distribution over the 
+latent variables using a neural network.
+
+In conclusion this thesis provided a common framework for understanding the assumptions 
+and the finite-sample performance of two methods for addressing time-constant unmeasured 
+confounding in time-varying treatments settings. 
+It highlighted the assumptions and limitations of these methods and 
+the need for further theoretical and empirical work to understand their 
+properties and applicability. The results of this thesis suggested 
+evidence that both FE-MSM and SeqGPLVM perform similarly for longer treatment sequences.  The 
+results of this thesis provided emperical evidence that both FE-MSM 
+and SeqGPLVM can be useful tools for addressing time-constant unmeasured confounding in 
+certain settings to reduce bias and improve coverage compared to standard methods 
+that do not account for unmeasured confounding. A promising future research 
+direction is to 
+investigate the theoretical properties of the fixed effects estimates by FE-MSM and the 
+latent variables estimated by SeqGPLVM to understand the nature of these estimates 
+and their relationship to the true unmeasured confounder. This could be pursued by 
+further exploring the performance and the estimation of the latent variables 
+and the fixed effects 
+in simulation studies using alternative DGPs 
+that impose a richer structure on the unmeasured confounding. 
+For example, one could consider 
+a hierarchical DGP in which individuals are first assigned to latent 
+classes and the unmeasured confounder 
+is then generated conditional on class membership. Such a design would 
+induce structured heterogeneity in 
+the population and would make it possible to investigate whether the fixed effects 
+in FE-MSM and the latent 
+variables inferred by SeqGPLVM recover only coarse subgroup structure or a 
+quantitatively meaningful 
+approximation to the underlying confounder. 
+In this sense, the simulation framework suggested by 
+\citeA{bouchattaouiCausalDynamicVariational2025} may provide a useful starting point, 
+even though that 
+paper focuses on unobserved adjustment variables rather than unobserved confounders.
+
+Another idea inspired by \citeA{bouchattaouiCausalDynamicVariational2025} is to investigate 
+whether the consistency assumption for SeqGPLVM can be imposed also in practice by imposing 
+a more concentrated,
+approximately deterministic posterior over the latent variables. 
+The theory of deconfounding requires 
+that the latent substitute confounder is a deterministic function of the 
+treatment sequence 
+while in practice the posterior distribution over the latent variables is 
+typically diffuse, especially for smaller sample sizes. If successful, 
+such an approach could lead 
+to more stable latent representations 
+and reduce the sensitivity of the resulting causal effect estimates to 
+posterior uncertainty in the inferred confounder.
+
+\begin{comment}
+\textbf{DISCUSSION}
+\hl{While this MI-style propagation provides a principled empirical uncertainty summary,
+it does not close the main theoretical gap in the sequential deconfounding approach.
+First, it does not by itself deliver a large-sample result for the \emph{overall}
+two-stage estimator---i.e., conditions under which the plug-in (or draw-averaged)
+MSM estimator is consistent and $\sqrt{N}$-asymptotically normal with a valid variance
+formula---of the kind established for FE--IPTW by Blackwell and Yamauchi.
+Second, because the outcome stage is not modeled jointly with the treatment model,
+the distribution of $\{\hat{\gamma}^{(s)}\}$ should be interpreted as uncertainty
+propagation rather than a coherent Bayesian posterior for $\gamma$; consequently,
+interval calibration is not automatically guaranteed from Bayesian first principles.
+Third, even perfect variance combination does not address potential sources of
+systematic error---such as misspecification of the latent treatment model/CMM,
+violations of positivity leading to unstable weights, or approximation error from
+variational inference---which can affect both bias and coverage.}
+
+
 \begin{itemize}
     \item discuss about the vocablurary choice of "unmeasured" vs "hidden"
     \item testing against misspecified latent space dimension (I think bica does this?)
@@ -74,4 +207,4 @@ They also follow a similar two stage procedure where they first estimate the lat
 using a factor model and then use these estimated confounders as observed covariates in the outcome model. 
 However, they do not use IPTW for estimating the causal effect in the outcome model. 
 Instead, they use G-formula which does not involve fitting a second propensity score model.
-
+\end{comment}
