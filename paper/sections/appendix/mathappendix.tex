@@ -2,7 +2,7 @@
 % Appendix: Deriving the (negative) ELBO loss for the SeqGPLVM
 % ------------------------------------------------------------
 
-\section{SeqGPLVM loss function}
+\chapter{SeqGPLVM loss function}
 \label{sec:seqgplvm_loss}
 In this section, we derive the ELBO (evidence lower bound) for the sequential Gaussian process latent variable 
 model (SeqGPLVM) introduced in Section~\ref{sec:seqgplvm}. We retain the notation from Section~\ref{sec:notation}.
@@ -46,7 +46,7 @@ that define the variational family, e.g., the mean and variance in Gaussian vari
 distributions.
 \end{comment}
 
-\subsection{Variational inference background}
+\section{Variational inference background}
 \label{sec:variational_inference_background}
 The ultimate inferential goal of the SeqGPLVM is to estimate the posterior distribution over 
 the time-invariant latent substitute confounder \(\mathbf{Z}\) given the observed data 
@@ -146,7 +146,7 @@ Thus to setup variational inference, we need to specify the likelihood
 the prior over latents \(p_{\boldsymbol{\gamma}}(\mathbf{z}\mid \mathbf{x})\), 
 and the variational family \(q_{\boldsymbol{\psi}}(\mathbf{z}\mid \mathbf{x})\).
 
-\subsection{Conditional markov model}
+\section{Conditional markov model}
 Let $\widetilde{\mathbf{X}}_t = \{(\bar{\mathbf{X}}_{it}, \mathbf{A}_{i,t-p:t-1}, 
 \mathbf{Z}_i)\}_{i=1}^N$ be the augmented covariate vector at time $t$ 
 that includes observed covariates history, the treatment history from time $t-p$ to $t-1$, 
@@ -163,7 +163,7 @@ Substituting this factorization into the ELBO in Eq.~\eqref{eq:elbo-rewrite} yie
     \;-\; \mathrm{KL}\!\left(q_{\boldsymbol{\psi}}(\mathbf{z}\mid \mathbf{x})\,\|\,p_{\boldsymbol{\gamma}}(\mathbf{z}\mid \mathbf{x})\right).
 \end{align}
 
-\subsection{Variational Inference for Bayesian Gaussian process latent variable models}
+\section{Variational Inference for Bayesian Gaussian process latent variable models}
 Bayesian Gaussian 
 process latent variable models (GPLVMs) \cite{titsiasBayesianGaussianProcess2010} are 
 a class of latent variable models that use Gaussian processes to model the relationship between observed data and latent variables. 
@@ -308,7 +308,7 @@ Thus, \(\widetilde{\mathcal{L}}(\boldsymbol{\psi}, \boldsymbol{\gamma})\)
 is a valid lower bound on the log-evidence and can be used as a 
 surrogate objective for variational inference in the sequential GPLVM.
 
-\subsection{Inducing points}
+\section{Inducing points}
 
 The lower bound in Eq.~\eqref{eq:new_lower_bound} still involves a variational
 distribution over the full random vector of latent function values

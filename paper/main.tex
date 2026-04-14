@@ -1,5 +1,3 @@
-% !TeX root = main.tex
-
 \documentclass[12pt,a4paper,twoside,openright]{book}
 %\usepackage[work]{MCthesis}			% you can select this to work
 
@@ -24,7 +22,7 @@
 \usepackage{listings} 			% to include R-Code
 \usepackage[section]{placeins}		% forces floats to appear in the section they are placed in
 \usepackage{listings} 			% to include R-Code
-\usepackage[]{apacite}	% bibliography example
+\usepackage[nosectionbib]{apacite}	% bibliography example
 \usepackage[toc,page]{appendix}
 \usepackage{framed}
 \usepackage{listings}
@@ -149,8 +147,9 @@
 \bibliographystyle{apacite}
 \bibliography{references}
 \clearpage
-
-\input{sections/appendix}
+\appendix
+\input{sections/appendix/mathappendix.tex}
+\input{sections/appendix/extra_results.tex}
 \input{sections/supplementary}
 
 \end{document}
