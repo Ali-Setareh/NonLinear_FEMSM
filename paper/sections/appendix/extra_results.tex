@@ -1,15 +1,16 @@
 \chapter{Additional Simulation Results}
 \label{sec:additional_simulation_results}
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=0.95\textwidth]{figures/build/simulation_results_a1_p4.pdf}
-    \caption{Simulation results for the case $a=1$. The panels report bias, standard error, and coverage for $\tau_F=1$ and $\tau_C=0.3$ across sample sizes $N$ and ratios $\rho = n/T$.}
-    \label{fig:simulation_results_a1}
-\end{figure}
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=0.95\textwidth]{figures/build/simulation_results_a2_p4.pdf}
-    \caption{Simulation results for the case $a=2$. The panels report bias, standard error, and coverage for $\tau_F=1$ and $\tau_C=0.3$ across sample sizes $N$ and ratios $\rho = n/T$.}
-    \label{fig:simulation_results_a2}
-\end{figure}
+In Figures~\ref{fig:simulation_results_a1_p4} and \ref{fig:simulation_results_a2_p4}, 
+the results of the simulation study for the four-covariate case are reported. 
+The additional results for the four-covariate case lead to the same overall conclusions as in 
+the two-covariate setting. In particular, both \texttt{IPTW-FE-impute} and \texttt{IPTW-SeqGPLVM-impute} 
+still improve over the naive \texttt{IPTW} estimator, while \texttt{IPTW-FE-impute} remains uniformly 
+closer to \texttt{IPTW-True} and exhibits smaller estimated standard errors than \texttt{IPTW-SeqGPLVM-impute}. 
+However, increasing the number of observed covariates from \(p=2\) to \(p=4\) does not lead to a systematic 
+finite-sample improvement. Across scenarios, the \(p=4\) results are generally associated with larger average 
+standard errors. 
+Although coverage occasionally improves in the more difficult settings, especially under stronger unmeasured 
+confounding, these improvements appear to be driven mainly by wider intervals rather than smaller bias. 
+As in the main results, the most challenging regime remains the short-panel setting with \(\rho=50\), 
+particularly for smaller sample sizes, where the performance of both adjusted estimators deteriorates especially 
+for \texttt{IPTW-SeqGPLVM-impute}.

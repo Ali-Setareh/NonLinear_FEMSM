@@ -1,7 +1,7 @@
 \chapter{Proof of Theorem 1}
 \label{proof_theorem_1}
 The appendix of \citeA{hattSequentialDeconfoundingCausal2024} 
-formulates the proof for Ther only for a first-order
+formulates the proof for Theorem 1 only for a first-order
 conditional Markov model over treatments. 
 However, the same proof strategy extends naturally
 to finite order \(p\) by augmenting the treatment state with the 
@@ -14,34 +14,33 @@ Suppose that for some fixed integer \(p \ge 1\), the assigned treatment process 
 the conditional Markov property of order \(p\), that is,
 \begin{equation}
 \label{eq:p-order-cmm}
-p(a_{1:T}\mid x_{1:T},z,\theta)
+p_{\boldsymbol{\gamma}}(\bar{\mathbf{a}}_{iT}\mid \bar{\mathbf{x}}_{iT},\mathbf{z}_i)
 =
-p(a_1\mid x_1,z,\theta)
-\prod_{t=2}^T
-p(a_t\mid a_{t-p:t-1},x_t,z,\theta),
+\prod_{t=1}^T
+p_{\boldsymbol{\gamma}_t}(a_{it}\mid \mathbf{a}_{i,t-p:t-1},\bar{\mathbf{x}}_{it},\mathbf{z}_i),
 \end{equation}
-where \(a_{t-p:t-1}=(a_{t-p},\dots,a_{t-1})\), with the convention that indices below \(1\)
-are omitted. Assume further that the treatment space is a Borel space and that unobserved
+where \(\mathbf{a}_{i,t-p:t-1}=(a_{i,t-p},\dots,a_{i,t-1})\), with the convention that for \(t<1\),
+\(a_{it}=0\). Assume further that the treatment space is a Borel space and that unobserved
 confounding is time-invariant in the sense maintained by \citeA{hattSequentialDeconfoundingCausal2024}.
 
 Then the proof strategy of \citeA{hattSequentialDeconfoundingCausal2024} extends to yield a recursive representation
 \begin{equation}
 \label{eq:p-order-recursion}
-A_t = f_t(A_{t-p:t-1},Z,X_t,V_t),
+A_{it} = f_t(\mathbf{A}_{i,t-p:t-1},\mathbf{Z}_i,\bar{\mathbf{X}}_{it},V_{it}),
 \end{equation}
-where \(V_t \sim \mathrm{Uniform}([0,1])\), and
+where \(V_{it} \sim \mathrm{Uniform}([0,1])\), and
 \begin{equation}
 \label{eq:p-order-v-indep}
-V_t \perp Y(\bar a_t)\mid \bar A_{t-1},\bar X_t,Z
+V_{it} \perp Y_i(\bar{\mathbf{a}}_t)\mid \bar{\mathbf{A}}_{i,t-1},\bar{\mathbf{X}}_{it},\mathbf{Z}_i
 \qquad
-\text{for all } \bar a_t \in \bar{\mathcal A}_t.
+\text{for all } \bar{\mathbf{a}}_t \in \bar{\mathcal A}_t.
 \end{equation}
 Consequently,
 \begin{equation}
 \label{eq:p-order-ssi}
-A_t \perp Y(\bar a_t)\mid \bar A_{t-1},\bar X_t,Z
+A_{it} \perp Y_i(\bar{\mathbf{a}}_t)\mid \bar{\mathbf{A}}_{i,t-1},\bar{\mathbf{X}}_{it},\mathbf{Z}_i
 \qquad
-\text{for all } \bar a_t \in \bar{\mathcal A}_t.
+\text{for all } \bar{\mathbf{a}}_t \in \bar{\mathcal A}_t.
 \end{equation}
 \end{proposition}
 
@@ -51,73 +50,70 @@ with a state augmentation step.
 
 First, define the augmented treatment state
 \[
-S_t := (A_{t-p+1},\dots,A_t) \in \mathcal A^p.
+\mathbf{S}_{it} := (A_{i,t-p+1},\dots, A_{it}) \in \mathcal A^p.
 \]
 Under \eqref{eq:p-order-cmm}, the treatment process is Markov of order \(p\) conditional on
-\((X_t,Z)\). Equivalently, the augmented state process \((S_t)_{t\ge1}\) is first-order
-Markov conditional on \((X_t,Z)\). Indeed, for each \(t\),
+\((\bar{\mathbf{X}}_{it},\mathbf{Z}_i)\). Equivalently, the augmented state process \((\mathbf{S}_{it})_{t\ge1}\) is first-order
+Markov conditional on \((\bar{\mathbf{X}}_{it},\mathbf{Z}_i)\). Indeed, for each \(t\),
 \[
-\Pr(S_t \in B \mid S_{1:t-1}, \bar X_t, Z)
+\mathbb{P}(\mathbf{S}_{it} \in B \mid \bar{\mathbf{S}}_{i,t-1}, \bar{\mathbf{X}}_{it}, \mathbf{Z}_i)
 =
-\Pr(S_t \in B \mid S_{t-1}, X_t, Z)
+\mathbb{P}(\mathbf{S}_{it} \in B \mid \mathbf{S}_{i,t-1}, \bar{\mathbf{X}}_{it}, \mathbf{Z}_i)
 \]
 for all measurable \(B \subseteq \mathcal A^p\), because the first \(p-1\) coordinates of
-\(S_t\) are deterministic shifts of \(S_{t-1}\), while the last coordinate \(A_t\) depends
-on the past only through \(A_{t-p:t-1}\), \(X_t\), and \(Z\).
+\(\mathbf{S}_{it}\) are deterministic shifts of \(\mathbf{S}_{i,t-1}\), while the last coordinate \(A_{it}\) depends
+on the past only through \(\mathbf{A}_{i,t-p:t-1}\), \(\bar{\mathbf{X}}_{it}\), and \(\mathbf{Z}_i\).
 
 Since \(\mathcal A^p\) is again a Borel space, the same Kallenberg recursion argument used by
 \citeA{hattSequentialDeconfoundingCausal2024} for the order-1 case applies to the augmented state process.
 Therefore, there exist measurable functions \(F_t\) and i.i.d. random variables
-\(V_t \sim \mathrm{Uniform}([0,1])\) such that
+\(V_{it} \sim \mathrm{Uniform}([0,1])\) such that
 \[
-S_t = F_t(S_{t-1}, Z, X_t, V_t).
+\mathbf{S}_{it} = F_t(\mathbf{S}_{i,t-1}, \mathbf{Z}_i, \bar{\mathbf{X}}_{it}, V_{it}).
 \]
 Let \(f_t\) denote the last-coordinate projection of \(F_t\). Then
 \[
-A_t = f_t(A_{t-p:t-1}, Z, X_t, V_t),
+A_{it} = f_t(\mathbf{A}_{i,t-p:t-1}, \mathbf{Z}_i, \bar{\mathbf{X}}_{it}, V_{it}),
 \]
 which establishes \eqref{eq:p-order-recursion}.
 
 It remains to verify \eqref{eq:p-order-v-indep}. This is the same step that remains to be shown
 in the proof of Lemma 2 in \citeA{hattSequentialDeconfoundingCausal2024}. Their argument extends without essential
-change. Suppose, for contradiction, that there exists an omitted variable that confounds
-\(V_t\) and \(Y(\bar a_t)\) conditional on \((\bar A_{t-1},\bar X_t,Z)\).
-
-If this omitted variable is time-invariant, then it would also affect the entire sequence
-\((V_s)_s\). But the recursion construction yields that the \(V_t\) are i.i.d. Uniform\([0,1]\),
-so such a common time-invariant source of dependence is excluded.
-
+change. Suppose, for contradiction, that there exists an omitted variable $W$ that confounds
+\(V_{it}\) and \(Y_i(\bar{\mathbf{a}}_t)\) conditional on \((\bar{\mathbf{A}}_{i,t-1},\bar{\mathbf{X}}_{it},\mathbf{Z}_i)\). 
+Moreover, according to Assumption~\ref{ass:SG-No-single-time-point-confounding}, there is no 
+single-time confounders. Hence $W$ at least affect $V_{is}$ where $s \neq t$. 
+But the recursion construction yields that the \(V_{it}\) are i.i.d. Uniform\([0,1]\),
+so such a common time-invariant source of dependence is excluded. 
 If instead the omitted variable is time-varying, then because
 \[
-A_t = f_t(A_{t-p:t-1}, Z, X_t, V_t),
+\mathbf{A}_{it} = f_t(\mathbf{A}_{i,t-p:t-1}, \mathbf{Z}_i, \bar{\mathbf{X}}_{it}, V_{it}),
 \]
-the same omitted variable would induce confounding between \(A_t\) and \(Y(\bar a_t)\).
+the same omitted variable would induce confounding between \(A_{it}\) and \(Y_i(\bar{\mathbf{a}}_t)\).
 This contradicts the maintained setup that any unobserved confounding is time-invariant and is
-captured through the latent static variable \(Z\).
-
-Hence,
+captured through the latent static variable \(\mathbf{Z}_i\). Hence,
 \[
-V_t \perp Y(\bar a_t)\mid \bar A_{t-1},\bar X_t,Z,
+V_{it} \perp Y_i(\bar{\mathbf{a}}_t)\mid \bar{\mathbf{A}}_{i,t-1},\bar{\mathbf{X}}_{it},\mathbf{Z}_i,
 \]
 which proves \eqref{eq:p-order-v-indep}.
 
 Finally, define
 \[
-\mathcal G_t := \sigma(\bar A_{t-1},\bar X_t,Z).
+\mathcal G_{it} := \sigma(\bar{\mathbf{A}}_{i,t-1},\bar{\mathbf{X}}_{it},\mathbf{Z}_i).
 \]
-Since \((A_{t-p:t-1}, Z, X_t)\) is \(\mathcal G_t\)-measurable, \eqref{eq:p-order-v-indep}
+Since \((\mathbf{A}_{i,t-p:t-1}, \mathbf{Z}_i, \bar{\mathbf{X}}_{it})\) is \(\mathcal G_{it}\)-measurable, \eqref{eq:p-order-v-indep}
 implies
 \[
-(A_{t-p:t-1}, Z, X_t, V_t) \perp Y(\bar a_t)\mid \mathcal G_t.
+(\mathbf{A}_{i,t-p:t-1}, \mathbf{Z}_i, \bar{\mathbf{X}}_{it}, V_{it}) \perp Y_i(\bar{\mathbf{a}}_t)\mid \mathcal G_{it}.
 \]
-Because \(A_t\) is a measurable function of \((A_{t-p:t-1}, Z, X_t, V_t)\), conditional
+Because \(A_{it}\) is a measurable function of \((\mathbf{A}_{i,t-p:t-1}, \mathbf{Z}_i, \bar{\mathbf{X}}_{it}, V_{it})\), conditional
 independence is preserved under measurable transformations, and therefore
 \[
-A_t \perp Y(\bar a_t)\mid \mathcal G_t.
+A_{it} \perp Y_i(\bar{\mathbf{a}}_t)\mid \mathcal G_{it}.
 \]
 Equivalently,
 \[
-A_t \perp Y(\bar a_t)\mid \bar A_{t-1},\bar X_t,Z.
+A_{it} \perp Y_i(\bar{\mathbf{a}}_t)\mid \bar{\mathbf{A}}_{i,t-1},\bar{\mathbf{X}}_{it},\mathbf{Z}_i.
 \]
 This proves \eqref{eq:p-order-ssi}.
 \end{proof}
