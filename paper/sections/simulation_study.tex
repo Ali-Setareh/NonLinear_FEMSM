@@ -52,14 +52,14 @@ Y_{iT} &:= U_i + \tau_F A_{iT} + \tau_C \sum_{t=T-3}^{T-1} A_{it}
 \end{align}
 \end{subequations}
 
-We simulate for two different values of $a \in \{1, 2\}$ \hl{to control the
-contribution of the unmeasured confounder $U_i$ to the variance of the linear predictor.} 
+We simulate for two different values of $a \in \{1, 2\}$ to control the
+contribution of the unmeasured confounder $U_i$.
 We simulate for two different number of covariates $p \in \{2, 4\}$ 
 to see the effect of the dimensionality 
 of covariates. 
 The coefficients are set to $\boldsymbol{\beta} = (-0.5, -0.5)^{\top}$ when $p=2$ and 
-$\boldsymbol{\beta} = (-0.5, -0.5, 1, -0.5)^{\top}$ when $p=4$. \hl{(add some note about why we chose 
-these coeffs based on the variance or sth)}. We set $\varphi = 0.3$. %Note that we generate 
+$\boldsymbol{\beta} = (-0.5, -0.5, 1, -0.5)^{\top}$ when $p=4$. 
+We set $\varphi = 0.3$. %Note that we generate 
 The covariates $\mathbf{X}_{it}$ are generated exogenously to 
 the treatments solely for the sake of simplicity where  $\Sigma_{jj} = 1$ and $\Sigma_{jj'} = 0.2$ for $j \neq j'$. By doing this, the ground truth 
 values for the causal targets of interests conincide wit the DGP parameters. 

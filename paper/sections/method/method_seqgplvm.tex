@@ -34,13 +34,13 @@ described below.
     \end{equation}
     for $t<1$, $\mathbf{a}_t$ is set to $0$ by convention. We then say that the 
     latent variable $\mathbf{Z}_i$ follows a Conditional Markov Model of order $p$, 
-    written $\mathbf{Z}_i \sim \text{CMM} (p)$\footnote{The original version of this assumption 
-in \citeA{hattSequentialDeconfoundingCausal2024} is stated only for a first-order CMM. However, 
-the proof of their Theorem 1 using Preposition 7.6 in \citeA{kallenbergFoundationsModernProbability}, 
-can be easily extended to higher-order CMMs as well 
-(see \href{https://chatgpt.com/share/69c7c2fe-2f64-8388-8843-b0d989e7b267}{link} 
-and \cite{bouchattaouiCausalDynamicVariational2025}). Hence the more general 
-form of the CMM assumption is stated.}.
+    written $\mathbf{Z}_i \sim \text{CMM} (p)$
+    \footnote{The original version of this assumption 
+    in \citeA{hattSequentialDeconfoundingCausal2024} is stated only for a 
+    first-order CMM. However, we show in Appendix~\ref{proof_theorem_1} that 
+    the proof of their Theorem 1 using Preposition 7.6 in
+    \citeA{kallenbergFoundationsModernProbability}, 
+    can be easily extended to higher-order CMMs as well.}.
 \end{idassumpSG}
 In Eq.~\eqref{eq:cmm},
 \(\boldsymbol{\gamma} = \{\boldsymbol{\gamma}_1, \ldots, \boldsymbol{\gamma}_T\}\) are the generative 
