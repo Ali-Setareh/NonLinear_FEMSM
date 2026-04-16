@@ -7,7 +7,7 @@ unmeasured confounder based on the observed treatment sequence, (ii) estimating
 the propensity scores using a treatment model that conditions on both observed
 covariates and the confounder substitute, and (iii) a marginal
 structural model that uses the estimated propensity scores in stage two to adjust
-for confounding using IPTW. It is worth mentioning that SeqGPLM can be used
+for confounding using IPTW. It is worth mentioning that SeqGPLVM can be used
 in conjunction with any other estimation methods as well, such as g-computation or doubly
 robust methods, but we focus on IPTW estimation of MSM for comparability with
 FE-MSM.
@@ -34,8 +34,7 @@ described below.
     \end{equation}
     for $t<1$, $\mathbf{a}_t$ is set to $0$ by convention. We then say that the 
     latent variable $\mathbf{Z}_i$ follows a Conditional Markov Model of order $p$, 
-    written $\mathbf{Z}_i \sim \text{CMM} (p)$
-    \footnote{The original version of this assumption 
+    written $\mathbf{Z}_i \sim \text{CMM} (p)$\footnote{The original version of this assumption 
     in \citeA{hattSequentialDeconfoundingCausal2024} is stated only for a 
     first-order CMM. However, we show in Appendix~\ref{proof_theorem_1} that 
     the proof of their Theorem 1 using Preposition 7.6 in
@@ -60,8 +59,8 @@ This assumption excludes structures such as the one in
 Figure~\ref{fig:single-time-point-confounding}. Note that, Assumption~\ref{ass:C-timeinvariant-uc} 
 is not 
 sufficient to exclude these single-time-point confounders since a confounder can 
-be constant but its effect 
-varry with time. 
+be constant, but its effect 
+varies with time. 
 
 \begin{figure}
     \centering
@@ -84,18 +83,18 @@ p(\mathbf{z}_i \mid \bar{\mathbf{x}}_{iT}, \bar{\mathbf{a}}_{iT}) =
 \end{idassumpSG}
 Assumption~\ref{ass:SG-Consistency} implies the uniqueness of the latent variable $\mathbf{Z}_i$ which 
 imposes the $\text{CMM}$ of order $p$. 
- This assumption is necessary since only the existance of a $\text{CMM}(p)$, does not guarantee the uniqueness of the latent 
+ This assumption is necessary since only the existence of a $\text{CMM}(p)$, does not guarantee the uniqueness of the latent 
  variable. The violation of this assumption can lead to 
  contradictory causal estimates \cite{damourMultiCauseApproachesCausal2019}. 
  However, the substitute confounder $\hat{\mathbf{Z}}_i$ is not 
  required to coincide with the true confounder $\mathbf{U}_i$ or the true latent factorizer 
  $\mathbf{Z}_i$. It is sufficient 
- to estimate the substitue confounder up to some deterministic bijective 
+ to estimate the substitute confounder up to some deterministic bijective 
  transformation, e.g., a linear 
  transformation.  
 
  \begin{theorem}[Substitute Confounder]
-    If the treatment process can be written as a CMM of a finite oreder $p$ under assumptions 
+    If the treatment process can be written as a CMM of a finite order $p$ under assumptions 
     \ref{ass:C-consistency} and 
 
 
@@ -166,7 +165,7 @@ Since the kernels are defined on the joint space of the latent substitutes
 and the observed history, 
 there is a lot of flexibility to encode different types of interactions between 
 these variables. For the sake 
-of simplicity, we use the same kernel for all time points, but in principle, 
+of simplicity, we use the same kernel for all-time points, but in principle, 
 we can use different kernels at different time points. The generative model then 
 can be written as follows: 
 

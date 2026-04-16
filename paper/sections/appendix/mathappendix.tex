@@ -206,8 +206,8 @@ q_{\boldsymbol{\psi}_t}(\mathbf{f}_t\mid \widetilde{\mathbf{x}}_{t})
 p(\mathbf{f}_t\mid \widetilde{\mathbf{x}}_{t})
 \right).
 \end{align*}
-This lower bound is true for all $t \in \{1, \ldots, T\}$. Hence the lower bound on 
-the sum of log-likelihoods across all time points is
+This lower bound is true for all $t \in \{1, \ldots, T\}$. Hence, the lower bound on 
+the sum of log-likelihoods across all-time points is
 \begin{align*}
 \sum_{t=1}^T \log p_{\boldsymbol{\gamma}_t}(\mathbf{a}_t\mid \widetilde{\mathbf{x}}_{t})
 &\ge \sum_{t=1}^T \mathbb{E}_{q_{\boldsymbol{\psi}_t}(\mathbf{f}_t\mid \widetilde{\mathbf{x}}_{t})}
@@ -558,7 +558,7 @@ since the variational distribution over the latent variables does not depend on 
 The downside of this 
 choice is that for the new data points, 
 we need to repeat the optimization to find the corresponding mean and variance parameters, while 
-freazing the fitted Gaussian process hyperparameters, 
+freezing the fitted Gaussian process hyperparameters, 
 which can be computationally expensive.
 
 The number of inducing points \(M_t\) is a key hyperparameter that governs 

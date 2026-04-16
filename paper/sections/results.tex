@@ -67,7 +67,7 @@ p(a_{it} = 1 \mid a_{i,t-1}) = \operatorname{expit}\!\left(w_7 a_{i,t-1} + w_8\r
 \end{equation}
 
 
-\paragraph{Treaming weights.} The unit-specific fixed effects and the individual 
+\paragraph{Trimming weights.} The unit-specific fixed effects and the individual 
 latent variables are not identified 
 for individuals with no variation in their treatment history, i.e., always 
 treated or never treated. Including these samples in the estimation process can make 
@@ -76,13 +76,12 @@ for both methods unstable. Even if the population level positivity assumption ho
 in the finite sample, it is 
 possible to have such individuals. This problem becomes more severe when the 
 number of time points is small. 
-In this case, we removed always/never treated 
+In this case, we removed always and never treated 
 individuals from the estimation process and imputed their propensity 
 scores by assigning a fixed value, e.g., $\hat{\pi}_{it} = 0.01$ for never treated 
-individuals and $\hat{\pi}_{it} = 0.99$ for always treated individuals for all 
-time points. Depending on the lenght of the treatment intervention window $k$ specified 
-in the MSM, this imputation strategy can lead to extream weights which 
-we further treamed by capping them within the range of $[10^{-6}, 1-10^{-6}]$ 
+individuals and $\hat{\pi}_{it} = 0.99$ for always treated individuals for all-time points. Depending on the length of the treatment intervention window $k$ specified 
+in the MSM, this imputation strategy can lead to extreme weights which 
+we further trimmed by capping them within the range of $[10^{-6}, 1-10^{-6}]$ 
 to avoid unstable weights. 
 
 Figures~\ref{fig:simulation_results_a1} and~\ref{fig:simulation_results_a2} show the results of the simulation study for the 
@@ -103,8 +102,10 @@ In this case we used the same logistic regression as
 in Eq.~\eqref{eq:ps_model} to estimate the propensity scores by replacing 
 the individual 
 fixed effects $\alpha_i$ with a global intercept. Shapes 
-correspond to the $n$ to $T$ ratio. Squares represent $\rho = 5$ (the largest number of time points), 
-circles represent $\rho = 10$, and triangles represent $\rho = 50$ (the smallest number of time points). 
+correspond to the $n$ to $T$ ratio. Squares represent $\rho = 5$ 
+(the largest number of time points), 
+circles represent $\rho = 10$, and triangles represent $\rho = 50$ 
+(the smallest number of time points). 
 
 The results show that both methods improves the bias of the estimates of the 
 parameters of interest in comparison to the naive IPTW, especially as the ratio of 
@@ -113,14 +114,22 @@ standard error compared to the SeqGPLVM-MSM, particularly for smaller sample siz
 This may be due to the fact that the FE-MSM method relies on a correctly specified 
 parametric model for the propensity scores, while the sequential GPLVM method is more 
 flexible but may require larger sample sizes to achieve similar performance. We can see that 
-the worst case for both methods is for $\rho = 50$ but specially this is visible for 
+the worst case for both methods is for $\rho = 50$, but specially this is visible for 
 the sequential GPLVM in the smallest sample size $N = 200$, where it introduces 
-more bias than the naive IPTW for the strong unmeasured confounding case (Figure~\ref{fig:simulation_results_a2}, panels (A)--(B)) 
-and performs almost equally as the naive IPTW for the weak unmeasured confounding 
+more bias than the naive IPTW for the strong unmeasured confounding case 
+(Figure~\ref{fig:simulation_results_a2}, panels (A)--(B)) 
+and performs nearly as poorly as the naive IPTW for the weak unmeasured confounding 
 case (Figure~\ref{fig:simulation_results_a1}, panels (A)--(B)). However, 
-the larger estimated standard errors in this setting do not generally keep the coverage close to the nominal level. In particular, for the shortest treatment sequence ($\rho = 50$) under the stronger unmeasured confounding setting (Figure~\ref{fig:simulation_results_a2}), the coverage of \texttt{IPTW-SeqGPLVM-impute} falls well below $0.90$, especially in panel (F), corresponding to the $\tau_C = 0.3$ scenario. Thus, in the worst-case regime, the increase in uncertainty is not sufficient to compensate for the additional bias.
+the larger estimated standard errors in this setting do not generally keep the coverage 
+close to the nominal level. In particular, for the shortest treatment sequence 
+($\rho = 50$) under the stronger unmeasured confounding setting 
+(Figure~\ref{fig:simulation_results_a2}), the coverage of 
+\texttt{IPTW-SeqGPLVM-impute} falls well below $0.90$, 
+especially in panel (F), corresponding to the $\tau_C = 0.3$ scenario. Thus, 
+in the worst-case regime, the increase in uncertainty is not sufficient to 
+compensate for the additional bias.
 
-As the number of time points increases, the gap between the bias of two methods decreases and 
+As the number of time points increases, the gap between the bias of two methods decreases, and 
 they perform more similarly although the FE-MSM bias remains lower while the standard 
 error of SeqGPLVM-MSM remains higher than the FE-MSM estimates across all scenarios. 
 Under the weak unmeasured confounding setting where the unmeasured confounder explains 
@@ -140,7 +149,7 @@ and this gap becomes more pronounced under stronger unmeasured confounding.
 
 In the stronger unmeasured confoundedness case where the unmeasured confounder explains 
 2/3 of the variance in the treatment (Figure~\ref{fig:simulation_results_a2}), both methods perform more poorly 
-than the weaker case in terms of the bias while FE-MSM perfroms slightly better across all different $\rho$ values and 
+than the weaker case in terms of the bias while FE-MSM performs slightly better across all different $\rho$ values and 
 sample sizes. In this scenario there is a small Monte Carlo bias observed even for the 
 \texttt{IPTW-True}. This is the due to the extreme weights and the truncation strategy we  
 used.

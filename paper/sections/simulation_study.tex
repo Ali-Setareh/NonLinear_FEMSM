@@ -1,7 +1,7 @@
 \chapter{Simulation study}
 \label{chap:simulation_study} 
 \section{Data generating process}
-To evaluate the finte sample performance of the two proposed method, 
+To evaluate the finite sample performance of the two proposed method, 
 we conduct a simulation study based on the DGP taken 
 from Section 5.1 of \citeA{blackwellEffectPoliticalAdvertising2024}. 
 In this 
@@ -21,10 +21,10 @@ and the unmeasured confounder.
 
 We simulate longitudinal data for 
 $n \in \{200, 500, 1000\}$ individuals. For the
-length of the time serieses for each n, we consider 
-three different lenghts: $\rho = n/T$ 
+length of the time series for each n, we consider 
+three different lengths: $\rho = n/T$ 
 with $\rho \in \{5,10,50\}$. The data is balanced,
-menaning that each individual has 
+meaning that each individual has 
 the same number of time points. 
 In Eq.~\eqref{eq:blackwell_scm}, we present 
 the structural causal equations for the DGP. 
@@ -62,13 +62,13 @@ $\boldsymbol{\beta} = (-0.5, -0.5, 1, -0.5)^{\top}$ when $p=4$.
 We set $\varphi = 0.3$. %Note that we generate 
 The covariates $\mathbf{X}_{it}$ are generated exogenously to 
 the treatments solely for the sake of simplicity where  $\Sigma_{jj} = 1$ and $\Sigma_{jj'} = 0.2$ for $j \neq j'$. By doing this, the ground truth 
-values for the causal targets of interests conincide wit the DGP parameters. 
+values for the causal targets of interests coincide wit the DGP parameters. 
 %So we do not have the 
 %treatment-confounder feedback. This is done to isolate the effect of
 %adjusting for unmeasred time-invariant confounding and make the simulation simpler and it has important 
 %implications in interpreting the causal effects. see section \ref{estimation}. 
-Also note that theere is no dynamics 
-in the covariates and the distribution of $\mathbf{X}_{it}$ is the same for all time points. The parameters 
+Also note that there is no dynamics 
+in the covariates and the distribution of $\mathbf{X}_{it}$ is the same for all-time points. The parameters 
 for the outcome model are set to $\tau_F = 1$, $\tau_C = 0.3$, and $\boldsymbol{\theta} = (1, 0.5)^{\top}$ 
 when $p=2$ and when $p=4$, $\boldsymbol{\theta} = (1, 0.5, 1, 1)^{\top}$. The causal DAG for 
 the DGP is shown in Figure~\ref{fig:dgp-dag}. 
@@ -98,7 +98,7 @@ We are interested in two causal questions.
 What is the average effect of the treatment received at the 
 final time on the 
 final outcome while holding fixed the sum of the earlier 
-treatments within the intervention window, marginlized over the natural 
+treatments within the intervention window, marginalized over the natural 
 values of the treatments this treatment window? 
 Mathematically, 
 this is defined as
@@ -121,7 +121,7 @@ that relates the assigned treatments to the expected potential
 outcome at the final time: 
 $\mathbb{E\left[Y_{iT}\left(\underline{\mathbf{a}}_{T-k}\right)\right]} = 
 m(\underline{\mathbf{a}}_{T-k}, \boldsymbol{\theta}_0)$, where 
-$m(\underline{\mathbf{a}}_{T-k}, \boldsymbol{\theta}_0)$ is the true unkown function 
+$m(\underline{\mathbf{a}}_{T-k}, \boldsymbol{\theta}_0)$ is the true unknown function 
 parameterized by $\boldsymbol{\theta}_0$. Our job is 
 to first propose a function $f(\underline{\mathbf{a}}_{T-k}, \boldsymbol{\theta})$ 
 and then estimate its parameters $\boldsymbol{\theta}$. In this 
@@ -131,8 +131,8 @@ DGP, the ground truth function $m$, is:
     m\left(\underline{\mathbf{a}}_{T-k}; \boldsymbol{\theta}_0 \right) = \alpha_0 + \tau_{F} a_T + \tau_{C} \sum_{t=T-3}^{T-1} a_t
 \end{equation}
 
-to see this, we begin from Eq.~\eqref{eq:blackwell_scm_outcome}. First note that since this is 
-a sctructural equation model, we can replace the random variables 
+To show this, we begin from Eq.~\eqref{eq:blackwell_scm_outcome}. First note that since this is 
+a structural equation model, we can replace the random variables 
 by their interventional values. So we have:
 \[
 Y_{iT}\!\left(\underline{\mathbf{a}}_{T-k}\right)
@@ -162,7 +162,7 @@ The equality between these causal effects and the parameters of the
 outcome model in the DGP is a result of the linearity of the DGP and 
 the absence of treatment-confounder feedback. 
 See \ref{sec:msm_ground_truth} for more discussion on this. To only focus 
-on the adjustment for the unmeasred confounder, for both of the methods, 
+on the adjustment for the unmeasured confounder, for both of the methods, 
 we specify $f\left(\underline{\mathbf{a}}_{T-k}; \boldsymbol{\theta} \right)$ as the correctly 
 specified linear MSM:
 \begin{equation}
