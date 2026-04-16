@@ -378,7 +378,8 @@ instrumental variable approaches: \cite{angristIdentificationCausalEffects1996} 
 \begin{subfigure}{0.8\textwidth}
 \centering
 \includegraphics[width=\linewidth]{figures/build/simple_dag.pdf}
-\caption{A simple causal DAG with treatment $A$, outcome $Y$, and treatment-outcome confounder $X$. The confounder $X$ is a common cause of both the treatment $A$ and the outcome $Y$, which can lead to confounding bias if not properly adjusted for.}
+\caption{A simple causal DAG with treatment $A$, outcome $Y$, and treatment-outcome confounder $\mathbf{X}$. 
+Confounder $\mathbf{X}$ is a common cause of both the treatment $A$ and the outcome $Y$, which can lead to confounding bias if not properly adjusted for.}
 \end{subfigure}
 
 \vspace{0.6cm}
@@ -386,9 +387,10 @@ instrumental variable approaches: \cite{angristIdentificationCausalEffects1996} 
 \begin{subfigure}{0.8\textwidth}
 \centering
 \includegraphics[width=\linewidth]{figures/build/treatment_covariate_feedback.pdf}
-\caption{A longitudinal causal DAG with time-varying treatments $A_t$, time-varying confounders $X_t$, and an unobserved confounder $U$.
+\caption{A longitudinal causal DAG with time-varying treatments $A_t$, time-varying 
+confounders $\mathbf{X}_t$, and an unobserved confounder $\mathbf{U}$.
 Filled nodes represent observed variables, while the unfilled node represents an unobserved variable. Arrows 
-from $A_t$ to $X_{t+1}$ represent treatment-confounder feedback, where the treatment at time $t$ can affect the confounders at later time points.}
+from $A_t$ to $\mathbf{X}_{t+1}$ represent treatment-confounder feedback, where the treatment at time $t$ can affect the confounders at later time points.}
 \end{subfigure}
 
 \caption{Two examples of causal DAGs. The first DAG (a) represents a simple static setting with a single treatment and outcome, while the second DAG (b) represents a more complex longitudinal setting with time-varying treatments.}
