@@ -23,11 +23,6 @@ the multi-treatment deconfounder proposed by \citeA{wangBlessingsMultipleCauses2
 to the multi-treatment deconfounder, it is based on the three key assumptions that are 
 described below. 
 
-%SeqGPLVM
-%is a probabilistic 
-%longitudinal latent variable 
-%model. 
-
 \begin{idassumpSG}[CMM(p): Conditional Markov Model of order p]\label{ass:SG-Marcovianity}
     A latent variable $\mathbf{Z}_i \in \mathbb{R}^J $, a fixed order $p \in \mathbb{N}^*$
     and a parameter vector $\boldsymbol{\gamma} = (\boldsymbol{\gamma}_1, \ldots, \boldsymbol{\gamma}_T)$ exist such that the assigned treatment distribution can be 
@@ -99,6 +94,13 @@ imposes the $\text{CMM}$ of order $p$.
  transformation, e.g., a linear 
  transformation.  
 
+ \begin{theorem}[Substitute Confounder]
+    If the treatment process can be written as a CMM of a finite oreder $p$ under assumptions 
+    \ref{ass:C-consistency} and 
+
+
+    
+ \end{theorem}
 Under these assumptions
 and the common assumptions, Theorem 1 in \citeA{hattSequentialDeconfoundingCausal2024} 
 states that we obtain sequential ignorability 

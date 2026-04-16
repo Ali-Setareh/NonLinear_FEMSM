@@ -7,45 +7,6 @@
 In this section, we derive the ELBO (evidence lower bound) for the sequential Gaussian process latent variable 
 model (SeqGPLVM) introduced in Section~\ref{sec:seqgplvm}. We retain the notation from Section~\ref{sec:notation}.
 
-\begin{comment}
-    
-\subsection{Notation}
-We use uppercase letters for random quantities and 
-the corresponding lowercase letters for their realizations. 
-Boldface denotes vectors or collections, and plain letters 
-denote scalars. Individuals are indexed by \(i \in \{1,\dots,N\}\) 
-and time by \(t \in \{1,\dots,T\}\). Let \(\mathbf{X}_{it} \in \mathbb{R}^D\) denote the 
-covariate vector for individual \(i\) at time \(t\), 
-and let \(A_{it}\) denote the treatment at time \(t\). 
-For simplicity, we assume scalar treatments, but the extension to multi-dimensional 
-treatments is straightforward. 
-For each time point \(t\), define
-$
-\mathbf{X}_t := \{\mathbf{X}_{it}\}_{i=1}^N
-$,
-$
-\mathbf{A}_t := \{A_{it}\}_{i=1}^N.
-$
-The full covariate and treatment collections are denoted by
-$
-\mathbf{X} := \{\mathbf{X}_t\}_{t=1}^T
-$,
-$
-\mathbf{A} := \{\mathbf{A}_t\}_{t=1}^T,
-$
-with realizations \(\mathbf{x}\) and \(\mathbf{a}\), respectively. 
-Let \(\mathbf{Z} := \{\mathbf{Z}_i\}_{i=1}^N\) denote 
-the collection of time-invariant latent variables, 
-where \(\mathbf{Z}_i \in \mathbb{R}^J\) and \(J\) is the 
-latent dimension. Finally, \(\boldsymbol{\gamma}\) denotes generative 
-hyperparameters and \(\boldsymbol{\psi}\) variational hyperparameters. 
-Generative hyperparameters are 
-those that define how the data is generated and enter the prior and likelihood, e.g., 
-the kernel lengthscale and variance in GPs, while variational hyperparameters are those 
-that define the variational family, e.g., the mean and variance in Gaussian variational 
-distributions.
-\end{comment}
-
 \section{Variational inference background}
 \label{sec:variational_inference_background}
 The ultimate inferential goal of the SeqGPLVM is to estimate the posterior distribution over 
@@ -308,7 +269,7 @@ Thus, \(\widetilde{\mathcal{L}}(\boldsymbol{\psi}, \boldsymbol{\gamma})\)
 is a valid lower bound on the log-evidence and can be used as a 
 surrogate objective for variational inference in the sequential GPLVM.
 
-\section{Inducing points}
+\section{Sparse variational approximation via inducing points}
 
 The lower bound in Eq.~\eqref{eq:new_lower_bound} still involves a variational
 distribution over the full random vector of latent function values
@@ -620,18 +581,3 @@ this way, the latent space is
 partitioned into equally sized strata and 
 one point is drawn from each stratum, 
 yielding inducing locations that are well dispersed across the latent space. 
-
-\begin{comment}
-    
-\begin{landscape}
-\begin{figure}[p]
-  \centering
-  \includegraphics[width=\paperwidth,trim=0.5cm 0.5cm 0.5cm 0.5cm,
-  clip]{figures/build/fit_seqgplvm_dag.pdf}
-  \caption{Inference dag for the SeqGPLVM.}
-  \label{fig:seqdecon-dag}
-\end{figure}
-\end{landscape}
-
-\end{comment}
-

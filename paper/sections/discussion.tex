@@ -7,43 +7,51 @@ time-constant unmeasured confounding in the context of time-varying treatments.
 Although the simulation results show improvements in the bias of the 
 causal effect estimates for both methods, there are still some limitations and 
 open questions which make these methods not yet ready for 
-widespread use in practice. The fundamental requirement behind both of these methods 
-is another form of ignorability assumption which includes a time-invariant latent variable 
-in the conditioning set which make the treatment assignment independent of the potential 
-outcomes. 
+widespread use in practice. The fundamental requirement behind both 
+of these methods is another form of ignorability assumption that includes 
+a time-invariant latent variable in the conditioning set, making the treatment 
+assignment independent of the potential outcomes.
 
 In FE-MSM this requirement is directly assumed and is formalized by 
-Assumption~\ref{ass:FE-unit-specific-ignor}. The restriction they put in this assumption 
-on the unmeasured confounder is that using a latent scalar variable $\alpha_i$, 
-all the 
-time-invariant unmeasured confounding in the treatment process 
-can be captured. Effectively, this assumption restricts the class 
+Assumption~\ref{ass:FE-unit-specific-ignor}. In particular, 
+the assumption states that all time-invariant unmeasured confounding in 
+the treatment process can be represented by a latent scalar variable, $\alpha_i$. 
+Effectively, this assumption restricts the class 
 of DGPs which this method can address to the class of DGPs where the unmeasured confounder 
-only enters the treatment process as a scalar or, at least, where those confounders can be summarized 
+only enters the treatment process as a scalar or, at least, where those confounders 
+can be summarized 
 into one scalar. This is a strong structural assumption which cannot be verified 
-using observed data. For instance, this method cannot be used in cases where 
+using observational data. For instance, this method cannot be used in cases where 
 the unmeasured confounding modifies not only the intercept but also 
 the effect of other covariates or treatments (interaction effects). 
 
 On the other hand, in SeqGPLVM, this requirement 
-is justified by means of assuming a set of auxiliary 
+is proved by means of assuming a set of auxiliary 
 assumptions (Assumptions~\ref{ass:SG-Marcovianity}-\ref{ass:SG-Consistency}). 
 Among these assumptions, the assumption of consistency of the latent variable 
 plays the most crucial role. This assumption is not only impossible to verify in 
-real-world problems, but it is not straightforward to establish even in simulation studies where 
-the DGP is known. To verify this assumption for a given DGP, one would need to show that the 
+real-world problems, but it is not straightforward to establish even in simulation 
+studies where 
+the DGP is known. To verify this assumption for a given DGP, one would 
+need to show that the 
 relevant latent confounder is uniquely identified, up to trivial transformations, 
 by the observed data. Note that the notion of identifiability considered here 
-is closer to structural identifiability, since the issue is whether the 
+is closer to the structural identifiability, since the issue is whether the 
 latent confounder is uniquely implied by the data-generating structure, 
 rather than whether a parameter can be estimated within a fixed statistical model. 
 This is a much 
-stronger requirement than merely showing that there exists some latent-variable representation 
-of the treatment process. In general, different latent structures may induce the same observed 
-distribution of the treatments, and therefore the same observed data may be compatible with 
-multiple candidate substitute confounders. In such a case, even if a latent-variable model fits 
-the treatment process well, it does not follow that the recovered latent variable corresponds to 
-the confounder needed for causal identification. In other words, SeqGPLVM 
+stronger requirement than merely showing that there exists 
+some latent-variable representation 
+of the treatment process. In general, different latent structures 
+may induce the same observed 
+distribution of the treatments, and therefore the same observed 
+data may be compatible with 
+multiple candidate substitute confounders. In such a case, even if 
+a latent-variable model fits 
+the treatment process well, it does not follow that the 
+recovered latent variable corresponds to 
+the confounder needed for causal identification. In other words, 
+SeqGPLVM 
 may recover a latent factor that explains the dependence structure among the treatments, 
 but this alone does not guarantee that this latent factor is the correct one for the 
 causal problem. This is a fundamental issue for all methods that rely on latent 
@@ -57,24 +65,27 @@ burden of the usual sequential ignorability assumption to a different and
 arguably less transparent set of 
 structural assumptions about the existence, uniqueness, and causal relevance of a 
 latent substitute 
-confounder. Despite these theoretical limitations, the flexibility of SeqGPLVM 
-in modeling complex relationships 
-between the observed covariates, treatments, and the latent confounder for longitudinal data, 
-can be studied further as a non-parametric latent variable model for time series data. 
-
-A future direction is to add dynamics to the latent variable structure. Also another 
-interesting direction is to implement an amortized version of SeqGPLVM which can 
-be more efficient for new data by parametrizing the posterior distribution over the 
-latent variables using a neural network.
+confounder. Despite the theoretical limitations of latent variable 
+models for deconfounding, SeqGPLVM remains a promising approach for 
+predictive tasks and exploratory data analysis. Its flexibility in 
+modeling complex relationships among observed covariates, treatments, 
+and latent confounders in longitudinal settings, together with the ability 
+to incorporate domain knowledge through the choice of kernel, makes it 
+particularly appealing in applications where latent variables are themselves of 
+substantive interest, such as psychometrics. Moreover, the model allows these 
+functional relationships to vary across time points, thereby accommodating greater 
+temporal heterogeneity. A natural direction for future research is to extend this 
+framework to incorporate dynamic latent variables and to implement 
+the amortized version, which may further enhance its 
+usefulness as a nonparametric latent variable model for time-series data.
 
 In conclusion this thesis provided a common framework for understanding the assumptions 
 and the finite-sample performance of two methods for addressing time-constant unmeasured 
 confounding in time-varying treatments settings. 
 It highlighted the assumptions and limitations of these methods and 
 the need for further theoretical and empirical work to understand their 
-properties and applicability. The results of this thesis suggested 
-evidence that both FE-MSM and SeqGPLVM perform similarly for longer treatment sequences.  The 
-results of this thesis provided emperical evidence that both FE-MSM 
+properties and applicability. The 
+results of this thesis provided simulation evidence that both FE-MSM 
 and SeqGPLVM can be useful tools for addressing time-constant unmeasured confounding in 
 certain settings to reduce bias and improve coverage compared to standard methods 
 that do not account for unmeasured confounding. A promising future research 
@@ -98,11 +109,12 @@ quantitatively meaningful
 approximation to the underlying confounder. 
 In this sense, the simulation framework suggested by 
 \citeA{bouchattaouiCausalDynamicVariational2025} may provide a useful starting point, 
-even though that 
-paper focuses on unobserved adjustment variables rather than unobserved confounders.
+even though this paper focuses on unobserved adjustment 
+variables rather than unobserved confounders.
 
 Another idea inspired by \citeA{bouchattaouiCausalDynamicVariational2025} is to investigate 
-whether the consistency assumption for SeqGPLVM can be imposed also in practice by imposing 
+whether the consistency assumption for SeqGPLVM can be imposed 
+also in practice by imposing 
 a more concentrated,
 approximately deterministic posterior over the latent variables. 
 The theory of deconfounding requires 
