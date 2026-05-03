@@ -48,7 +48,7 @@ which can lead to bias if not properly adjusted for; (see
 for detailed examples.) In Figure \ref{fig:sample_dags} (b), these feedback loops 
 are represented by the purple arrows from $A_t$ to subsequent $\mathbf{X}_{t+k}$ where $1 \le k \le T-t$. These structures 
 are problematic for standard regression-based methods which estimate 
-models such as $\mathbb{E}[Y_i|\bar{\mathbf{A}}_{i3},\bar{\mathbf{X}}_{i3}] = \alpha + \sum_{t=1}^{3} \beta_t A_t + \sum_{t=1}^{3}\boldsymbol{\gamma}_t^\top X_t$, 
+models such as $\mathbb{E}[Y_i|\bar{\mathbf{A}}_{i3},\bar{\mathbf{X}}_{i3}] = \alpha + \sum_{t=1}^{3} \beta_t A_{it} + \sum_{t=1}^{3}\boldsymbol{\gamma}_t^\top \mathbf{X}_{it}$, 
 even 
 if this outcome regression is correctly specified. To see why, in Figure \ref{fig:sample_dags} (b), 
 $\mathbf{X}_3$ is a confounder for the effect of $A_3$ on $Y$ as it is a common cause of both $A_3$ and $Y$. So it needs to be adjusted for to get an unbiased estimate of the effect of $A_3$ on $Y$. 
