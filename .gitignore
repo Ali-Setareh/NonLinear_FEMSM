@@ -372,3 +372,5 @@ Thumbs.db
 # Track this one PNG in paper/
 !paper/qds.png
 paper/figures/**/*.tex
+
+/short_presentation
