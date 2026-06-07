@@ -105,6 +105,7 @@
 }%
 }
 
+\newcommand{\hist}[1]{\overline{\vphantom{X}#1}}
 \begin{document}
 % Speaker note: 20 seconds. State the thesis topic and the interview-relevant angle: assumptions, implementation, and simulation comparison.
 \begin{frame}[plain]
@@ -262,7 +263,7 @@ randomization breaks the link between treatment decisions \(A_{it}\) and stable 
 
 \end{frame}
 
-
+\begin{comment}
 % Speaker note: 45 seconds. Give the core motivation: repeated treatment decisions, observed covariates, stable unobserved traits, and why standard methods are not enough.
 \begin{frame}{Motivation: longitudinal data rarely behaves like an RCT}
 \begin{columns}[T,onlytextwidth]
@@ -301,34 +302,113 @@ Y_i(\bar{a}_T) \perp A_{it}\mid \bar A_{i,t-1},\bar {X}_{it}.
 \end{columns}
 \smallref{Context: longitudinal causal inference with time-varying treatments, terminal outcome, and time-invariant unmeasured confounding.}
 \end{frame}
+\end{comment}
+
+
+% ---------------------------------------------------------
+% SLIDE 3: IPTW intuition
+% ---------------------------------------------------------
+\begin{frame}{When randomization is unavailable: IPTW-MSM}
+\vspace{-0.38cm}
+
+\begin{columns}[T,onlytextwidth]
+
+% ---------------- LEFT COLUMN: WIDER ----------------
+\begin{column}{0.56\textwidth}
+{\fontsize{7.85}{9.25}\selectfont
+
+\textbf{Observational setting}
+
+\vspace{0.12cm}
+
+\begin{itemize}
+  \setlength\itemsep{0.33em}
+  \setlength\parskip{0pt}
+  \setlength\parsep{0pt}
+
+  \item Treatment is not randomized.
+
+  \item Doctors choose treatment based on observed patient history:
+  \[
+  (A_{i1},X_{i1}),\ldots,(A_{iT},X_{iT}) \quad \longrightarrow \quad Y_i.
+  \]
+
+  \item Therefore, patients following different treatment paths may not be comparable.
+
+\end{itemize}
+
+\vspace{0.16cm}
+
+\textbf{Inverse Probability of Treatment Weighting (IPTW) idea}
+
+\vspace{0.12cm}
+
+\begin{itemize}
+  \setlength\itemsep{0.33em}
+  \setlength\parskip{0pt}
+  \setlength\parsep{0pt}
+
+  \item Estimate how likely each observed treatment decision was.
+
+  \item Upweight patients whose observed treatment path was unlikely.
+
+  \item Create a weighted pseudo-population where treatment is balanced with respect to measured history.
+
+\end{itemize}
+
+}
+\end{column}
+
+% ---------------- RIGHT COLUMN: NARROWER ----------------
+\begin{column}{0.40\textwidth}
+\vspace{0.02cm}
+\begin{center}
+\includegraphics[
+  width=0.8\linewidth,
+  trim=3pt 3pt 3pt 3pt,
+  clip
+]{dagexample3.pdf}
+\end{center}
+\end{column}
+
+\end{columns}
+
+\vspace{-0.05cm}
+
+{\fontsize{7.0}{8.3}\selectfont
+\textcolor{PrimerTeal}{\textbf{Sequential ignorability:}}
+after conditioning on the observed history, treatment is as good as randomized,
+\[
+\setlength{\abovedisplayskip}{2pt}
+\setlength{\belowdisplayskip}{2pt}
+Y_i(\bar a_T)
+\perp
+A_{it}
+\mid
+\hist{A}_{i,t-1},\hist{X}_{it}.
+\]
+}
+
+\end{frame}
 
 % Speaker note: 35 seconds. Explain the baseline IPTW-MSM workflow before introducing hidden confounding.
 \begin{frame}{Baseline: IPTW-MSM without hidden confounding}
 \begin{columns}[T,onlytextwidth]
 
 \begin{column}{0.46\textwidth}
-\vspace{-0.05cm}
+%\vspace{-0.05cm}
+{\fontsize{9.1}{11}\selectfont
 \spacedparagraph{If sequential ignorability holds, treatment assignment can be modeled using only the observed history:}
 
 \vspace{-0.20cm}
-{\fontsize{9.3}{12.5}\selectfont
 \[
-\pi_{it} = P(A_{it}=1\mid \bar A_{i,t-1},\bar {X}_{it}).
+\pi_{it} = P(A_{it}=1\mid \hist{A}_{i,t-1},\hist{X}_{it}).
 \]
-}
 
-\spacedparagraph{IPTW uses these probabilities to create a pseudo-population where treatment is no longer confounded by the measured history.}
-
-\arrowtext{Then an MSM models the mean potential outcome under treatment regimes.}
-\end{column}
-
-\begin{column}{0.50\textwidth}
-\vspace{-0.05cm}
-{\fontsize{9.0}{12.0}\selectfont
 \pstrong{Step 1: Estimate propensity scores}
 \[
 \hat\pi_{it} =
-\hat P(A_{it}=1\mid \bar A_{i,t-1},\bar {X}_{it})
+\hat P(A_{it}=1\mid \hist{A}_{i,t-1},\hist{X}_{it})
 \]
 
 \vspace{-0.25cm}
@@ -338,32 +418,60 @@ Y_i(\bar{a}_T) \perp A_{it}\mid \bar A_{i,t-1},\bar {X}_{it}.
 \prod_{t=1}^{T}
 \hat\pi_{it}^{-A_{it}}
 (1-\hat\pi_{it})^{-(1-A_{it})}
-\]
+\] 
 
-\vspace{-0.25cm}
 \pstrong{Step 3: Fit the weighted MSM}
 \[
 E[Y_i(\bar a_T)]=m(\bar a_T;\theta)
 \]
+
+\vspace{-0.25cm}
+%\arrowtext{Then an MSM models the mean potential outcome under treatment regimes.}
 }
-\vspace{-0.65cm}
+\end{column}
+
+\begin{column}{0.50\textwidth}
+{\fontsize{9.1}{11}\selectfont
+
+\spacedparagraph{
+The marginal structural model compares the mean final outcome under different treatment regimes.
+}
+
+\vspace{0.15cm}
+
+\[
+\Delta(\bar a,\bar a')
+=
+E\!\left[
+Y_i(\bar a)-Y_i(\bar a')
+\right].
+\]
+
 \arrowtext{The parameters ($\theta$) are interpreted causally only if 
 the propensity model captures all treatment-outcome confounding and is correctly specified.}
+}
 \end{column}
 
 \end{columns}
-\smallref{Baseline idea: IPTW estimates a marginal structural model after reweighting by the inverse probability of the observed treatment history.}
+%\smallref{Baseline idea: IPTW estimates a marginal structural model after reweighting by the inverse probability of the observed treatment history.}
 \end{frame}
 
 % Speaker note: 50 seconds. Explain the estimand and the shared idea: both methods try to condition on a substitute for the missing stable factor and then use IPTW/MSM.
 \begin{frame}{Target: a truncated treatment-regime effect}
 \begin{columns}[T,onlytextwidth]
 \begin{column}{0.49\textwidth}
-\spacedparagraph{The thesis focuses on average potential outcomes under interventions on the last \(k\) treatment periods:}
-\[
-E[Y_i(\underline{a}_{T-k})]
-=E[Y_i(\bar A_{i,T-k-1},\underline{a}_{T-k})].
-\]
+{\fontsize{9.1}{11}\selectfont
+\vspace{-0.1cm}
+
+\arrowtext{Sequential ignorability is violated when a stable, unmeasured factor 
+\red{$U_i$} affects both treatment history and the final outcome.}
+\vspace{0.05cm}
+\begin{center}
+\includegraphics[width=0.8\linewidth]{treatment_covariate_feedback.pdf}
+\end{center}
+}
+\vspace{-0.65cm}
+{\fontsize{6.2}{6}\selectfont\muted{Illustration: time-varying treatments and covariates with a time-invariant unobserved confounder.}}
 
 %\vspace{-0.15cm}
 %\spacedparagraph{In the simulation, the marginal structural model is}
@@ -373,13 +481,21 @@ E[Y_i(\underline{a}_{T-k})]
 %\]
 \end{column}
 \begin{column}{0.47\textwidth}
+{\fontsize{9.1}{11}\selectfont
+\vspace{-0.05cm}
+\spacedparagraph{The thesis focuses on average potential outcomes under interventions on the last \(k\) treatment periods:}
+\[
+E[Y_i(\underline{a}_{T-k})]
+=E[Y_i(\hist{A}_{i,T-k-1},\underline{a}_{T-k})].
+\]
 \spacedparagraph{The key identification idea is to recover a version of sequential ignorability by conditioning on a unit-specific hidden factor:}
 \[
-Y_i(\bar{a}_T) \perp A_{it}\mid \bar A_{i,t-1},\bar {X}_{it},\eta_i .
+Y_i(\bar{a}_T) \perp A_{it}\mid \hist{A}_{i,t-1},\hist{X}_{it},\eta_i .
 \]
 \vspace{-0.1cm}
 \arrowtext{\(\eta_i=\alpha_i\) for FE-MSM.}
 \arrowtext{\(\eta_i=Z_i\) for SeqGPLVM-MSM.}
+}
 \end{column}
 \end{columns}
 \end{frame}
