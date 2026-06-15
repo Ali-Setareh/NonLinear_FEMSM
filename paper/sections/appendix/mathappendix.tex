@@ -102,12 +102,12 @@ Thus, we can use \(\mathcal{L}(\boldsymbol{\psi},\boldsymbol{\gamma})\) as a sur
     \;-\; \mathrm{KL}\!\left(q_{\boldsymbol{\psi}}(\mathbf{z}\mid \mathbf{x})\,\|\,p_{\boldsymbol{\gamma}}(\mathbf{z}\mid \mathbf{x})\right).
     \label{eq:elbo-rewrite}
 \end{align}
-Thus to setup variational inference, we need to specify the likelihood 
+Thus, to setup variational inference, we need to specify the likelihood 
 \(p_{\boldsymbol{\gamma}}(\mathbf{a}\mid \mathbf{x},\mathbf{z})\), 
 the prior over latents \(p_{\boldsymbol{\gamma}}(\mathbf{z}\mid \mathbf{x})\), 
 and the variational family \(q_{\boldsymbol{\psi}}(\mathbf{z}\mid \mathbf{x})\).
 
-\section{Conditional markov model}
+\section{Conditional Markov model}
 Let $\widetilde{\mathbf{X}}_t = \{(\bar{\mathbf{X}}_{it}, \mathbf{A}_{i,t-p:t-1}, 
 \mathbf{Z}_i)\}_{i=1}^N$ be the augmented covariate vector at time $t$ 
 that includes observed covariates history, the treatment history from time $t-p$ to $t-1$, 

@@ -202,7 +202,7 @@ several shortcomings. They are primarily designed for settings with repeated mea
 and are not directly applicable to designs with a single terminal outcome. Depending on the 
 context, this can be a significant limitation, as many longitudinal studies are 
 interested in the effect of treatments on a final outcome measured at the end of the study. 
-More importantly even when there are repeated measures of the outcome, the causal structures in which 
+More importantly, even when there are repeated measures of the outcome, the causal structures in which 
 fixed-effects regression can be used to adjust for unmeasured confounding to get valid estimates of causal effects are limited. Specifically, 
 they can only be used when there is no treatment-confounder feedback. Another important drawback 
 of fixed-effects regression is its inability to target the average 
@@ -257,7 +257,7 @@ unobserved confounder $\mathbf{U}_i$.
     \item \textbf{Assumption 2: Consistency of the substitute confounders.} The latent variable $\mathbf{Z}_i$ is 
     pinpointed almost surely by a single deterministic function of the observed treatments:
     $$ \mathbb{P}(\mathbf{Z}_i \mid A_{i1}, A_{i2}, \ldots, A_{iM}) = \delta_{\mathbf{f}   (A_{i1}, A_{i2}, \ldots, A_{iM})}. $$
-    Where $\delta_{\mathbf{f}(\cdot)}$ denotes a point mass at $\mathbf{f}(\cdot)$. This means that the latent variable 
+    Here, $\delta_{\mathbf{f}(\cdot)}$ denotes a point mass at $\mathbf{f}(\cdot)$. This means that the latent variable 
     $\mathbf{Z}_i$ is a deterministic function of the observed treatments, and it implies the 
     uniqueness of the latent variable \cite{wangClarifyingTheoryDeconfounder2020}. 
     \item \textbf{Assumption 3: Positivity or overlap.} The last $k$ treatments satisfy 
@@ -307,7 +307,7 @@ a deterministic function of the observed treatments, i.e., $\mathbf{Z}_i = \math
 then $\mathbf{Z}_i$ is a post-treatment variable and conditioning on it may cause biased estimates of 
 the causal effects. 
 
-Some of these criticisms are responded by \citeA{wangBlessingsMultipleCauses2019a} 
+Some of these criticisms were addressed by \citeA{wangBlessingsMultipleCauses2019a} 
 and \citeA{wangClarifyingTheoryDeconfounder2020}. However, the ambiguity surrounding the consistency 
 assumption and the constraints it imposes on the substitute confounder, still remains 
 a major concern for the deconfounder method to be widely applicable. 
@@ -320,7 +320,7 @@ same key idea as the original deconfounder method, which is to use a
 latent variable to capture the statistical signature of the unobserved 
 confounders in the observed treatments. Their main differences lie in the causal structures they are designed for 
 and the causal targets they can identify.
-While The method of \citeA{bicaTimeSeriesDeconfounder2020} is designed
+While the method of \citeA{bicaTimeSeriesDeconfounder2020} is designed
 for settings with multiple treatments 
 at each time point to adjust for time-varying unmeasured confounders using dynamic 
 latent variables, 

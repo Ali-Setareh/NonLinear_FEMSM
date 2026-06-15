@@ -8,7 +8,7 @@ the propensity scores using a treatment model that conditions on both observed
 covariates and the confounder substitute, and (iii) a marginal
 structural model that uses the estimated propensity scores in stage two to adjust
 for confounding using IPTW. It is worth mentioning that SeqGPLVM can be used
-in conjunction with any other estimation methods as well, such as g-computation or doubly
+in conjunction with any other estimation method as well, such as g-computation or doubly
 robust methods, but we focus on IPTW estimation of MSM for comparability with
 FE-MSM.
 
@@ -51,7 +51,7 @@ This is crucial to understand the SeqGPLVM architecture.
     dependence with at least one other treatment $A_s$ ($s\neq t$), conditional on the observed history.
 \end{idassumpSG}
 This assumption excludes structures such as the one in 
-Figure~\ref{fig:single-time-point-confounding}. Note that, Assumption~\ref{ass:C-timeinvariant-uc} 
+Figure~\ref{fig:single-time-point-confounding}. Note that Assumption~\ref{ass:C-timeinvariant-uc} 
 is not 
 sufficient to exclude these single-time-point confounders since a confounder can 
 be constant, but its effect 
@@ -111,7 +111,7 @@ estimate the substitute confounder. It holds for any
 latent variable model that can estimate a latent variable $\mathbf{Z}_i$ in a CMM of chosen order $p$. 
 The key idea of the deconfounder is that 
 once the substitute confounder is estimated, we can 
-treat it as an \emph{observed-like} covariates and include it in 
+treat it as an \emph{observed-like} covariate and include it in 
 any outcome model---depending on the specific causal target---to adjust for 
 confounding. 
 

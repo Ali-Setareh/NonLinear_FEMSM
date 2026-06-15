@@ -8,7 +8,7 @@ For FE-MSM, the parameters are estimated by solving the following optimization p
 \label{eq:least_squares}
 (\widehat{\tau}_F,\widehat{\tau}_C)
 =
-\arg\min_{\tau_F',\tau_C'}
+\arg\min_{\tau_F',\tau_C',\alpha}
 \sum_{i=1}^{n}
 \widehat{W}_i
 \left\{
@@ -81,11 +81,10 @@ individuals from the estimation process and imputed their propensity
 scores by assigning a fixed value, e.g., $\hat{\pi}_{it} = 0.01$ for never treated 
 individuals and $\hat{\pi}_{it} = 0.99$ for always treated individuals for all time points. Depending on the length of the treatment intervention window $k$ specified 
 in the MSM, this imputation strategy can lead to extreme weights which 
-we further trimmed by capping them within the range of $[10^{-6}, 1-10^{-6}]$ 
-to avoid unstable weights. 
+we further trimmed at the 1st and 99th percentiles to reduce weight instability.
 
 Figures~\ref{fig:simulation_bias_combined_a_p2}--\ref{fig:simulation_coverage_combined_a_p2} show the results of the simulation study for the 
-two-covariate case. The additional results for the four covariate-case are 
+two-covariate case. The additional results for the four-covariate case are 
 reported in Appendix~\ref{sec:additional_simulation_results}. Bias, standard error, and coverage of the 
 90\% confidence intervals are reported based on 500 simulation runs. 
 Figure~\ref{fig:simulation_bias_combined_a_p2} reports the bias, 
@@ -112,7 +111,7 @@ fixed effects $\alpha_i$ with a global intercept.
 
 The results show that both methods improve the bias of the estimates of the 
 parameters of interest in comparison to the naive IPTW, especially as the ratio of 
-$\frac{n}{T}$ decreases. However, FE-MSM tends to have slightly lower bias and 
+$\frac{N}{T}$ decreases. However, FE-MSM tends to have slightly lower bias and 
 standard error compared to the SeqGPLVM-MSM, particularly for smaller sample sizes. 
 This may be due to the fact that the FE-MSM method relies on a correctly specified 
 parametric model for the propensity scores, while the sequential GPLVM method is more 
@@ -136,7 +135,7 @@ As the number of time points increases, the gap between the biases of the two me
 they perform more similarly although the FE-MSM bias remains lower while the standard 
 error of SeqGPLVM-MSM remains higher than the FE-MSM estimates across all scenarios. 
 Under the weak unmeasured confounding setting where the unmeasured confounder explains 
-roughly 1/3 of the variance of the treatment assignments (Figure~\ref{fig:simulation_coverage_combined_a_p2}, panels (A)--(F)), coverage is mixed 
+roughly $\frac{1}{3}$ of the variance of the treatment assignments (Figure~\ref{fig:simulation_coverage_combined_a_p2}, panels (A)--(F)), coverage is mixed 
 rather than uniformly close to the nominal level. For $\tau_C = 0.3$, \texttt{FE-MSM} 
 attains coverage values below $0.90$ throughout, and \texttt{SeqGPLVM-MSM} 
 shows substantial undercoverage for the shortest treatment sequence, 
@@ -151,12 +150,12 @@ still exhibits noticeably larger bias and lower coverage than \texttt{IPTW-True}
 and this gap becomes more pronounced under stronger unmeasured confounding. 
 
 In the stronger unmeasured confounding case where the unmeasured confounder explains 
-2/3 of the variance in the treatment (Figures~\ref{fig:simulation_bias_combined_a_p2}--\ref{fig:simulation_coverage_combined_a_p2}, panels (G)--(L)), both methods perform more poorly 
+$\frac{2}{3}$ of the variance in the treatment (Figures~\ref{fig:simulation_bias_combined_a_p2}--\ref{fig:simulation_coverage_combined_a_p2}, panels (G)--(L)), both methods perform more poorly 
 than the weaker case in terms of the bias while FE-MSM performs slightly better across all different $\rho$ values and 
 sample sizes. In this scenario there is a small Monte Carlo bias observed even for the 
 \texttt{IPTW-True}, due to extreme weights and the trimming strategy.
 
-\begin{figure}[!tbp]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=\textwidth]{figures/build/simulation_bias_combined_a_p2.pdf}
     \caption{Simulation bias for the two-covariate case. The panels report bias for $c_U=1$ and $c_U=2$, for $\tau_F=1$ and $\tau_C=0.3$, across sample sizes $N$ and ratios $\rho = N/T$.}

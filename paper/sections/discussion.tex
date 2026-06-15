@@ -55,7 +55,7 @@ recovered latent variable corresponds to
 the confounder needed for causal identification. Putting it differently, the fact that
 SeqGPLVM 
 may recover a latent factor that explains the dependence structure among the treatments, 
-this alone does not guarantee that this latent factor is the correct one for the 
+does not guarantee that this latent factor is the correct one for the 
 causal problem. This is a fundamental issue for all methods that rely on latent 
 variable models for deconfounding, and it is not specific to SeqGPLVM.
 
@@ -94,7 +94,7 @@ and SeqGPLVM can be useful tools for addressing time-constant unmeasured confoun
 certain settings to reduce bias and improve coverage compared to standard methods 
 that do not account for unmeasured confounding. A promising future research 
 direction is to 
-investigate the theoretical properties of the fixed effects estimates by FE-MSM and the 
+investigate the theoretical properties of the fixed-effect estimates by FE-MSM and the 
 latent variables estimated by SeqGPLVM to understand the nature of these estimates 
 and their relationship to the true unmeasured confounder. This could be pursued by 
 further exploring the performance and the estimation of the latent variables 
@@ -117,7 +117,7 @@ even though this paper focuses on unobserved adjustment
 variables rather than unobserved confounders.
 
 Another idea inspired by \citeA{bouchattaouiCausalDynamicVariational2025} is to investigate 
-whether the consistency assumption for SeqGPLVM can be imposed 
+whether the consistency assumption for SeqGPLVM can be enforced 
 also in practice by imposing 
 a more concentrated,
 approximately deterministic posterior over the latent variables. 

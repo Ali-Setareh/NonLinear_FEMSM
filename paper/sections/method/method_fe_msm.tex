@@ -152,12 +152,12 @@ Figure~\ref{fig:fixed_effect_architecture} shows a graphical representation of t
     Plate diagram of the conditional assignment likelihood under 
     the fixed-effects propensity-score model, assuming the true 
     treatment assignment mechanism depends only on past treatment 
-    and covariate values. The likelihood factorizes as
+    and current covariate values. The likelihood factorizes as
     $
     p(\mathbf{a} \mid \mathbf{x};\alpha, \boldsymbol{\beta})
     =
     \prod_{i,t}
-    p\!\left(A_{it} \mid A_{i,t-1}, X_{i,t-1}, \alpha_i, \boldsymbol{\beta}\right).
+    p\!\left(a_{it} \mid a_{i,t-1}, x_{i,t}, \alpha_i, \boldsymbol{\beta}\right).
     $
     We do not specify a model for the 
     joint distribution of $(\mathbf{X}, \alpha)$. Note that, 
