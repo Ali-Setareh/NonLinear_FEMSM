@@ -19,7 +19,7 @@ FE-MSM.
 
 The sequential deconfounding theory proposed by 
 \citeA{hattSequentialDeconfoundingCausal2024} can be seen as the sequential version of 
-the multi-treatment deconfounder proposed by \citeA{wangBlessingsMultipleCauses2019}. Similarly 
+the multi-treatment deconfounder proposed by \citeA{wangBlessingsMultipleCauses2019}. Similar 
 to the multi-treatment deconfounder, it is based on the three key assumptions that are 
 described below. 
 
@@ -91,7 +91,7 @@ imposes the $\text{CMM}$ of order $p$.
  \begin{theorem}[Substitute Confounder \cite{hattSequentialDeconfoundingCausal2024}\footnote{The original version of this theorem 
     in \citeA{hattSequentialDeconfoundingCausal2024} is stated only for a 
     first-order CMM. However, we show in Appendix~\ref{proof_theorem_1} that 
-    the proof of their Theorem 1 using Preposition 7.6 in
+    the proof of their Theorem 1 using Proposition 7.6 in
     \citeA{FoundationsModernProbability1997}, 
     can be easily extended to higher-order CMMs as well.}]
     Under Assumptions 
@@ -111,8 +111,8 @@ estimate the substitute confounder. It holds for any
 latent variable model that can estimate a latent variable $\mathbf{Z}_i$ in a CMM of chosen order $p$. 
 The key idea of the deconfounder is that 
 once the substitute confounder is estimated, we can 
-treat it as a \emph{observed-like} covariates and include it in 
-any outcome model—depending on the specific causal target—to adjust for 
+treat it as an \emph{observed-like} covariates and include it in 
+any outcome model---depending on the specific causal target---to adjust for 
 confounding. 
 
 \subsection{SeqGPLVM}
@@ -160,7 +160,7 @@ Since the kernels are defined on the joint space of the latent substitutes
 and the observed history, 
 there is a lot of flexibility to encode different types of interactions between 
 these variables. For the sake 
-of simplicity, we use the same kernel for all-time points, but in principle, 
+of simplicity, we use the same kernel for all time points, but in principle, 
 we can use different kernels at different time points. The generative model then 
 can be written as follows: 
 
@@ -170,14 +170,13 @@ p(\bar{\mathbf{a}}_{iT}, \bar{\mathbf{f}}_T  \mid \bar{\mathbf{x}}_{iT}, \mathbf
 \mid f_t)p(f_t \mid \mathbf{z}_i, \bar{\mathbf{x}}_{i,\leq t}, \bar{\mathbf{a}}_{i,t-p:t-1})).
 \]
 
-Since the exact posterior distribution is intractable, we adopt the 
-variational inference with inducing point for inference \cite{titsiasBayesianGaussianProcess2010}. 
+Since the exact posterior distribution is intractable, we adopt variational inference with inducing point for inference \cite{titsiasBayesianGaussianProcess2010}. 
 The dimensionality of the inducing points is \(J + \sum_{s=1}^{t} |\mathcal{X}_s| + \sum_{s=t-p}^{t-1}|\mathcal{A}_{s}|\). 
 The likelihood term \(p(a_{it} \mid f_t)\) depends on the type of treatment variable. 
-For instance if \(\mathcal{A}_t = \{0,1\}\), we can use a Bernoulli likelihood, 
+For instance, if \(\mathcal{A}_t = \{0,1\}\), we can use a Bernoulli likelihood, 
 or for a continuous treatment, we can use a Gaussian likelihood. The details of the 
 variational inference procedure and the optimization of the evidence lower bound (ELBO) are provided 
-in Appendix~\ref{sec:seqgplvm_loss}. In Fig \ref{fig:seqgplvm_architecture} a 
+in Appendix~\ref{sec:seqgplvm_loss}. In Figure \ref{fig:seqgplvm_architecture} a 
 graphical representation of the SeqGPLVM is shown.
 
 \subsection{Outcome model}
@@ -208,9 +207,9 @@ Hence, as in FE-MSM, estimation proceeds in two steps: first, a parametric model
 to estimate the propensity scores, and second, these estimated propensities are used to
 construct inverse-probability weights for fitting the marginal structural model. The key
 difference is that instead of directly estimating a unit-specific fixed effect $\alpha_i$ 
-in the treatment model, a sample is drawn from the approximate posterior distribution 
-of the substitute confounder $q(\mathbf{Z}_i)$ and 
-condition the treatment model on these samples together with the observed history 
+in the treatment model, samples are drawn from the approximate posterior distribution 
+of the substitute confounder $q(\mathbf{Z}_i)$ and the treatment model is conditioned
+on these samples together with the observed history 
 to estimate the propensity scores.
 
 To account for uncertainty in the inferred substitute confounder, we adopt a
@@ -270,7 +269,7 @@ B_j = \frac{1}{S - 1}\sum_{s=1}^{S}\left(\hat{\theta}_j^{(s)} - \bar{\theta}_j\r
 \qquad
 T_j = Q_j + \left(1+\frac{1}{S}\right)B_j.
 \]
-The resulting confidence interval $T_j$ therefore reflect both
+The resulting confidence intervals based on $T_j$ therefore reflect both
 (i) variability in the MSM fit conditional on a latent draw and
 (ii) additional variability due to uncertainty in the inferred substitute confounder.
 
@@ -307,11 +306,11 @@ the FE-MSM method described in section \ref{sec:fe-msm}.
     \centering
     \includegraphics[width=\linewidth]{figures/build/fit_seqgplvm_dag.pdf}
     \caption{Plate diagram of the first-stage SeqGPLVM treatment model used to estimate
-time-varying propensity scores for a first order CMM. For each time point $t$, 
+time-varying propensity scores for a first-order CMM. For each time point $t$, 
 a Gaussian process
 $f_t(\cdot)$ with hyperparameters $\boldsymbol{\gamma}_t$ maps the latent state and
 observed history into the assignment probability $A_{it}$.
-The variables $g_t$ denote GP function values at inducing inputs $m_t$
+The variables $g_t$ denote GP function values at inducing inputs $\mathbf{w}_t$
 (shown without nodes as they are treated as parameters).
 Filled nodes indicate observed quantities and unfilled nodes latent quantities.
 The outer plate indexes individuals $i = 1, \dots, N$ and the temporal structure

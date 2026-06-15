@@ -4,7 +4,7 @@
 Methods for observational longitudinal causal inference with discrete time points can be organized along two main dimensions: 
 the structure of the causal process and the causal target of interest. 
 The structure of the causal process is typically represented by a directed acyclic graph (DAG) 
-that encodes the assumptions about the data generating process and the causal relationships 
+that encodes the assumptions about the data-generating process and the causal relationships 
 between the variables \cite{pearlCausalityModelsReasoning2009}. The presence or absence of 
 treatment-confounder feedback 
 and unobserved confounders are important features of the causal structure that can affect the 
@@ -14,9 +14,9 @@ different causal targets, such as the average treatment effect at a specific tim
 effect of treatment over time, or the average contrast between two specific treatment regimes. Having these 
 two dimensions in mind, in the 
 following sections, we will review the relevant literature and concepts on longitudinal causal inference 
-and the methods exist to address confounding.
+and the methods that exist to address confounding.
 
-\section{Conceptual foundations of longitudinal causal inference.}
+\section{Conceptual foundations of longitudinal causal inference}
 \paragraph{Potential outcomes and treatment regimes}
 The causal targets are often formalized in the potential-outcomes framework \cite{rubinEstimatingCausalEffects1974}. 
 In this framework, the potential outcome of individual $i$ is defined as $Y_i(a)$, representing the outcome that would be observed if 
@@ -43,7 +43,7 @@ as a confounder for the treatment at time $t$ and the outcomes at later time poi
 \paragraph{Treatment-confounder feedback.}
 Treatment-confounder feedback occurs when the treatment at time $t$ can affect the confounders at later 
 time points. This creates a feedback loop between the treatment and the confounders, 
-which can lead to bias if not properly adjusted for; (see 
+which can lead to bias if it is not properly adjusted for; (see 
 \citeA{hernanCausalInferenceWhat2023booksection} 
 for detailed examples.) In Figure \ref{fig:sample_dags} (b), these feedback loops 
 are represented by the purple arrows from $A_t$ to subsequent $\mathbf{X}_{t+k}$ where $1 \le k \le T-t$. These structures 
@@ -63,7 +63,7 @@ regime, i.e., $\mathbb{E}[Y_i(\bar{\mathbf{a}}_T)]$, as a fundamental causal tar
 It represents the expected final outcome if all individuals in the population were to follow the treatment 
 regime $\bar{\mathbf{a}}_T$. This causal estimand is 
 of particular interest as it can be used to construct various causal contrasts between different treatment regimes. 
-For example, the average causal effect of taking a binary treatment at all-time points compared to not 
+For example, the average causal effect of taking a binary treatment at all time points compared to not 
 taking the treatment at all can be defined as $\mathbb{E}[Y_i(\bar{\mathbf{1}}_T) - Y_i(\bar{\mathbf{0}}_T)]$.
 
 \paragraph{G-methods.}
@@ -80,7 +80,7 @@ possible treatment regimes. This means for a study with 10 time points, there ar
 treatment regimes. The problem becomes even more severe when the treatment is not binary. 
 
 \paragraph{Identification under sequential ignorability.}
-G-methods are relying on the assumptions of sequential ignorability for identification, which 
+G-methods rely on the assumption of sequential ignorability for identification, which 
 states that there are no unmeasured confounders between the 
 treatment and outcome at each time point.  More formally, 
 sequential ignorability can be expressed as 
@@ -116,7 +116,7 @@ correctly specified,
 $\theta_1$ is the expected outcome when no treatment is given at any time point, 
 and $\theta_2$ represents the average causal effect of receiving one more treatment on the expected outcome.
 
-MSMs parameters are often estimated using inverse probability of treatment weighting (IPTW) 
+MSM parameters are often estimated using inverse probability of treatment weighting (IPTW) 
 \cite{robinsMarginalStructuralModels2000}. 
 IPTW creates a pseudo-population in which the treatment assignment is exogenous 
 while preserving the causal effect of $\bar{\mathbf{A}}$ on $Y$. 
@@ -145,20 +145,20 @@ The estimated IPTW weights are
     \label{eq:ipw-weights}
 \widehat{W}_{i} = \prod_{t=1}^{T} \hat{\pi}_{it}^{-A_{it}} (1-\hat{\pi}_{it})^{-(1-A_{it})}.
 \end{equation}
-Once the weights are estimated, the IPTW estimator of MSM can be obtained by solving empirical version of the following equation:
+Once the weights are estimated, the IPTW estimator of MSM can be obtained by solving the empirical version of the following equation:
 
 \begin{equation}
     \label{eq:ipw-estimation}
 \mathbb{E}\left\{\widehat{W}_i\, \mathbf{h}\!\left(\bar{\mathbf{A}}_{i,T}\right)\left(Y_i - m\!\left(\bar{\mathbf{A}}_{i,T};\boldsymbol{\theta}\right)\right)\right\}=0,
 \end{equation}
-where $\mathbf{h}(\cdot)$ is a researcher-chosen vector valued function of the treatment history with dimensionality of  
+where $\mathbf{h}(\cdot)$ is a researcher-chosen vector-valued function of the treatment history with dimensionality of  
 $1 \times \dim(\boldsymbol{\theta})$. If $\mathbf{h}(\cdot)$ 
 is chosen to be the identity function and the MSM is specified as a linear model, 
 then the above estimating equation reduces to a weighted least squares problem.
 
 The IPTW weights can become 
-very large when the estimated propensity scores be close to zero or one,
-Which may lead to unstable estimates. To mitigate this issue, stabilized weights 
+very large when the estimated propensity scores are close to zero or one,
+which may lead to unstable estimates. To mitigate this issue, stabilized weights 
 are often used.  They are defined as 
 
 \begin{equation}
@@ -181,7 +181,7 @@ receiving the treatment at time $t$ given only the past treatment history,
 
 The consistency of the IPTW estimator only relies on the correct 
 specification of the treatment assignment model appearing in the denominator of the stabilized weights. 
-The numerator serves only to improve the finite sample performance of the estimator, but the misspecification 
+The numerator serves only to improve the finite-sample performance of the estimator, but the misspecification 
 of it does not affect the consistency. 
 Moreover, any function of the past treatment history can be included in the numerator as long as it is not a function 
 of the confounders \cite{robinsMarginalStructuralModels2000a}.
@@ -197,21 +197,21 @@ $$Y_{i,t+1} = \alpha_i + \beta A_{it} + \epsilon_{it},$$
 with $\alpha_i$ being the individual-specific intercept that captures the effect of any 
 unmeasured time-invariant confounder in an additive form. 
 
-Although these models can adjust for unmeasured time-invariant confounders, They have 
+Although these models can adjust for unmeasured time-invariant confounders, they have 
 several shortcomings. They are primarily designed for settings with repeated measured outcomes, 
 and are not directly applicable to designs with a single terminal outcome. Depending on the 
 context, this can be a significant limitation, as many longitudinal studies are 
 interested in the effect of treatments on a final outcome measured at the end of the study. 
 More importantly even when there are repeated measures of the outcome, the causal structures in which 
-fixed-effect regression can be used to adjust for unmeasured confounding to get valid estimates of causal effects are limited. Specifically, 
+fixed-effects regression can be used to adjust for unmeasured confounding to get valid estimates of causal effects are limited. Specifically, 
 they can only be used when there is no treatment-confounder feedback. Another important drawback 
-of fixed-effect regression is their inability to target the average 
+of fixed-effects regression is its inability to target the average 
 potential outcome under specific treatment regimes, which is often of 
 interest in longitudinal studies. Instead, 
 they target the average spontaneous effect of the current treatment 
 on the current outcome, i.e., $\mathbb{E}[Y_{i,t+1}(a_{it}=1) - Y_{i,t+1}(a_{it}=0)]$. 
 The assumptions 
-required implicitly by the fixed-effect regression to be causally interpretable is discussed in 
+required implicitly by the fixed-effects regression to be causally interpretable are discussed in 
 detail by \citeA{imaiWhenShouldWe2019}. 
 
 In contrast, MSMs can target the average potential outcome under a full treatment regime while allowing for complex
@@ -220,7 +220,7 @@ The FE-MSM proposed by \citeA{blackwellEffectPoliticalAdvertising2024} can be be
 hybrid of these approaches. The novelty of FE-MSM comes from its use of a fixed-effect in 
 the propensity score model as opposed to the outcome model. This allows the method 
 to adjust for unmeasured time-invariant confounders without relying on repeated outcome measures, 
-while still benefiting from the ability of MSMs to adjust for all sorts of causal dynamics 
+while still benefiting from the ability of MSMs to adjust for a wide range of causal dynamics 
 including treatment-confounder feedback.  
 However, this comes at the cost of targeting the average potential outcome under truncated treatment 
 interventions instead of the full treatment regimes.
@@ -279,8 +279,8 @@ latent variables that can all render the same treatment conditional independence
 while 
 resulting in different causal effects ranging from negative to positive. This counterexample shows 
 that consistency assumption should be understood as a property of the underlying 
-data generating process and not as consequence of a particular factor model. Hence, 
-it is not possible to be verified by the observed data. 
+data-generating process and not as a consequence of a particular factor model. Hence, 
+it cannot be verified by the observed data. 
 
 Another point raised by \citeA{damourMultiCauseApproachesCausal2019} 
 is that, if the consistency assumption holds, %the latent variables are a 
@@ -299,10 +299,10 @@ ignorability assumption. \citeA{grimmerNaiveRegressionRequires2023} argues that 
 the deconfounder assumptions hold, the naive regression adjustment with only the 
 observed covariates also results in unbiased estimates of the causal effects. Moreover, through 
 extensive simulation studies, they showed 
-that both the deconfounder method and the naive regression adjustment perform equally poorly in presence 
+that both the deconfounder method and the naive regression adjustment perform equally poorly in the presence 
 of unmeasured confounding. 
 
-Furthermore, \citeA{ogburnCommentBlessingsMultiple2019} notes that if $\mathbf{Z}_i$ is 
+Furthermore, \citeA{ogburnCommentBlessingsMultiple2019} note that if $\mathbf{Z}_i$ is 
 a deterministic function of the observed treatments, i.e., $\mathbf{Z}_i = \mathbf{f}(A_{i1}, A_{i2}, \ldots, A_{iM})$, 
 then $\mathbf{Z}_i$ is a post-treatment variable and conditioning on it may cause biased estimates of 
 the causal effects. 
@@ -318,20 +318,19 @@ by \citeA{bicaTimeSeriesDeconfounder2020} and \citeA{hattSequentialDeconfounding
 They both rely on the 
 same key idea as the original deconfounder method, which is to use a 
 latent variable to capture the statistical signature of the unobserved 
-confounders in the observed treatments. Their main difference lie in the causal structures they are designed for 
+confounders in the observed treatments. Their main differences lie in the causal structures they are designed for 
 and the causal targets they can identify.
-While 
-\citeA{bicaTimeSeriesDeconfounder2020} is designed
+While The method of \citeA{bicaTimeSeriesDeconfounder2020} is designed
 for settings with multiple treatments 
 at each time point to adjust for time-varying unmeasured confounders using dynamic 
 latent variables, 
 \citeA{hattSequentialDeconfoundingCausal2024} is designed for a common setting 
-with a single treatment at each time point in presence of constant 
+with a single treatment at each time point in the presence of constant 
 unmeasured confounding, and it estimates a constant latent variable using 
-the treatment history. Moreover, they both required the consistency assumption which 
-is the most controversial assumption and the implementations of it will 
+the treatment history. Moreover, they both require the consistency assumption which 
+is the most controversial assumption and its implementations will 
 be discussed in Chapter~\ref{chap:discussion}. A graphical comparison of 
-the sequential deconfounder and the multi-treatment deconfounder is presented In Figure 
+the sequential deconfounder and the multi-treatment deconfounder is presented in Figure 
 \ref{fig:deconfounder-comparison}.
 
 \section{Research gap and thesis contribution}
@@ -369,11 +368,11 @@ and to support future methodological work on longitudinal causal inference with 
         \label{fig:second}
     \end{subfigure}
 
-    \caption{A graphical comparison of deconfounder and sequential deconfounder. 
+    \caption{A graphical comparison of the multi-treatment deconfounder and the sequential deconfounder. 
     The first DAG (a) represents the deconfounder setting where there are $M$ causes 
     at a single time point. 
-    The second DAG (b) represents the sequential deconfounder setting where 
-    there are time-varying $T$ treatments temporally linked. Both DAGs include 
+    The second DAG (b) represents the sequential deconfounder setting where there are $T$ 
+    temporally ordered treatments. Both DAGs include 
     an unobserved \emph{multi-treatment} confounder $\mathbf{U}_i$ that affects at least two treatments, 
     and a latent variable $\mathbf{Z}_i$ which is a statistically sufficient substitute for the unobserved confounder $\mathbf{U}_i$. Both 
     figures can be extended to include observed confounders.}
@@ -398,7 +397,7 @@ instrumental variable approaches: \cite{angristIdentificationCausalEffects1996} 
 \centering
 \includegraphics[width=\linewidth]{figures/build/simple_dag.pdf}
 \caption{A simple causal DAG with treatment $A$, outcome $Y$, and treatment-outcome confounder $\mathbf{X}$. 
-Confounder $\mathbf{X}$ is a common cause of both the treatment $A$ and the outcome $Y$, which can lead to confounding bias if not properly adjusted for.}
+Confounder $\mathbf{X}$ is a common cause of both the treatment $A$ and the outcome $Y$, which can lead to confounding bias if it is not properly adjusted for.}
 \end{subfigure}
 
 \vspace{0.6cm}
@@ -409,7 +408,7 @@ Confounder $\mathbf{X}$ is a common cause of both the treatment $A$ and the outc
 \caption{A longitudinal causal DAG with time-varying treatments $A_t$, time-varying 
 confounders $\mathbf{X}_t$, and an unobserved confounder $\mathbf{U}$.
 Filled nodes represent observed variables, while the unfilled node represents an unobserved variable. Arrows 
-from $A_t$ to $\mathbf{X}_{t+1}$ represent treatment-confounder feedback, where the treatment at time $t$ can affect the confounders at later time points.}
+from $A_t$ to later $\mathbf{X}_{t+k}$ represent treatment-confounder feedback, where the treatment at time $t$ can affect the confounders at later time points.}
 \end{subfigure}
 
 \caption{Two examples of causal DAGs. The first DAG (a) represents a simple static setting with a single treatment and outcome, while the second DAG (b) represents a more complex longitudinal setting with time-varying treatments.}

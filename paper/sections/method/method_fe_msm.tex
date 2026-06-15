@@ -8,7 +8,7 @@ and (ii) a marginal structural model that uses the
 estimated propensity scores in stage one to adjust for 
 confounding using IPTW. FE-MSM can be seen as a very direct way of 
 bringing back the sequential 
-ignorability assumption where we suspect of unmeasured time-invariant 
+ignorability assumption where we suspect unmeasured time-invariant 
 confounding. The fixed effect acts as a unit specific 
 offset in the propensity score model, capturing all 
 the time-invariant unmeasured confounding. More formally, the identification of 
@@ -26,7 +26,6 @@ A_{it}
 \bar{\mathbf{A}}_{i,t-1} = \bar{\mathbf{a}}_{t-1},\,
 \alpha_i .
 \]
-Moreover, the time-invariant 
 \end{idassumpFE}
 
 Assumption \ref{ass:FE-unit-specific-ignor} states that conditioned on 
@@ -144,8 +143,7 @@ Theorem 1 that
 N(0, V_{\boldsymbol{\theta}_0}),
 \]
 where $V_{\boldsymbol{\theta}_0}$ is a sandwich-type asymptotic variance that can be consistently estimated using the sample analog of the sandwich formula.
-Figure~\ref{fig:fixed_effect_architecture}, 
-shows a graphical representation of the conditional treatment assignment likelihood. 
+Figure~\ref{fig:fixed_effect_architecture} shows a graphical representation of the conditional treatment assignment likelihood. 
 
 \begin{figure}[!b]
     \centering

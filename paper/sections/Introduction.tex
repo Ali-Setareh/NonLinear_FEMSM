@@ -1,7 +1,7 @@
 \chapter{Introduction}
 \label{sec:introduction}
 Many fundamental questions in social sciences and epidemiology are 
-causal in nature focussing on the \emph{effect} of an \emph{intervention} on an outcome. 
+causal in nature focusing on the \emph{effect} of an \emph{intervention} on an outcome. 
 Examples include whether increasing the minimum wage affects employment \cite{cardMinimumWagesEmployment1993} 
 or whether initiating hormone therapy changes the risk of coronary heart disease in postmenopausal 
 women \cite{hernanObservationalStudiesAnalyzed2008}. In order to answer such questions, it is not sufficient to study 
@@ -15,7 +15,7 @@ This thesis focuses on a specific observational longitudinal study design with
 discrete time points \cite{gillCausalInferenceComplex2001}, which involves
 data with repeated covariate measurements of the same units, a time-varying binary treatment, 
 a terminal outcome at the end of the observation period and a lack of anticipation effects, meaning 
-that treatments at future points do not impact potential outcomes at the current time point \cite{arkhangelskyCausalModelsLongitudinal2024}. 
+that treatments at future time points do not impact potential outcomes at the current time point \cite{arkhangelskyCausalModelsLongitudinal2024}. 
 Instances of such designs can be found in psychology \cite{molinaAssociationStimulantTreatment2023}, sociology \cite{bacakMarginalStructuralModels2015}, and epidemiology \cite{bodnarMarginalStructuralModels2004}. 
 Moreover, the growing availability of intensive longitudinal data through techniques like experience sampling, 
 mobile evaluations, and wearable devices has made methods for longitudinal causal 
@@ -24,7 +24,7 @@ inference increasingly important \cite{myin-germeysExperienceSamplingMethodology
 Estimating causal effects in longitudinal settings with time-varying treatments and confounders is 
 particularly challenging due to the presence of treatment-confounder feedback, where treatments at 
 previous time points can affect confounders at subsequent time points, which in turn can affect future 
-treatments and outcome. In presence of such feedback loops, naive standard regression methods that 
+treatments and the outcome. In the presence of such feedback loops, naive standard regression methods that 
 adjust for 
 post-treatment confounders at each time point can produce biased estimates of causal effects. %\cite{hernanCausalInferenceWhat2023booksection}
 To address this issue, a family of methods known as the g-methods have been developed \cite{robinsEstimationCausalEffects2008, naimiIntroductionMethods2017}. 
@@ -35,7 +35,7 @@ which is often violated in observational studies.
 There are two types of unmeasured confounding that can occur in longitudinal 
 studies: time-varying and time-invariant. In this thesis, the focus is on the latter, 
 which are also referred to as missing baseline confounders. These are 
-unmeasured covariates that affect the treatments and outcome at all-time 
+unmeasured covariates that affect the treatments and outcome at all time 
 points but do not change over time. Examples of such baseline covariates may 
 include genetic predisposition, personality traits, or other stable 
 characteristics of individuals during the span of the study. 
@@ -58,7 +58,7 @@ These two methods are comparable as they can be used in similar settings such as
 unit-specific constant unobserved heterogeneity component that is supposed to 
 capture the effect of the unmeasured confounders. They diverge, however, 
 in their characterization of the unobserved heterogeneity component. 
-Whereas FE-MSM—rooted in econometrics literature—conceptualizes this component 
+Whereas FE-MSM---rooted in econometrics literature---conceptualizes this component 
 as a frequentist fixed effect and a nuisance parameter which is tied to inverse 
 probability of treatment weighting (IPTW) of marginal structural models, 
 the machine-learning-based SeqGPLVM views it as a 
@@ -75,7 +75,7 @@ when one method might be preferred over the other.
 To fill this gap, the current thesis provides a unified presentation of these two 
 methods, highlighting their assumptions with a common notation. The performance of 
 the proposed methods was evaluated through a simulation study using 
-the data generating process suggested in \citeA{blackwellEffectPoliticalAdvertising2024}. 
+the data-generating process suggested in \citeA{blackwellEffectPoliticalAdvertising2024}. 
 Synthetic datasets were generated for three different ratios of individuals to time 
 points under two different confounding strengths. The estimates obtained from 
 both methods were compared to the true causal effects to assess their bias, 
@@ -85,154 +85,14 @@ Beyond the simulation study, a detailed derivation of the loss function for
 SeqGPLVM is provided, which was not fully elaborated in the original paper. 
 Moreover, a modular implementation of SeqGPLVM is 
 developed using the \texttt{GPyTorch} library \cite{gardnerGPyTorchBlackboxMatrixMatrix2021}. 
-This implementation is designed to accommodate different treatment types and intended for 
+This implementation is designed to accommodate different treatment types and is intended for 
 practical reuse in future research\footnote{Code available at \url{https://github.com/Ali-Setareh/SeqGPLVM_FEMSM}}.
 
 The remainder of the thesis is structured as follows. Chapter ~\ref{chap:literature_review} reviews the 
-relevant literature on longitudinal causal inference and the methods exist to address confounding. Next in
+relevant literature on longitudinal causal inference and the methods that exist to address confounding. Next in
 Chapter ~\ref{chap:method}, the FE-MSM and the 
 SeqGPLVM are described in detail, including their assumptions and estimation procedures. 
-Chapter ~\ref{chap:simulation_study}, presents a simulation study comparing the performance of these 
-two methods under different scenarios. Finally, chapter ~\ref{chap:discussion}, discusses the 
-implications of findings and suggest directions for future research.
+Chapter ~\ref{chap:simulation_study} presents a simulation study comparing the performance of these 
+two methods under different scenarios. Finally, chapter ~\ref{chap:discussion} discusses the 
+implications of the findings and suggests directions for future research.
 
-\begin{comment}
-Causal inference is a field of study that aims to understand and estimate the 
-causal effects of intervetions. Many fundamental questions in psychology, epidemiology, 
-economics and political science are causal in nature. Questions such as \emph{Will 
-increasing the minimum wage lead to higher employment?} \cite{cardMinimumWagesEmployment1993} or \emph{
-    Does initiating hormonal therapy increase the risk of coronary heart disease (CHD) in postmenopausal women?
-} \cite{hernanObservationalStudiesAnalyzed2008}. The common thread in these questions is that they 
-are querying about an intervention and its effect on an outcome. Therefore, to answer them, it is not enough 
-to simply find an association between those intervetions and the outcomes, but we need to know or assume 
-something about
-the \emph{structure} of the data generating process or the causal diagram 
-and using that structure to identify the 
-causal target of interest. 
-
-Knowing the structure of the data generating process 
-is not an easy task. 
-It often requires an expert knowledge of the domain and assumptions about how the 
-world works. One way to mitigate 
-the problem of not knowing the structure of the data generating process is to conduct a randomized controlled trial (RCT). 
-RCTs are often considered the gold standard for causal inference 
-because they allow researchers to control for confounding variables and establish a 
-clear cause-and-effect relationship between the treatment and the outcome. 
-However, in many cases,
-conducting randomized experiments is often infeasible, unethical or expensive and therefore, 
-researchers often have to rely on observational data to estimate 
-causal effects. 
-
-Causal inference from observational datasets usually involves two 
-main levels of  complexity. The first level is when the 
-cuasal diagram is unknown and we wish to discover it from the data. This is the topic of 
-causal discovery, an active area of research and not the subject of this thesis. 
-The second level of complexity is when the causal diagram is known but we have unmeasured confounders, i.e. 
-there are variables that affect both the treatment and the outcome but are not observed in the data. This is the 
-focus of this thesis. Furthermore, we are going to limit our focus to longitudinal data, 
-a common research design where 
-the same individuals are observed at multiple time points. Nowadays, numerous applications 
-gather these recurring data points at short intervals during everyday activities 
-using techniques like experience sampling, mobile evaluations, and wearable devices. The growing availability of such intensive 
-longitudinal data has made methods for longitudinal causal inference increasingly important \cite{myin-germeysExperienceSamplingMethodology2018}.
- 
-Estimating causal effects in longitudinal settings where 
-treatments and confounders can vary over time is particularly challenging 
-because of the presence of treatment-confounder feedback, i.e.
-the treatments at previous time points both affect the confounders at the next time points 
-and the outcomes. It is important to note that this articlefocuses on discrete time 
-periods\cite{gillCausalInferenceComplex2001} and assumes a lack of anticipation effects, 
-where treatments at future points do not impact potential outcomes at the current time point \cite{arkhangelskyCausalModelsLongitudinal2024}.
-
-This study conducts a comparative analysis of the performance and assumptions of two methods that have been 
-proposed to estimate the causal effects of time-varying treatments 
-in the presence of \emph{time-invariant} unmeasured confounders. The first is the fixed-effect
-marginal structural model (FE-MSM) proposed by \cite{blackwellEffectPoliticalAdvertising2024}, 
-which combines the marginal structural model (MSM) \cite{robinsMarginalStructuralModels2000} 
-with unit fixed effects. The second method is the 
-sequential Gaussian process latent variable model (SeqGPLVM) introduced 
-by \cite{hattSequentialDeconfoundingCausal2024}. This method may be interpreted as the 
-sequential extension of the deconfounder method of \cite{wangBlessingsMultipleCauses2019} when 
-instead of having conditionally independent multiple treatments at a single time point, 
-there is a time ordered causally linked 
-sequence of treatments. The approach is based on the Gaussian process latent variable model
-\cite{lawrenceGaussianProcessLatent2003}, which is used to estimate a
-statistically sufficient substitute for the unmeasured confounders.
-This latent variable is then used to retain the sequential ignorability assumption to 
-estimate any causal target of interest. 
-
-The two methods are comparable as they can be used to estimate the 
-causal effects of time-varying treatments in the presence of time-invariant 
-unmeasured confounders, specifically where feedback mechanisms exist 
-between treatments and confounders. 
-Both methods are applicable to similar setting with  
-a single treatment available at each time point and a single outcome at the end of the study.
-Moreover, they both invlove a unit-specific unobserved heterogeneity component that 
-is supposed to capture the effect of the
-unmeasured confounders. 
-
-They diverge, however, in their characterization of this 
-unobserved heterogeneity component, the assumptions they make about it and the scope of 
-applicability of their methods. 
-Whereas FE-MSM—rooted in econometrics and political science literature—conceptualizes this 
-component as a frequentist fixed effect and a nuisance parameter which is tied 
-to MSMs based routines, 
-the machine-learning-based SeqGPLVM views it 
-as a latent variable and employs a much more flexible and non-parametric 
-approach to estimate these latent variables which can be employed in a wide range of 
-causal inference methods. 
-Therefore, putting these two methods 
-together in the same paper using a unified notation and vocabulary is an effort to make a 
-bridge between different fields of research and to highlight the 
-assumptions and implications of these two methods in a same framework. 
-
-The performance of the proposed methods was evaluated through a simulation 
-study using the data generating 
-process suggested in \cite{blackwellEffectPoliticalAdvertising2024}. Synthetic datasets were 
-generated for three different ratios of individuals to time points under two different 
-confounding strengths. The estimates obtained from both methods were compared to the true causal effects to 
-assess their bias, variance and coverage. 
-
-Beyond the simulation study, a detailed derivation of the loss function for SeqGPLVM is 
-provided, which was not fully elaborated in the original paper. Moreover, for the first time, 
-a modular implementation of SeqGPLVM is developed using the \texttt{GPyTorch} \cite{gardnerGPyTorchBlackboxMatrixMatrix2021}.
-It is designed to accommodate different treatment types and intended for practical reuse in future 
-research \footnote{Code available at \url{https://github.com/Ali-Setareh/SeqGPLVM_FEMSM}}.
-
-The rest of the thesis is structured as follows. Chapter ~\ref{chap:literature_review} reviews the 
-relevant literature on longitudinal causal inference and the methods exist to address confounding. Next in
-Chapter ~\ref{chap:method}, the FE-MSM and the 
-SeqGPLVM are described in detail, including their assumptions and estimation procedures. 
-Chapter ~\ref{chap:simulation_study}, presents a simulation study comparing the performance of these 
-two methods under different scenarios. Finally, chapter ~\ref{chap:discussion}, discusses the 
-implications of findings and suggest directions for future research.
-
-
-
-    I can also add a discussion about the motivation behind comparing these two methods in the same paper. 
-    For example, I can argue that by comparing these two methods, I can provide a more comprehensive understanding of the 
-    strengths and weaknesses of each method and how they perform under different scenarios.
-\begin{itemize}
-    \item I test both the FE-MSM and SeqGPLVM methods on a same 
-    synthetic data and compare their performance. 
-    \item by presenting these two methods in a same paper, 
-    I can also highlight the differences and similarities between them 
-    and perhaps provide some insights about when one method might be preferred over the other. and also 
-    encourage future research to explore the connections between methods developed in different fields.
-    \item I also make the assumptions behind these two methods more explicit and perhaps discuss 
-    about the plausibility of these assumptions in real world settings. 
-    \item I provide replicable code for both methods and make it available to the public. 
-    \item connection with the blessing of multiple causes paper by Wang and Blei. specifically, 
-    the analogous assumption of no single cause confounding in the time varying treatment setting 
-    and also the critique made by D'amor about the deconfounder paper 
-    and how it applies to the time varying treatment setting. 
-    \item related to the previous point, in the paper towards clarifying the
-    theory of deconfounder by wang and Blei, they accepted that identifying the potential 
-    outcomes for the complete sets of treatments is not possible but it is 
-    possible to identify the potential outcomes for subsets of treatments. 
-    This is similar to the fe-msm approach where we only identify the potential outcomes for subsets of treatments 
-    but they did not explicitly discuss this point in their paper. I can make this connection more explicit. 
-
-\end{comment}
-
-    

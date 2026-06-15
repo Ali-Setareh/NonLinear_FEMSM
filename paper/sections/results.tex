@@ -2,7 +2,7 @@
 \label{results}
 
 We compared the performance of the proposed methods by estimating the two structural 
-parameters of interest $\tau_F$ and $\tau_C$ using the weighted least squares. 
+parameters of interest $\tau_F$ and $\tau_C$ using weighted least squares. 
 For FE-MSM, the parameters are estimated by solving the following optimization problem:
 \begin{equation}
 \label{eq:least_squares}
@@ -16,7 +16,7 @@ Y_i-\alpha-\tau_F' A_{iT}
 -\tau_C' \sum_{t=T-3}^{T-1} A_{it}
 \right\}^{2}
 \end{equation}
-Where $\widehat{W}_i$ are the stabilized version of 
+Where $\widehat{W}_i$ are the stabilized versions of 
 IPTW weights defined in Eq.~\eqref{eq:iptw_weights}. 
 The parametric 
 propensity score model is correctly specified (up to a unit-specific fixed effect) 
@@ -24,11 +24,11 @@ as a logistic regression of the
 treatment on the past treatment history and covariates, with a unit-specific fixed effect, 
 \begin{equation}
 \label{eq:ps_model}
-p(a_{it} = 1 \mid x_{it}, a_{i,t-1}, z_i^{(s)}) = \operatorname{expit}(w_1^\top x_{it} + w_2 a_{i,t-1} + \alpha_i).
+p(a_{it} = 1 \mid x_{it}, a_{i,t-1}, \alpha_i) = \operatorname{expit}(w_1^\top x_{it} + w_2 a_{i,t-1} + \alpha_i).
 \end{equation}
 
 
-For the sequential GPLVM, a $\text{CMM}(1)$ with a one dimensional latent variable 
+For the sequential GPLVM, a $\text{CMM}(1)$ with a one-dimensional latent variable 
 (i.e., $Z_i \in \mathbb{R}$ and $|\mathcal{Z}| = 1$) 
 is fitted to the treatment data, 
 using a linear kernel: 
@@ -47,7 +47,7 @@ $0.01$. The number of iterations is set to $6000$ and the convergence is
 monitored by checking the change in ELBO.
 The parameters of the MSM are estimated by
 the procedure described in Section~\ref{sec:seqgplvm-outcome} by solving 
-the same optimization problem as in Eq.~\eqref{eq:least_squares} with 
+the same optimization problem as in Eq.~\eqref{eq:least_squares} with the 
 number of posterior draws set to $S=100$. The following logistic regression 
 model is used to estimate the propensity scores for the IPTW estimation 
 of the MSM parameters:
@@ -79,13 +79,13 @@ number of time points is small.
 In this case, we removed always and never treated 
 individuals from the estimation process and imputed their propensity 
 scores by assigning a fixed value, e.g., $\hat{\pi}_{it} = 0.01$ for never treated 
-individuals and $\hat{\pi}_{it} = 0.99$ for always treated individuals for all-time points. Depending on the length of the treatment intervention window $k$ specified 
+individuals and $\hat{\pi}_{it} = 0.99$ for always treated individuals for all time points. Depending on the length of the treatment intervention window $k$ specified 
 in the MSM, this imputation strategy can lead to extreme weights which 
 we further trimmed by capping them within the range of $[10^{-6}, 1-10^{-6}]$ 
 to avoid unstable weights. 
 
 Figures~\ref{fig:simulation_bias_combined_a_p2}--\ref{fig:simulation_coverage_combined_a_p2} show the results of the simulation study for the 
-two covariate-case. The additional results for the four covariate-case are 
+two-covariate case. The additional results for the four covariate-case are 
 reported in Appendix~\ref{sec:additional_simulation_results}. Bias, standard error, and coverage of the 
 90\% confidence intervals are reported based on 500 simulation runs. 
 Figure~\ref{fig:simulation_bias_combined_a_p2} reports the bias, 
@@ -95,7 +95,7 @@ Within each figure, the first two rows correspond to the weak unmeasured confoun
 $U_i \in [-1,1]$ ($a=1$), and the last two rows correspond to the strong unmeasured confounding 
 setting where $U_i \in [-2,2]$ ($a=2$). The first and third rows correspond to 
 $\tau_F = 1$, while the second and fourth rows correspond to $\tau_C = 0.3$. 
-The columns correspond to the $n$ to $T$ ratio, with panels (A), (D), (G), and (J) showing 
+The columns correspond to the $N$ to $T$ ratio, with panels (A), (D), (G), and (J) showing 
 $\rho = 5$ (the largest number of time points), panels (B), (E), (H), and (K) showing 
 $\rho = 10$, and panels (C), (F), (I), and (L) showing $\rho = 50$ 
 (the smallest number of time points). Solid lines in grey show the results using the 
@@ -103,14 +103,14 @@ true propensity scores (\texttt{IPTW-True}). Solid orange lines
 show the results for FE-MSM (\texttt{FE-MSM}) and dash-dotted 
 purple lines show the results for SeqGPLVM (\texttt{SeqGPLVM-MSM}). 
 Dashed blue lines 
-represent the results for the naive IPTW estimaton of the specified MSM assuming 
+represent the results for the naive IPTW estimation of the specified MSM assuming 
 sequential ignorability without adjusting for the unmeasured confounder (\texttt{IPTW}). 
 In this case we used the same logistic regression as 
 in Eq.~\eqref{eq:ps_model} to estimate the propensity scores by replacing 
 the individual 
 fixed effects $\alpha_i$ with a global intercept.
 
-The results show that both methods improves the bias of the estimates of the 
+The results show that both methods improve the bias of the estimates of the 
 parameters of interest in comparison to the naive IPTW, especially as the ratio of 
 $\frac{n}{T}$ decreases. However, FE-MSM tends to have slightly lower bias and 
 standard error compared to the SeqGPLVM-MSM, particularly for smaller sample sizes. 
@@ -132,7 +132,7 @@ especially in panel (L), corresponding to the $\tau_C = 0.3$ scenario. Thus,
 in the worst-case regime, the increase in uncertainty is not sufficient to 
 compensate for the additional bias.
 
-As the number of time points increases, the gap between the bias of two methods decreases, and 
+As the number of time points increases, the gap between the biases of the two methods decreases, and 
 they perform more similarly although the FE-MSM bias remains lower while the standard 
 error of SeqGPLVM-MSM remains higher than the FE-MSM estimates across all scenarios. 
 Under the weak unmeasured confounding setting where the unmeasured confounder explains 
@@ -150,36 +150,31 @@ shortest treatment sequence. Even when $a = 1$, \texttt{FE-MSM}
 still exhibits noticeably larger bias and lower coverage than \texttt{IPTW-True}, 
 and this gap becomes more pronounced under stronger unmeasured confounding. 
 
-In the stronger unmeasured confoundedness case where the unmeasured confounder explains 
+In the stronger unmeasured confounding case where the unmeasured confounder explains 
 2/3 of the variance in the treatment (Figures~\ref{fig:simulation_bias_combined_a_p2}--\ref{fig:simulation_coverage_combined_a_p2}, panels (G)--(L)), both methods perform more poorly 
 than the weaker case in terms of the bias while FE-MSM performs slightly better across all different $\rho$ values and 
 sample sizes. In this scenario there is a small Monte Carlo bias observed even for the 
-\texttt{IPTW-True}, due to extreme weights and the truncation strategy.
-\FloatBarrier
-\begin{figure}[t]
+\texttt{IPTW-True}, due to extreme weights and the trimming strategy.
+
+\begin{figure}[!tbp]
     \centering
-    \includegraphics[width=0.98\textwidth]{figures/build/simulation_bias_combined_a_p2.pdf}
-    \caption{Simulation bias for the two-covariate case. The panels report bias for $a=1$ and $a=2$, for $\tau_F=1$ and $\tau_C=0.3$, across sample sizes $N$ and ratios $\rho = n/T$.}
+    \includegraphics[width=\textwidth]{figures/build/simulation_bias_combined_a_p2.pdf}
+    \caption{Simulation bias for the two-covariate case. The panels report bias for $c_U=1$ and $c_U=2$, for $\tau_F=1$ and $\tau_C=0.3$, across sample sizes $N$ and ratios $\rho = N/T$.}
     \label{fig:simulation_bias_combined_a_p2}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}[!tbp]
     \centering
-    \includegraphics[width=0.98\textwidth]{figures/build/simulation_standard_error_combined_a_p2.pdf}
-    \caption{Simulation standard error for the two-covariate case. The panels report standard error for $a=1$ and $a=2$, for $\tau_F=1$ and $\tau_C=0.3$, across sample sizes $N$ and ratios $\rho = n/T$.}
+    \includegraphics[width=\textwidth]{figures/build/simulation_standard_error_combined_a_p2.pdf}
+    \caption{Simulation standard error for the two-covariate case. The panels report standard error for $c_U=1$ and $c_U=2$, for $\tau_F=1$ and $\tau_C=0.3$, across sample sizes $N$ and ratios $\rho = N/T$.}
     \label{fig:simulation_standard_error_combined_a_p2}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}[!tbp]
     \centering
-    \includegraphics[width=0.98\textwidth]{figures/build/simulation_coverage_combined_a_p2.pdf}
-    \caption{Simulation coverage for the two-covariate case. The panels report coverage of the 90\% confidence intervals for $a=1$ and $a=2$, for $\tau_F=1$ and $\tau_C=0.3$, across sample sizes $N$ and ratios $\rho = n/T$.}
+    \includegraphics[width=\textwidth]{figures/build/simulation_coverage_combined_a_p2.pdf}
+    \caption{Simulation coverage for the two-covariate case. The panels report coverage of the 90\% confidence intervals for $c_U=1$ and $c_U=2$, for $\tau_F=1$ and $\tau_C=0.3$, across sample sizes $N$ and ratios $\rho = N/T$.}
     \label{fig:simulation_coverage_combined_a_p2}
 \end{figure}
-%\begin{figure}[t]
- %   \centering
-  %  \includegraphics[width=1\textwidth]{figures/build/simulation_results.pdf}
-   % \caption{Simulation results for FE-MSM and sequential GPLVM.}
-    %\label{fig:simulation_results}
-%\end{figure}
+
 

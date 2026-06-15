@@ -6,7 +6,7 @@ structural model (FE-MSM) proposed by \citeA{blackwellEffectPoliticalAdvertising
 and the sequential Gaussian process latent variable model (SeqGPLVM) 
 proposed by \citeA{hattSequentialDeconfoundingCausal2024} when it is used 
 in conjunction with IPTW estimation of MSM (SeqGPLVM-MSM). We first describe the common set of
-assumptions required by of these methods, and then go 
+assumptions required by both of these methods, and then go 
 into the details of the steps of each method.
 
 \section{Notation and problem setup}
@@ -79,7 +79,7 @@ distributions.
 \paragraph{Target causal estimand.} To avoid the usual incidental parameters 
 problem in the estimation of non-linear fixed effects models, FE-MSM 
 is limited to estimating only the average truncated potential outcome. 
-Although, the sequential deconfounding approach and SeqGPLVM can be used for 
+Although the sequential deconfounding approach and SeqGPLVM can be used for 
 identification and estimation of a wider range of causal targets 
 including $\mathbb{E}[Y_i(\bar{\mathbf{a}}_{T})]$, to maintain comparability with FE-MSM, 
 we also focus on the average truncated potential outcome, $\mathbb{E}[Y_i(\underline{\mathbf{a}}_{T-k})]$, 

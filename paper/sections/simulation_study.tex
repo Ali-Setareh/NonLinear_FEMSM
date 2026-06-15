@@ -1,14 +1,13 @@
 \chapter{Simulation study}
 \label{chap:simulation_study} 
-\section{Data generating process}
-To evaluate the finite sample performance of the two proposed method, 
+\section{Data-generating process}
+To evaluate the finite-sample performance of the two proposed methods, 
 we conduct a simulation study based on the DGP taken 
 from Section 5.1 of \citeA{blackwellEffectPoliticalAdvertising2024}. 
 In this 
 DGP, the scenario which we simulate is a study design 
 where individuals are exposed to a binary treatment
-(e.g., receiving a political advertisement) over a period 
-fixed period of time, and the outcome of interest
+(e.g., receiving a political advertisement) over a fixed period of time, and the outcome of interest
 is measured only once at the end of the study period 
 (e.g., voting behavior). The treatment assignment
 is influenced by both observed covariates and an 
@@ -62,20 +61,24 @@ $\boldsymbol{\beta} = (-0.5, -0.5, 1, -0.5)^{\top}$ when $d_X=4$.
 We set $\varphi = 0.3$. %Note that we generate 
 The covariates $\mathbf{X}_{it}$ are generated exogenously to 
 the treatments solely for the sake of simplicity where  $\Sigma_{jj} = 1$ and $\Sigma_{jj'} = 0.2$ for $j \neq j'$. By doing this, the ground truth 
-values for the causal targets of interests coincide wit the DGP parameters. 
+values for the causal targets of interest coincide with the DGP parameters. 
 %So we do not have the 
 %treatment-confounder feedback. This is done to isolate the effect of
 %adjusting for unmeasred time-invariant confounding and make the simulation simpler and it has important 
 %implications in interpreting the causal effects. see section \ref{estimation}. 
 Also note that there is no dynamics 
-in the covariates and the distribution of $\mathbf{X}_{it}$ is the same for all-time points. The parameters 
+in the covariates and the distribution of $\mathbf{X}_{it}$ is the same for all time points. The parameters 
 for the outcome model are set to $\tau_F = 1$, $\tau_C = 0.3$, and $\boldsymbol{\theta} = (1, 0.5)^{\top}$ 
 when $d_X=2$ and when $d_X=4$, $\boldsymbol{\theta} = (1, 0.5, 1, 1)^{\top}$. The causal DAG for 
 the DGP is shown in Figure~\ref{fig:dgp-dag}. 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{figures/build/dgp_dag.pdf}
-    \caption{Data generating process causal DAG.}
+    \caption{Directed acyclic graph of the data-generating 
+    process used in the simulation study. The time-invariant unmeasured 
+    confounder \(U_i\) affects all treatment assignments and the terminal 
+    outcome \(Y_i\). The outcome depends on \(U_i\), the final 
+    treatment \(A_{iT}\), the recent treatment sum \(\sum_{t=T-3}^{T-1} A_{it}\), and the time-averaged covariates \(\bar X_i\).}
     \label{fig:dgp-dag}
 \end{figure}
 
@@ -88,7 +91,7 @@ $$S_k(\underline{\mathbf{a}}_{T-k}) := \sum_{t=T-k}^{T-1} a_t
 \in \{0,1,2,\dots, k\}$$ 
 as the sum 
 of treatments received in the last $k$ time points before $T$, where $k+1$ 
-represents the intervention window.  In real world applications, 
+represents the intervention window.  In real-world applications, 
 the choice of $k$ is based on the research question and the domain 
 knowledge about the relevant time window for the treatment effects. 
 In this simulation, we set $k=3$ to match the dependence structure of the 
@@ -99,7 +102,7 @@ What is the average effect of the treatment received at the
 final time on the 
 final outcome while holding fixed the sum of the earlier 
 treatments within the intervention window, marginalized over the natural 
-values of the treatments this treatment window? 
+values of the treatments in this treatment window? 
 Mathematically, 
 this is defined as
 $\mathbb{E}\left[ Y_i\left(a_T = 1, S_3 = s\right) 
@@ -162,8 +165,7 @@ The equality between these causal effects and the parameters of the
 outcome model in the DGP is a result of the linearity of the DGP and 
 the absence of treatment-confounder feedback. 
 %See \ref{sec:msm_ground_truth} for more discussion on this. 
-To only focus 
-on the adjustment for the unmeasured confounder, for both of the methods, 
+To focus only on the adjustment for the unmeasured confounder, for both of the methods, 
 we specify $f\left(\underline{\mathbf{a}}_{T-k}; \boldsymbol{\theta} \right)$ as the correctly 
 specified linear MSM:
 \begin{equation}

@@ -82,7 +82,7 @@ Equivalently,
 \end{equation}
 Maximizing \(\mathcal{L}(\boldsymbol{\psi},\boldsymbol{\gamma})\) w.r.t.\ \(q\) minimizes the 
 KL divergence to the true posterior and equality 
-holds iff \(q_{\boldsymbol{\psi}}(\mathbf{z}\mid \mathbf{x}) = 
+holds if and only if \(q_{\boldsymbol{\psi}}(\mathbf{z}\mid \mathbf{x}) = 
 p_{\boldsymbol{\gamma}}(\mathbf{z}\mid \mathbf{x},\mathbf{a})\). 
 This is true since the lhs of \eqref{eq:logp-decomp} does not depend on \(q\). 
 Thus, we can use \(\mathcal{L}(\boldsymbol{\psi},\boldsymbol{\gamma})\) as a surrogate objective for approximate inference. 
@@ -207,7 +207,7 @@ p(\mathbf{f}_t\mid \widetilde{\mathbf{x}}_{t})
 \right).
 \end{align*}
 This lower bound is true for all $t \in \{1, \ldots, T\}$. Hence, the lower bound on 
-the sum of log-likelihoods across all-time points is
+the sum of log-likelihoods across all time points is
 \begin{align*}
 \sum_{t=1}^T \log p_{\boldsymbol{\gamma}_t}(\mathbf{a}_t\mid \widetilde{\mathbf{x}}_{t})
 &\ge \sum_{t=1}^T \mathbb{E}_{q_{\boldsymbol{\psi}_t}(\mathbf{f}_t\mid \widetilde{\mathbf{x}}_{t})}
@@ -525,7 +525,7 @@ this bound offers two key advantages. The expected log-likelihood is
 computed with respect to the sparse marginal posterior 
 \(q_{\boldsymbol{\psi}_t,\boldsymbol{\gamma}_t}(\mathbf{f}_t \mid \widetilde{\mathbf{x}}_t)\), 
 induced by the lower-dimensional variational distribution 
-\(q_{\boldsymbol{\psi}_t}(\mathbf{u}_t)\), rather than the 
+\(q_{\boldsymbol{\psi}_t}(\mathbf{g}_t)\), rather than the 
 full variational distribution 
 \(q_{\boldsymbol{\psi}_t}(\mathbf{f}_t \mid \widetilde{\mathbf{x}}_t)\). 
 In addition, the KL term in Eq.~\eqref{eq:seqgplvm_inducing_bound} 
