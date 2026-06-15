@@ -9,7 +9,7 @@ For FE-MSM, the parameters are estimated by solving the following optimization p
 (\widehat{\tau}_F,\widehat{\tau}_C)
 =
 \arg\min_{\tau_F',\tau_C'}
-\sum_{i=1}^{N}
+\sum_{i=1}^{n}
 \widehat{W}_i
 \left\{
 Y_i-\alpha-\tau_F' A_{iT}
@@ -24,17 +24,17 @@ as a logistic regression of the
 treatment on the past treatment history and covariates, with a unit-specific fixed effect, 
 \begin{equation}
 \label{eq:ps_model}
-p(a_{it} = 1 \mid \mathbf{x}_{it}, a_{i,t-1}, \alpha_i) = \operatorname{expit}(w_1^\top \mathbf{x}_{it} + w_2 a_{i,t-1} + \alpha_i).
+p(a_{it} = 1 \mid x_{it}, a_{i,t-1}, z_i^{(s)}) = \operatorname{expit}(w_1^\top x_{it} + w_2 a_{i,t-1} + \alpha_i).
 \end{equation}
 
 
-For the sequential GPLVM, a $\text{CMM}(1)$ with a one-dimensional latent variable 
-(i.e., $\mathbf{Z}_i \in \mathbb{R}^J$ with $J = 1$) 
+For the sequential GPLVM, a $\text{CMM}(1)$ with a one dimensional latent variable 
+(i.e., $Z_i \in \mathbb{R}$ and $|\mathcal{Z}| = 1$) 
 is fitted to the treatment data, 
 using a linear kernel: 
 \[
-k_t^{\text{treat}} ((\mathbf{x}_t,a_{t-1},\mathbf{z}), (\mathbf{x}'_t,a'_{t-1},\mathbf{z}'))= \nu \left[\sum_{j=1}^{d_X}x_{jt} x'_{jt} 
-+ a_{t-1}a'_{t-1} + \sum_{j=1}^{J} z_{j} z'_{j} \right]
+k_t^{\text{treat}} ((x_t,a_{t-1},z), (x'_t,a'_{t-1},z'))= \nu \left[\sum_{j=1}^{|\mathcal{X_t}|}x_{jt} x'_{jt} 
++ aa' + \sum_{j=1}^{|\mathcal{Z}|} z_{j} z'_{j} \right]
 \]
 where $\nu$ is the variance hyperparameter. This is equivalent to 
 the Bayesian linear regression with a latent variable. The observed confounders 
@@ -53,10 +53,10 @@ model is used to estimate the propensity scores for the IPTW estimation
 of the MSM parameters:
 \begin{equation}
 \label{eq:ps_model_seqgplvm}
-p(a_{it} = 1 \mid \mathbf{x}_{it}, a_{i,t-1}, \mathbf{z}_i^{(s)}) = 
-\operatorname{expit}\!\left(w_3^\top \mathbf{x}_{it} + w_4 a_{i,t-1}+ w_5^\top \mathbf{z}_i^{(s)}+ w_6 \right),
+p(a_{it} = 1 \mid x_{it}, a_{i,t-1}, z_i^{(s)}) = 
+\operatorname{expit}\!\left(w_3^\top x_{it} + w_4 a_{i,t-1}+ w_5 z_i^{(s)}+ w_6 \right),
 \end{equation}
-where $\mathbf{z}_i^{(s)}$ is the $s$-th posterior draw of the latent variable for individual $i$.
+where $z_i^{(s)}$ is the $s$-th posterior draw of the latent variable for individual $i$.
 
 For both methods, the weighting is stabilized by multiplying the weights with 
 conditional probabilities of the current treatment given only the previous treatment using 
@@ -92,10 +92,10 @@ Figure~\ref{fig:simulation_bias_combined_a_p2} reports the bias,
 Figure~\ref{fig:simulation_standard_error_combined_a_p2} reports the standard error, and 
 Figure~\ref{fig:simulation_coverage_combined_a_p2} reports the coverage. 
 Within each figure, the first two rows correspond to the weak unmeasured confounding setting where 
-$U_i \in [-1,1]$ ($c_U=1$), and the last two rows correspond to the strong unmeasured confounding 
-setting where $U_i \in [-2,2]$ ($c_U=2$). The first and third rows correspond to 
+$U_i \in [-1,1]$ ($a=1$), and the last two rows correspond to the strong unmeasured confounding 
+setting where $U_i \in [-2,2]$ ($a=2$). The first and third rows correspond to 
 $\tau_F = 1$, while the second and fourth rows correspond to $\tau_C = 0.3$. 
-The columns correspond to the $N$ to $T$ ratio, with panels (A), (D), (G), and (J) showing 
+The columns correspond to the $n$ to $T$ ratio, with panels (A), (D), (G), and (J) showing 
 $\rho = 5$ (the largest number of time points), panels (B), (E), (H), and (K) showing 
 $\rho = 10$, and panels (C), (F), (I), and (L) showing $\rho = 50$ 
 (the smallest number of time points). Solid lines in grey show the results using the 
@@ -112,7 +112,7 @@ fixed effects $\alpha_i$ with a global intercept.
 
 The results show that both methods improves the bias of the estimates of the 
 parameters of interest in comparison to the naive IPTW, especially as the ratio of 
-$\frac{N}{T}$ decreases. However, FE-MSM tends to have slightly lower bias and 
+$\frac{n}{T}$ decreases. However, FE-MSM tends to have slightly lower bias and 
 standard error compared to the SeqGPLVM-MSM, particularly for smaller sample sizes. 
 This may be due to the fact that the FE-MSM method relies on a correctly specified 
 parametric model for the propensity scores, while the sequential GPLVM method is more 
@@ -146,7 +146,7 @@ although some undercoverage remains, again most visibly for $\rho = 50$ (panel (
 In this weaker confounding setting, \texttt{FE-MSM} is generally 
 closer to \texttt{IPTW-True} than \texttt{SeqGPLVM-MSM}, 
 but it does not match the true-propensity benchmark, especially for the 
-shortest treatment sequence. Even when $c_U = 1$, \texttt{FE-MSM} 
+shortest treatment sequence. Even when $a = 1$, \texttt{FE-MSM} 
 still exhibits noticeably larger bias and lower coverage than \texttt{IPTW-True}, 
 and this gap becomes more pronounced under stronger unmeasured confounding. 
 
@@ -159,21 +159,21 @@ sample sizes. In this scenario there is a small Monte Carlo bias observed even f
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.98\textwidth]{figures/build/simulation_bias_combined_a_p2.pdf}
-    \caption{Simulation bias for the two-covariate case. The panels report bias for $c_U=1$ and $c_U=2$, for $\tau_F=1$ and $\tau_C=0.3$, across sample sizes $N$ and ratios $\rho = N/T$.}
+    \caption{Simulation bias for the two-covariate case. The panels report bias for $a=1$ and $a=2$, for $\tau_F=1$ and $\tau_C=0.3$, across sample sizes $N$ and ratios $\rho = n/T$.}
     \label{fig:simulation_bias_combined_a_p2}
 \end{figure}
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.98\textwidth]{figures/build/simulation_standard_error_combined_a_p2.pdf}
-    \caption{Simulation standard error for the two-covariate case. The panels report standard error for $c_U=1$ and $c_U=2$, for $\tau_F=1$ and $\tau_C=0.3$, across sample sizes $N$ and ratios $\rho = N/T$.}
+    \caption{Simulation standard error for the two-covariate case. The panels report standard error for $a=1$ and $a=2$, for $\tau_F=1$ and $\tau_C=0.3$, across sample sizes $N$ and ratios $\rho = n/T$.}
     \label{fig:simulation_standard_error_combined_a_p2}
 \end{figure}
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.98\textwidth]{figures/build/simulation_coverage_combined_a_p2.pdf}
-    \caption{Simulation coverage for the two-covariate case. The panels report coverage of the 90\% confidence intervals for $c_U=1$ and $c_U=2$, for $\tau_F=1$ and $\tau_C=0.3$, across sample sizes $N$ and ratios $\rho = N/T$.}
+    \caption{Simulation coverage for the two-covariate case. The panels report coverage of the 90\% confidence intervals for $a=1$ and $a=2$, for $\tau_F=1$ and $\tau_C=0.3$, across sample sizes $N$ and ratios $\rho = n/T$.}
     \label{fig:simulation_coverage_combined_a_p2}
 \end{figure}
 %\begin{figure}[t]
