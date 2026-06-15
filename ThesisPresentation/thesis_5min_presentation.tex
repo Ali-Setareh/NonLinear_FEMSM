@@ -248,7 +248,7 @@ treatment decisions and the final outcome may both be influenced by stable unmea
   width=\linewidth,
   trim=4pt 4pt 4pt 4pt,
   clip
-]{seq_rct.png}
+]{seq_rct_2.png}
 \end{center}
 \end{column}
 
@@ -339,7 +339,7 @@ Y_i(\bar{a}_T) \perp A_{it}\mid \bar A_{i,t-1},\bar {X}_{it}.
 
 \vspace{0.16cm}
 
-\textbf{Inverse Probability of Treatment Weighting (IPTW) idea}
+\textbf{Inverse probability of treatment weighting (IPTW) idea}
 
 \vspace{0.12cm}
 
@@ -352,7 +352,7 @@ Y_i(\bar{a}_T) \perp A_{it}\mid \bar A_{i,t-1},\bar {X}_{it}.
 
   \item Upweight patients whose observed treatment path was unlikely.
 
-  \item Create a weighted pseudo-population where treatment is balanced with respect to measured history.
+  \item Create a weighted pseudo-population where treatment looks randomized.
 
 \end{itemize}
 
@@ -378,16 +378,38 @@ Y_i(\bar{a}_T) \perp A_{it}\mid \bar A_{i,t-1},\bar {X}_{it}.
 {\fontsize{7.0}{8.3}\selectfont
 \textcolor{PrimerTeal}{\textbf{Sequential ignorability:}}
 after conditioning on the observed history, treatment is as good as randomized,
+
 \[
-\setlength{\abovedisplayskip}{2pt}
-\setlength{\belowdisplayskip}{2pt}
 Y_i(\bar a_T)
 \perp
 A_{it}
 \mid
-\hist{A}_{i,t-1},\hist{X}_{it}.
+\hist{A}_{i,t-1},\hist{X}_{it}
+\quad
+\Longrightarrow
+\quad
+E[Y_i(\bar a_T)]
+=
+E\left[
+\frac{
+\mathbf{1}(\bar A_{iT}=\bar a_T)Y_i
+}{
+\prod_{t=1}^{T}
+\pi_{it}^{a_t}(1-\pi_{it})^{1-a_t}
+}
+\right]
 \]
 }
+%\[
+%\setlength{\abovedisplayskip}{2pt}
+%\setlength{\belowdisplayskip}{2pt}
+%Y_i(\bar a_T)
+%\perp
+%A_{it}
+%\mid
+%\hist{A}_{i,t-1},\hist{X}_{it}.
+%\]
+%}
 
 \end{frame}
 
@@ -420,7 +442,7 @@ A_{it}
 (1-\hat\pi_{it})^{-(1-A_{it})}
 \] 
 
-\pstrong{Step 3: Fit the weighted MSM}
+\pstrong{Step 3: Fit the weighted marginal structural model (MSM)}
 \[
 E[Y_i(\bar a_T)]=m(\bar a_T;\theta)
 \]
@@ -832,6 +854,62 @@ $\begin{aligned}[t]
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{comment}
+  
+\begin{frame}{Estimation equations: FE-MSM}
+\vspace{-0.25cm}
+{\fontsize{7.6}{9.0}\selectfont
+
+\textbf{Target}
+\[
+E\{Y_i(a_{T-k})\}=E\{Y_i(\overline A_{i,T-k-1},a_{T-k})\}.
+\]
+
+\textbf{Fixed-effect propensity model}
+\[
+\pi_{it}=P(A_{it}=1\mid \overline X_{it},\overline A_{i,t-1},\alpha_i).
+\]
+
+\[
+\ell_{it}(\beta,\alpha_i)
+=
+A_{it}\log \pi_{it}(\beta,\alpha_i)
++
+(1-A_{it})\log\{1-\pi_{it}(\beta,\alpha_i)\}.
+\]
+
+\[
+(\hat\beta,\hat\alpha)
+=
+\arg\max_{\beta,\alpha_1,\ldots,\alpha_N}
+\sum_{i=1}^N\sum_{t=1}^T
+\ell_{it}(\beta,\alpha_i).
+\]
+
+\textbf{IPTW weights for the truncated regime}
+\[
+\widehat W_i(\hat\beta,\hat\alpha_i)
+=
+\prod_{t=T-k}^{T}
+\left(\frac{1}{\pi_{it}(\hat\beta,\hat\alpha_i)}\right)^{A_{it}}
+\left(\frac{1}{1-\pi_{it}(\hat\beta,\hat\alpha_i)}\right)^{1-A_{it}} .
+\]
+
+\textbf{Weighted MSM estimating equation}
+\[
+\Psi_N(\theta)
+=
+\frac{1}{N}\sum_{i=1}^N
+\widehat W_i(\hat\beta,\hat\alpha_i)
+h(A_{i,T-k})
+\left[
+Y_i-m(A_{i,T-k};\theta)
+\right]
+=0.
+\]
+}
+\end{frame}
+\end{comment}
 % Speaker note: 65 seconds. This is the most important slide. Summarize results accurately from the thesis: both methods help versus naive IPTW, FE-MSM usually better, SeqGPLVM weak with short T/strong U, coverage mixed.
 \begin{frame}{Results: adjustment helps, but finite samples matter}
 \vspace{-0.25cm}
@@ -881,25 +959,45 @@ SeqGPLVM-MSM is most fragile for \(\rho=50\), especially under stronger unmeasur
 
 % Speaker note: 55 seconds. End with a balanced conclusion: the thesis is not just a benchmark, it clarifies assumptions and shows what is needed before practical use.
 \begin{frame}{Conclusion: what the comparison shows}
+\vspace{-0.15cm}
+
 \begin{columns}[T,onlytextwidth]
+
 \begin{column}{0.48\textwidth}
-{\fontsize{11}{14}\selectfont\teal{Main contributions}}\par
+{\fontsize{11}{14}\selectfont\teal{What the thesis clarifies}}\par
 \vspace{0.25cm}
-\spacedparagraph{Unified notation and assumptions for FE-MSM and SeqGPLVM-MSM.}
-\spacedparagraph{A detailed derivation of the SeqGPLVM loss function and a modular GPyTorch implementation.}
-\spacedparagraph{A simulation comparison under a common causal target and DGP.}
+
+{\fontsize{9.4}{12.0}\selectfont
+\spacedparagraph{FE-MSM and SeqGPLVM-MSM are not two completely separate pipelines: both can be understood as extensions of IPTW-MSM.}
+
+\spacedparagraph{For a fair comparison, both methods are evaluated for the same truncated treatment-regime effect ($E[Y_i(a_{T-k})]$).}
+
+\spacedparagraph{The key difference is how they represent the stable hidden factor: FE-MSM uses a unit fixed effect ($\alpha_i$), while SeqGPLVM learns a latent substitute ($Z_i$).}
+}
 \end{column}
+
 \begin{column}{0.48\textwidth}
-{\fontsize{11}{14}\selectfont\teal{Main takeaway}}\par
+{\fontsize{11}{14}\selectfont\teal{What the comparison shows}}\par
 \vspace{0.25cm}
-\spacedparagraph{Both methods replace the usual no-unmeasured-confounding assumption with structural assumptions about a time-invariant hidden factor.}
-\spacedparagraph{FE-MSM is simpler and more stable here, but depends on correct propensity specification and within-unit switching.}
-\spacedparagraph{SeqGPLVM is more flexible, but relies on strong latent-identifiability assumptions and enough treatment history.}
+
+{\fontsize{9.4}{12.0}\selectfont
+\spacedparagraph{Ignoring the time-invariant confounder ($U_i$) leaves standard IPTW biased in the simulation setting.}
+
+\spacedparagraph{Both adjusted methods reduce bias, especially as the number of individuals increases.}
+
+\spacedparagraph{FE-MSM is more stable in this DGP; SeqGPLVM-MSM is more flexible, but depends more strongly on latent identifiability and enough treatment history.}
+}
 \end{column}
+
 \end{columns}
-\vspace{0.25cm}
-{\fontsize{10.3}{14}\selectfont\RaggedRight\red{Bottom line:} promising tools in controlled settings, but not yet general-purpose deconfounding methods.\par}
+
+\vspace{0.28cm}
+
+{\fontsize{10.2}{13.5}\selectfont\RaggedRight
+\red{Bottom line:} these methods can help under stable hidden confounding, but they do not remove the need for credible structural assumptions and careful diagnostics.\par}
+
 \end{frame}
+
 
 \begin{frame}{Future research: interpreting the latent structure}
 
@@ -1055,6 +1153,85 @@ P(A_{it}=1\mid \bar X_{it},\bar A_{i,t-1},z_i^{(s)}).
 
 \end{frame}
 
+\begin{frame}{Appendix: Simulation-specific SeqGPLVM-MSM}
+\vspace{-0.2cm}
+{\fontsize{7.2}{8.6}\selectfont
+
+\textbf{SeqGPLVM treatment model}
+
+\[
+Z_i\in\mathbb{R},
+\qquad
+Z_i\sim \mathrm{CMM}(1).
+\]
+
+\[
+p_\gamma(\overline a_{iT}\mid \overline x_{iT},z_i)
+=
+\prod_{t=1}^{T}
+p_{\gamma_t}
+\left(
+a_{it}\mid x_{it},a_{i,t-1},z_i
+\right).
+\]
+
+\textbf{Linear kernel used in the simulation}
+
+\[
+k^{\text{treat}}_t
+\left(
+(x_t,a_{t-1},z),(x'_t,a'_{t-1},z')
+\right)
+=
+\nu
+\left[
+\sum_{j=1}^{|X_t|}x_{jt}x'_{jt}
++
+a_{t-1}a'_{t-1}
++
+zz'
+\right].
+\]
+
+\[
+\nu\sim \Gamma(2,1).
+\]
+
+\vspace{0.15cm}
+
+\textbf{Propensity model after drawing latent variables}
+
+\[
+z_i^{(s)}\sim q_\psi(Z_i),
+\qquad s=1,\ldots,S,
+\qquad S=100.
+\]
+
+\[
+P(A_{it}=1\mid X_{it},A_{i,t-1},z_i^{(s)})
+=
+\operatorname{expit}
+\left(
+w_3^\top X_{it}
++
+w_4 A_{i,t-1}
++
+w_5 z_i^{(s)}
++
+w_6
+\right).
+\]
+
+\[
+\hat\theta
+=
+\frac{1}{S}
+\sum_{s=1}^{S}\hat\theta^{(s)}.
+\]
+
+}
+\end{frame}
+
 % ---------------------------------------------------------
 % APPENDIX SLIDE 2: FE-MSM ESTIMATION
 % ---------------------------------------------------------
@@ -1162,6 +1339,71 @@ Y_i-m(A_{i,T-k};\theta)
 
 \end{frame}
 
+\begin{frame}{Appendix: Simulation-specific estimation models}
+\vspace{-0.2cm}
+{\fontsize{7.4}{8.8}\selectfont
+
+\textbf{Common weighted MSM}
+
+\[
+m(a_{T-k};\theta)
+=
+\alpha'
++
+\tau'_F a_T
++
+\tau'_C
+\sum_{t=T-3}^{T-1} a_t ,
+\qquad
+\theta=(\alpha',\tau'_F,\tau'_C).
+\]
+
+\[
+(\hat\tau_F,\hat\tau_C)
+=
+\arg\min_{\tau'_F,\tau'_C}
+\sum_{i=1}^N
+\widehat W_i
+\left[
+Y_i-\alpha'
+-\tau'_F A_{iT}
+-\tau'_C\sum_{t=T-3}^{T-1}A_{it}
+\right]^2 .
+\]
+
+\vspace{0.15cm}
+
+\textbf{FE-MSM propensity model}
+
+\[
+P(A_{it}=1\mid X_{it},A_{i,t-1},\alpha_i)
+=
+\operatorname{expit}
+\left(
+w_1^\top X_{it}
++
+w_2 A_{i,t-1}
++
+\alpha_i
+\right).
+\]
+
+\vspace{0.15cm}
+
+\textbf{Stabilized-weight numerator model}
+
+\[
+P(A_{it}=1\mid A_{i,t-1})
+=
+\operatorname{expit}
+\left(
+w_7 A_{i,t-1}+w_8
+\right).
+\]
+
+}
+\end{frame}
+
 % ---------------------------------------------------------
 % APPENDIX SLIDE: COVERAGE RESULTS
 % ---------------------------------------------------------
@@ -1230,5 +1472,72 @@ Coverage confirms the bias result: adjustment helps, but finite-sample uncertain
 \vfill
 \smallref{Shown: four-covariate case, \(a=2\), \(N\in\{200,500,1000\}\), \(\rho=N/T\in\{5,10,50\}\). Larger \(\rho\) means a shorter treatment sequence.}
 
+\end{frame}
+
+\begin{frame}{Appendix: how SeqGPLVM estimates the latent variable}
+\vspace{-0.25cm}
+{\fontsize{6.9}{8.2}\selectfont
+
+\textbf{Goal: infer a time-invariant substitute confounder}
+\[
+Z_i\in\mathbb{R},
+\qquad
+q_\psi(Z)
+=
+\prod_{i=1}^{N}\mathcal N(z_i\mid \mu_i,\sigma_i^2).
+\]
+
+\textbf{Treatment sequence model}
+\[
+p_\gamma(\bar a_{iT}\mid \bar x_{iT},z_i)
+=
+\prod_{t=1}^{T}
+p_{\gamma_t}(a_{it}\mid x_{it},a_{i,t-1},z_i).
+\]
+
+\textbf{GP treatment likelihood}
+\[
+f_t(x_{it},a_{i,t-1},z_i)\sim GP(0,k_t),
+\qquad
+P(A_{it}=1\mid f_{it})
+=
+\sigma(f_{it}).
+\]
+
+\[
+\log p_{\gamma_t}(A_{it}\mid f_{it})
+=
+A_{it}\log \sigma(f_{it})
++
+(1-A_{it})\log\{1-\sigma(f_{it})\}.
+\]
+
+\textbf{Training objective}
+\[
+\mathcal L(\psi,\gamma)
+=
+\sum_{t=1}^{T}
+\mathbb E_{q_\psi(Z)}
+\left[
+\sum_{i=1}^{N}
+\log p_{\gamma_t}(A_{it}\mid x_{it},a_{i,t-1},z_i)
+\right]
+-
+\mathrm{KL}
+\left[
+q_\psi(Z)\,\Vert\,p_\gamma(Z)
+\right].
+\]
+
+\[
+(\hat\psi,\hat\gamma)
+=
+\arg\max_{\psi,\gamma}
+\mathcal L(\psi,\gamma),
+\qquad
+z_i^{(s)}\sim q_{\hat\psi}(Z_i).
+\]
+
+}
 \end{frame}
 \end{document}
