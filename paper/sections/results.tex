@@ -84,28 +84,31 @@ in the MSM, this imputation strategy can lead to extreme weights which
 we further trimmed by capping them within the range of $[10^{-6}, 1-10^{-6}]$ 
 to avoid unstable weights. 
 
-Figures~\ref{fig:simulation_results_a1} and~\ref{fig:simulation_results_a2} show the results of the simulation study for the 
+Figures~\ref{fig:simulation_bias_combined_a_p2}--\ref{fig:simulation_coverage_combined_a_p2} show the results of the simulation study for the 
 two covariate-case. The additional results for the four covariate-case are 
-reported in Appendix~\ref{sec:additional_simulation_results}. Bias, standard deviation, and coverage of the 
-90\% confidence intervals are reported based on 500 simulation runs. Figure~\ref{fig:simulation_results_a1} corresponds to the weak unmeasured confounding setting where 
-$U_i \in [-1,1]$, and Figure~\ref{fig:simulation_results_a2} corresponds to the strong unmeasured confounding 
-setting where $U_i \in [-2,2]$. Within each figure, the left column 
-(panels (A), (C), and (E)) corresponds to $\tau_F = 1$, and the right column 
-(panels (B), (D), and (F)) corresponds to $\tau_C = 0.3$. Solid lines in grey show the results using the 
+reported in Appendix~\ref{sec:additional_simulation_results}. Bias, standard error, and coverage of the 
+90\% confidence intervals are reported based on 500 simulation runs. 
+Figure~\ref{fig:simulation_bias_combined_a_p2} reports the bias, 
+Figure~\ref{fig:simulation_standard_error_combined_a_p2} reports the standard error, and 
+Figure~\ref{fig:simulation_coverage_combined_a_p2} reports the coverage. 
+Within each figure, the first two rows correspond to the weak unmeasured confounding setting where 
+$U_i \in [-1,1]$ ($a=1$), and the last two rows correspond to the strong unmeasured confounding 
+setting where $U_i \in [-2,2]$ ($a=2$). The first and third rows correspond to 
+$\tau_F = 1$, while the second and fourth rows correspond to $\tau_C = 0.3$. 
+The columns correspond to the $n$ to $T$ ratio, with panels (A), (D), (G), and (J) showing 
+$\rho = 5$ (the largest number of time points), panels (B), (E), (H), and (K) showing 
+$\rho = 10$, and panels (C), (F), (I), and (L) showing $\rho = 50$ 
+(the smallest number of time points). Solid lines in grey show the results using the 
 true propensity scores (\texttt{IPTW-True}). Solid orange lines 
-show the results for FE-MSM (\texttt{IPTW-FE-impute}) and dashed 
-purple lines show the results for SeqGPLVM (\texttt{IPTW-SeqGPLVM-impute}). 
+show the results for FE-MSM (\texttt{FE-MSM}) and dash-dotted 
+purple lines show the results for SeqGPLVM (\texttt{SeqGPLVM-MSM}). 
 Dashed blue lines 
 represent the results for the naive IPTW estimaton of the specified MSM assuming 
 sequential ignorability without adjusting for the unmeasured confounder (\texttt{IPTW}). 
 In this case we used the same logistic regression as 
 in Eq.~\eqref{eq:ps_model} to estimate the propensity scores by replacing 
 the individual 
-fixed effects $\alpha_i$ with a global intercept. Shapes 
-correspond to the $n$ to $T$ ratio. Squares represent $\rho = 5$ 
-(the largest number of time points), 
-circles represent $\rho = 10$, and triangles represent $\rho = 50$ 
-(the smallest number of time points). 
+fixed effects $\alpha_i$ with a global intercept.
 
 The results show that both methods improves the bias of the estimates of the 
 parameters of interest in comparison to the naive IPTW, especially as the ratio of 
@@ -117,15 +120,15 @@ flexible but may require larger sample sizes to achieve similar performance. We 
 the worst case for both methods is for $\rho = 50$, but specially this is visible for 
 the sequential GPLVM in the smallest sample size $N = 200$, where it introduces 
 more bias than the naive IPTW for the strong unmeasured confounding case 
-(Figure~\ref{fig:simulation_results_a2}, panels (A)--(B)) 
+(Figure~\ref{fig:simulation_bias_combined_a_p2}, panels (I) and (L)) 
 and performs nearly as poorly as the naive IPTW for the weak unmeasured confounding 
-case (Figure~\ref{fig:simulation_results_a1}, panels (A)--(B)). However, 
+case (Figure~\ref{fig:simulation_bias_combined_a_p2}, panels (C) and (F)). However, 
 the larger estimated standard errors in this setting do not generally keep the coverage 
 close to the nominal level. In particular, for the shortest treatment sequence 
 ($\rho = 50$) under the stronger unmeasured confounding setting 
-(Figure~\ref{fig:simulation_results_a2}), the coverage of 
-\texttt{IPTW-SeqGPLVM-impute} falls well below $0.90$, 
-especially in panel (F), corresponding to the $\tau_C = 0.3$ scenario. Thus, 
+(Figure~\ref{fig:simulation_coverage_combined_a_p2}, panels (I) and (L)), the coverage of 
+\texttt{SeqGPLVM-MSM} falls well below $0.90$, 
+especially in panel (L), corresponding to the $\tau_C = 0.3$ scenario. Thus, 
 in the worst-case regime, the increase in uncertainty is not sufficient to 
 compensate for the additional bias.
 
@@ -133,38 +136,46 @@ As the number of time points increases, the gap between the bias of two methods 
 they perform more similarly although the FE-MSM bias remains lower while the standard 
 error of SeqGPLVM-MSM remains higher than the FE-MSM estimates across all scenarios. 
 Under the weak unmeasured confounding setting where the unmeasured confounder explains 
-roughly 1/3 of the variance of the treatment assignments (Figure~\ref{fig:simulation_results_a1}), coverage is mixed 
-rather than uniformly close to the nominal level. For $\tau_C = 0.3$, \texttt{IPTW-FE-impute} 
-attains coverage values below $0.90$ throughout, and \texttt{IPTW-SeqGPLVM-impute} 
+roughly 1/3 of the variance of the treatment assignments (Figure~\ref{fig:simulation_coverage_combined_a_p2}, panels (A)--(F)), coverage is mixed 
+rather than uniformly close to the nominal level. For $\tau_C = 0.3$, \texttt{FE-MSM} 
+attains coverage values below $0.90$ throughout, and \texttt{SeqGPLVM-MSM} 
 shows substantial undercoverage for the shortest treatment sequence, 
 with the deterioration being most pronounced for $N = 500$ and $N = 1000$ (panel (F)). 
 For $\tau_F = 1.0$, both methods are generally closer to the nominal level, 
-although some undercoverage remains, again most visibly for $\rho = 50$ (panel (E)). 
-In this weaker confounding setting, \texttt{IPTW-FE-impute} is generally 
-closer to \texttt{IPTW-True} than \texttt{IPTW-SeqGPLVM-impute}, 
+although some undercoverage remains, again most visibly for $\rho = 50$ (panel (C)). 
+In this weaker confounding setting, \texttt{FE-MSM} is generally 
+closer to \texttt{IPTW-True} than \texttt{SeqGPLVM-MSM}, 
 but it does not match the true-propensity benchmark, especially for the 
-shortest treatment sequence. Even when $a = 1$, \texttt{IPTW-FE-impute} 
+shortest treatment sequence. Even when $a = 1$, \texttt{FE-MSM} 
 still exhibits noticeably larger bias and lower coverage than \texttt{IPTW-True}, 
 and this gap becomes more pronounced under stronger unmeasured confounding. 
 
 In the stronger unmeasured confoundedness case where the unmeasured confounder explains 
-2/3 of the variance in the treatment (Figure~\ref{fig:simulation_results_a2}), both methods perform more poorly 
+2/3 of the variance in the treatment (Figures~\ref{fig:simulation_bias_combined_a_p2}--\ref{fig:simulation_coverage_combined_a_p2}, panels (G)--(L)), both methods perform more poorly 
 than the weaker case in terms of the bias while FE-MSM performs slightly better across all different $\rho$ values and 
 sample sizes. In this scenario there is a small Monte Carlo bias observed even for the 
 \texttt{IPTW-True}. This is the due to the extreme weights and the truncation strategy we  
 used.
+\FloatBarrier
 \begin{figure}[t]
     \centering
-    \includegraphics[width=0.95\textwidth]{figures/build/simulation_results_a1.pdf}
-    \caption{Simulation results for the case $a=1$. The panels report bias, standard error, and coverage for $\tau_F=1$ and $\tau_C=0.3$ across sample sizes $N$ and ratios $\rho = n/T$.}
-    \label{fig:simulation_results_a1}
+    \includegraphics[width=0.98\textwidth]{figures/build/simulation_bias_combined_a_p2.pdf}
+    \caption{Simulation bias for the two-covariate case. The panels report bias for $a=1$ and $a=2$, for $\tau_F=1$ and $\tau_C=0.3$, across sample sizes $N$ and ratios $\rho = n/T$.}
+    \label{fig:simulation_bias_combined_a_p2}
 \end{figure}
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=0.95\textwidth]{figures/build/simulation_results_a2.pdf}
-    \caption{Simulation results for the case $a=2$. The panels report bias, standard error, and coverage for $\tau_F=1$ and $\tau_C=0.3$ across sample sizes $N$ and ratios $\rho = n/T$.}
-    \label{fig:simulation_results_a2}
+    \includegraphics[width=0.98\textwidth]{figures/build/simulation_standard_error_combined_a_p2.pdf}
+    \caption{Simulation standard error for the two-covariate case. The panels report standard error for $a=1$ and $a=2$, for $\tau_F=1$ and $\tau_C=0.3$, across sample sizes $N$ and ratios $\rho = n/T$.}
+    \label{fig:simulation_standard_error_combined_a_p2}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.98\textwidth]{figures/build/simulation_coverage_combined_a_p2.pdf}
+    \caption{Simulation coverage for the two-covariate case. The panels report coverage of the 90\% confidence intervals for $a=1$ and $a=2$, for $\tau_F=1$ and $\tau_C=0.3$, across sample sizes $N$ and ratios $\rho = n/T$.}
+    \label{fig:simulation_coverage_combined_a_p2}
 \end{figure}
 %\begin{figure}[t]
  %   \centering
