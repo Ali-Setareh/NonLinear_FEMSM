@@ -51,21 +51,21 @@ We use \(\mathbf{U}_i \in \mathbb{R}^C\) to denote the true structural unmeasure
 individual \(i\), assumed to be time-invariant with dimension \(C\). In the latent-variable formulation,
 we write \(\mathbf{Z} := \{\mathbf{Z}_i\}_{i=1}^N\) for the collection of
 time-invariant latent variables, where \(\mathbf{Z}_i \in \mathbb{R}^J\) and \(J\)
-is the latent dimension. The truncated treatment and covariate histories over the last \(k\) periods are
+is the latent dimension. The truncated treatment and covariate histories over the intervention window from \(T-k\) through \(T\) are
 defined as
 \[
-\underline{\mathbf{A}}_{i,T-k} := (A_{i,T-k+1},\dots,A_{iT}),
+\underline{\mathbf{A}}_{i,T-k} := (A_{i,T-k},\dots,A_{iT}),
 \qquad
-\underline{\mathbf{X}}_{i,T-k} := (\mathbf{X}_{i,T-k+1},\dots,\mathbf{X}_{iT}).
+\underline{\mathbf{X}}_{i,T-k} := (\mathbf{X}_{i,T-k},\dots,\mathbf{X}_{iT}).
 \]
-For \(\underline{\mathbf{a}}_{T-k} = (a_{T-k+1},\dots,a_T)\), the corresponding truncated
+For \(\underline{\mathbf{a}}_{T-k} = (a_{T-k},\dots,a_T)\), the corresponding truncated
 potential outcome is defined by
 \[
 Y_i(\underline{\mathbf{a}}_{T-k})
 \equiv
 Y_i(\bar{\mathbf{A}}_{i,T-k-1},\,\underline{\mathbf{a}}_{T-k}),
 \]
-that is, the last \(k\) treatment values are intervened on while the earlier
+that is, the treatment values in the final \(k+1\)-point intervention window are intervened on while the earlier
 treatment history is left as observed. 
 
 Finally, in the context of SeqGPLVM, \(\boldsymbol{\gamma}\) denotes generative 

@@ -19,7 +19,7 @@ assumptions, respectively.
 
 \begin{idassumpC}[Consistency]\label{ass:C-consistency}
 The observed outcome for each individual under their observed treatment history equals
-the potential outcome under that treatment history. Formally, if $\bar{A}_{iT}=\bar{\mathbf{a}}_{iT}$, 
+the potential outcome under that treatment history. Formally, if $\bar{\mathbf{A}}_{iT}=\bar{\mathbf{a}}_{iT}$, 
 then $Y_{i}=Y_{i}(\bar{\mathbf{a}}_{iT})$. 
 Moreover, $Y_{i} = Y_{i}(\underline{\mathbf{a}}_{i,T-k})$ if 
 $\bar{\mathbf{A}}_{iT}=\left(\bar{\mathbf{A}}_{i,T-k-1},\underline{\mathbf{a}}_{i,T-k}\right)$.
@@ -69,14 +69,14 @@ used for identification directly since $\mathbf{U}_i$ is unmeasured.
 \end{idassumpC}
 
 \begin{idassumpC}[Positivity]\label{ass:C-positivity}
-For all treatment times $t = T - k + 1, \ldots, T$, 
-and all histories $(\bar{\mathbf{X}}_t, \bar{\mathbf{A}}_{t-1}, \boldsymbol{\eta}_i)$ 
+For all treatment times $t = T-k, \ldots, T$, 
+and all histories $(\bar{\mathbf{X}}_{it}, \bar{\mathbf{A}}_{i,t-1}, \boldsymbol{\xi}_i)$ 
 with positive probability, every treatment level has positive probability:
 \[
-\mathbb{P}(A_t = a_t \mid \bar{\mathbf{X}}_t = \bar{\mathbf{x}}_t,\ \bar{\mathbf{A}}_{t-1} = 
-\bar{\mathbf{a}}_{t-1}, \boldsymbol{\eta}_i) > 0 \quad \text{for all } a_t \in \mathcal{A}_t
+\mathbb{P}(A_{it} = a_t \mid \bar{\mathbf{X}}_{it} = \bar{\mathbf{x}}_t,\ \bar{\mathbf{A}}_{i,t-1} = 
+\bar{\mathbf{a}}_{t-1}, \boldsymbol{\xi}_i) > 0 \quad \text{for all } a_t \in \mathcal{A}_t
 \]
-Where $\boldsymbol{\eta}_i$ represents the unit-specific fixed effect in FE-MSM 
+Where $\boldsymbol{\xi}_i$ represents the unit-specific fixed effect in FE-MSM 
 or the latent variable in the SeqGPLVM model. This assumption  particularly
 is necessary for the identification of $\mathbb{E}[Y_i(\underline{\mathbf{a}}_{T-k})]$.
 \end{idassumpC}

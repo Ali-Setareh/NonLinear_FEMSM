@@ -101,7 +101,7 @@ imposes the $\text{CMM}$ of order $p$.
     that sequential ignorability holds conditional on the observed covariate history, treatment history, and latent variables \(\mathbf{Z}_i\). Hence, for all \(t \in \{1,\ldots,T\}\) and all \(\bar{\mathbf{a}}_{it}\),
 \begin{equation}
     \label{eq:seqgplvm-single-unit-seqignorability}
-    Y_i(\bar{\mathbf{a}}_T) \perp A_t \mid \bar{\mathbf{X}}_{it}, \bar{\mathbf{A}}_{i,t-1}, \mathbf{Z}_i .
+    Y_i(\bar{\mathbf{a}}_T) \perp A_{it} \mid \bar{\mathbf{X}}_{it}, \bar{\mathbf{A}}_{i,t-1}, \mathbf{Z}_i .
 \end{equation}
 
  \end{theorem}
@@ -172,9 +172,9 @@ p(\bar{\mathbf{a}}_{iT}, \bar{\mathbf{f}}_T  \mid \bar{\mathbf{x}}_{iT}, \mathbf
 
 Since the exact posterior distribution is intractable, we adopt the 
 variational inference with inducing point for inference \cite{titsiasBayesianGaussianProcess2010}. 
-The dimensionality of the inducing points is \(|\mathcal{Z}| + \sum_{s=1}^{\leq t} |\mathcal{X}_s| + \sum_{s=t-p}^{t-1}|\mathcal{A}_{s}|\). 
+The dimensionality of the inducing points is \(J + \sum_{s=1}^{t} |\mathcal{X}_s| + \sum_{s=t-p}^{t-1}|\mathcal{A}_{s}|\). 
 The likelihood term \(p(a_{it} \mid f_t)\) depends on the type of treatment variable. 
-For instance if \(\mathcal{A_t}\in \{0,1\}\), we can use a Bernoulli likelihood, 
+For instance if \(\mathcal{A}_t = \{0,1\}\), we can use a Bernoulli likelihood, 
 or for a continuous treatment, we can use a Gaussian likelihood. The details of the 
 variational inference procedure and the optimization of the evidence lower bound (ELBO) are provided 
 in Appendix~\ref{sec:seqgplvm_loss}. In Fig \ref{fig:seqgplvm_architecture} a 
@@ -188,7 +188,7 @@ closely parallels the FE-MSM procedure described in Section~\ref{sec:fe-msm}. In
 particular, Theorem~1 implies identification of the mean truncated potential outcome
 over the last $k$ time periods through the same IPTW representation as in
 Eq.~\eqref{eq:truncated_potential_outcome_id}, with the unobserved fixed effect
-$\alpha_i$ replaced by the latent variable $\boldsymbol{Z}_i$:
+$\alpha_i$ replaced by the latent variable $\mathbf{Z}_i$:
 \begin{equation}
     \label{eq:truncated_potential_outcome_id_seqgplvm}
     \mathbb{E}\bigl[Y_i(\underline{\mathbf{a}}_{T-k})\bigr]
@@ -202,23 +202,23 @@ where
 \[
 \pi_{it}
 =
-\mathbb{P}(A_{it}=1 \mid \bar{\mathbf{X}}_{it}, \bar{\mathbf{A}}_{i,t-1}, \boldsymbol{Z}_i).
+\mathbb{P}(A_{it}=1 \mid \bar{\mathbf{X}}_{it}, \bar{\mathbf{A}}_{i,t-1}, \mathbf{Z}_i).
 \]
 Hence, as in FE-MSM, estimation proceeds in two steps: first, a parametric model is used
 to estimate the propensity scores, and second, these estimated propensities are used to
 construct inverse-probability weights for fitting the marginal structural model. The key
 difference is that instead of directly estimating a unit-specific fixed effect $\alpha_i$ 
 in the treatment model, a sample is drawn from the approximate posterior distribution 
-of the substitute confounder $q(\boldsymbol{Z}_i)$ and 
+of the substitute confounder $q(\mathbf{Z}_i)$ and 
 condition the treatment model on these samples together with the observed history 
 to estimate the propensity scores.
 
 To account for uncertainty in the inferred substitute confounder, we adopt a
 multiple-imputation-style procedure. Specifically, for each posterior draw 
-$\mathbf{z}_i^{(s)} \sim q(\boldsymbol{Z}_i)$, $s=1,\dots,S$, the propensity scores are 
+$\mathbf{z}_i^{(s)} \sim q(\mathbf{Z}_i)$, $s=1,\dots,S$, the propensity scores are 
 re-estimated and the corresponding IPTW weights are computed as,
 \[
-\widehat{W}_i(\hat\beta, \mathbf{z}_i^{(s)})
+\widehat{W}_i(\hat{\boldsymbol{\beta}}, \mathbf{z}_i^{(s)})
 =
 \prod_{t=T-k}^{T}
 \left(\frac{1}{\pi_{it}(\hat{\boldsymbol{\beta}},\mathbf{z}_i^{(s)})}\right)^{A_{it}}
@@ -229,7 +229,7 @@ and fit the same marginal structural model as in the FE-MSM approach. Let
 \Psi_N(\boldsymbol{\theta}_s)
 :=
 \frac{1}{N} \sum_{i=1}^{N}
-\widehat{W}_i(\hat\beta, \mathbf{z}_i^{(s)})\,
+\widehat{W}_i(\hat{\boldsymbol{\beta}}, \mathbf{z}_i^{(s)})\,
 \mathbf{h}\!\left(\underline{\mathbf{A}}_{i,T-k}\right)\,
 \left[
 Y_i - m\!\left(\underline{\mathbf{A}}_{i,T-k}; \boldsymbol{\theta}_s \right)
@@ -250,7 +250,7 @@ The final point estimate is then obtained by averaging across the $S$ posterior 
 \]
 
 This procedure introduces two sources of uncertainty: first, uncertainty about the
-latent substitute confounder induced by the approximate posterior $q(\boldsymbol{Z}_i)$, and second,
+latent substitute confounder induced by the approximate posterior $q(\mathbf{Z}_i)$, and second,
 the usual sampling uncertainty in the MSM fit conditional on a given latent draw. To
 propagate both sources into the final causal effect estimates, we combine the
 draw-specific estimates using Rubin's within-between decomposition \cite{rubinMultipleImputationNonresponse2009}. 
@@ -266,7 +266,7 @@ the $j$-th component of $\hat{\boldsymbol{\theta}}$ is given by
 \[
 Q_j = \frac{1}{S}\sum_{s=1}^{S} V_{j}^{(s)},
 \qquad
-B_j = \frac{1}{S - 1}\sum_{s=1}^{S}\left(\hat{\boldsymbol{\theta}}_j^{(s)} - \bar{\boldsymbol{\theta}}_j\right)^2,
+B_j = \frac{1}{S - 1}\sum_{s=1}^{S}\left(\hat{\theta}_j^{(s)} - \bar{\theta}_j\right)^2,
 \qquad
 T_j = Q_j + \left(1+\frac{1}{S}\right)B_j.
 \]

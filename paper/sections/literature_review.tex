@@ -104,8 +104,8 @@ MSMs are models for average potential outcomes under different treatment regimes
 Although these models can 
 be nonparametric \cite{neugebauerNonparametricCausalEffects2007}, they are often specified as a 
 parametric model for $\mathbb{E}[Y_i(\bar{\mathbf{a}}_T)]$:
-$$\mathbb{E}[Y_i(\bar{\mathbf{a}}_T)] = m(\bar{\mathbf{a}}_T; \boldsymbol{\theta_0})$$
-where we use $\boldsymbol{\theta_0}$ to denote the set of true parameters. These models are called marginal 
+$$\mathbb{E}[Y_i(\bar{\mathbf{a}}_T)] = m(\bar{\mathbf{a}}_T; \boldsymbol{\theta}_0)$$
+where we use $\boldsymbol{\theta}_0$ to denote the set of true parameters. These models are called marginal 
 structural models because they model the mean of the marginal distribution of the potential outcomes, 
 rather than the usual conditional mean of the observed outcomes given the treatments and 
 confounders, i.e., $\mathbb{E}[Y_i|\bar{\mathbf{A}}_T, \bar{\mathbf{X}}_T]$, used in association studies. 
@@ -132,7 +132,7 @@ these weights, \citeA{robinsAssociationCausationMarginal1999} showed that
 
 \begin{equation}
     \label{eq:ipw-identification}
-\mathbb{E}\!\left[\mathbf{1}\{\bar{\mathbf{A}}_{i,T}=\bar{\mathbf{a}}_T\}W_iY_i\right]=m(\bar{\mathbf{a}}_T,\boldsymbol{\beta}_0).
+\mathbb{E}\!\left[\mathbf{1}\{\bar{\mathbf{A}}_{i,T}=\bar{\mathbf{a}}_T\}W_iY_i\right]=m(\bar{\mathbf{a}}_T;\boldsymbol{\theta}_0).
 \end{equation}
 
 In observational studies, the true probabilities $\pi_{it}$ are unknown and need to be 
@@ -149,10 +149,10 @@ Once the weights are estimated, the IPTW estimator of MSM can be obtained by sol
 
 \begin{equation}
     \label{eq:ipw-estimation}
-\mathbb{E}\left\{\widehat{W}_i\, \mathbf{h}\!\left(\bar{\mathbf{A}}_{i,T}\right)\left(Y_i - m\!\left(\bar{\mathbf{A}}_{i,T};\boldsymbol{\beta}\right)\right)\right\}=0,
+\mathbb{E}\left\{\widehat{W}_i\, \mathbf{h}\!\left(\bar{\mathbf{A}}_{i,T}\right)\left(Y_i - m\!\left(\bar{\mathbf{A}}_{i,T};\boldsymbol{\theta}\right)\right)\right\}=0,
 \end{equation}
 where $\mathbf{h}(\cdot)$ is a researcher-chosen vector valued function of the treatment history with dimensionality of  
-$1 \times \dim(\boldsymbol{\beta})$. If $\mathbf{h}(\cdot)$ 
+$1 \times \dim(\boldsymbol{\theta})$. If $\mathbf{h}(\cdot)$ 
 is chosen to be the identity function and the MSM is specified as a linear model, 
 then the above estimating equation reduces to a weighted least squares problem.
 
@@ -209,7 +209,7 @@ of fixed-effect regression is their inability to target the average
 potential outcome under specific treatment regimes, which is often of 
 interest in longitudinal studies. Instead, 
 they target the average spontaneous effect of the current treatment 
-on the current outcome, i.e., $\mathbb{E}[Y_{i,t+1}(a_{it}=1) - Y_{i,t}(a_{i,t+1}=0)]$. 
+on the current outcome, i.e., $\mathbb{E}[Y_{i,t+1}(a_{it}=1) - Y_{i,t+1}(a_{it}=0)]$. 
 The assumptions 
 required implicitly by the fixed-effect regression to be causally interpretable is discussed in 
 detail by \citeA{imaiWhenShouldWe2019}. 
@@ -242,8 +242,8 @@ individual $i$, and $\mathbf{X}_i$ is the observed covariate vector.
 The deconfounder recipe is then to fit a latent factor model of the assigned 
 treatments which renders the same treatment conditional independence structure as the true unobserved confounder $\mathbf{U}_i$ 
 by substituting the latent variable $\mathbf{Z}_i$ instead: 
-$$\mathbb{P}_{\Theta}(A_{i1}, A_{i2}, \ldots, A_{iM}\mid \mathbf{Z}_i, \mathbf{X}_i) = \prod_{i=1}^N \prod_{j=1}^{M} \mathbb{P}(A_{ij}\mid \mathbf{Z}_i, \mathbf{X}_i,\mathbf{\gamma}_j)$$
-where $\mathbf{\gamma}_j$ is the treatment-specific parameter. Under the assumptions below and SUTVA,  
+$$\mathbb{P}_{\Theta}(A_{i1}, A_{i2}, \ldots, A_{iM}\mid \mathbf{Z}_i, \mathbf{X}_i) = \prod_{j=1}^{M} \mathbb{P}(A_{ij}\mid \mathbf{Z}_i, \mathbf{X}_i,\boldsymbol{\gamma}_j)$$
+where $\boldsymbol{\gamma}_j$ is the treatment-specific parameter. Under the assumptions below and SUTVA,  
 this latent variable $\mathbf{Z}_i$ can be used as a substitute for the unobserved confounder $\mathbf{U}_i$ 
 and to retain the ignorability assumption:
 $$Y_i(\bar{\mathbf{a}}_M) \perp (A_{i1}, A_{i2}, \ldots, A_{iM}) | \mathbf{Z}_i, \mathbf{X}_i.$$

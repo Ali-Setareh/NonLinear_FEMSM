@@ -35,7 +35,7 @@ the unmeasured fixed effect $\alpha_i$,
 the treatment assignment at time $t$ is independent of the future 
 potential outcomes and covariates. Under this assumption along with 
 the assumptions \ref{ass:C-consistency} to \ref{ass:C-positivity}, the truncated potential 
-outcome $\mathbb{E}[Y_i(\underline{a}_{T-k})]$ can be nonparametrically identified as follows
+outcome $\mathbb{E}[Y_i(\underline{\mathbf{a}}_{T-k})]$ can be nonparametrically identified as follows
 
 \begin{equation}
     \label{eq:truncated_potential_outcome_id}
@@ -49,12 +49,12 @@ outcome $\mathbb{E}[Y_i(\underline{a}_{T-k})]$ can be nonparametrically identifi
 Where $\pi_{it} = \mathbb{P}(A_{it} = 1 \mid \bar{\mathbf{X}}_{it}, \bar{\mathbf{A}}_{i,t-1}, \alpha_i)$.
 In practice, a parametric model such as  
 $
-\pi_{it}(\bar{\mathbf{x}}_{it}, \bar{\mathbf{a}}_{i,t-1}; \boldsymbol{\beta_0},\alpha_{i0})
+\pi_{it}(\bar{\mathbf{x}}_{it}, \bar{\mathbf{a}}_{i,t-1}; \boldsymbol{\beta}_0,\alpha_{i0})
 =
 \mathbb{P}\!\left(
-A_{it}=1 \mid X_{it}=\bar{x}_{it},\; \bar{\mathbf{A}}_{i,t-1}=\bar{\mathbf{a}}_{i,t-1}; \boldsymbol{\beta_0}, \alpha_{i0}
+A_{it}=1 \mid \bar{\mathbf{X}}_{it}=\bar{\mathbf{x}}_{it},\; \bar{\mathbf{A}}_{i,t-1}=\bar{\mathbf{a}}_{i,t-1}; \boldsymbol{\beta}_0, \alpha_{i0}
 \right)$, 
-is specified; where $\boldsymbol{\beta_0}$ and $\alpha_{i0}$ are the true $b \times 1$ parameter vector and 
+is specified; where $\boldsymbol{\beta}_0$ and $\alpha_{i0}$ are the true $b \times 1$ parameter vector and 
 the unit-specific fixed effect respectively. 
 This model is estimated via a
 conditional maximum likelihood estimator. 
@@ -64,10 +64,10 @@ The log-likelihood function for the treatment model can be written as
 (1-A_{it})\log\{1-\pi_{it}(\boldsymbol{\beta},\alpha_{i})\}.
 \]
 Let $\boldsymbol{\alpha}_0 = (\alpha_{1}, \ldots, \alpha_{N})$, 
-then $\boldsymbol{\beta_0}$ and $\boldsymbol{\alpha}_0$ 
+then $\boldsymbol{\beta}_0$ and $\boldsymbol{\alpha}_0$ 
 are the solutions to the following optimization problem: 
 \[ 
-(\boldsymbol{\beta_0}, \boldsymbol{\alpha}_0)
+(\boldsymbol{\beta}_0, \boldsymbol{\alpha}_0)
 = \arg\max_{\boldsymbol{\beta},\alpha_1,\ldots,\alpha_N}
 \sum_{i=1}^{N}\sum_{t=1}^{T}
 \mathbb{E}\!\left[\ell_{it}(\boldsymbol{\beta},\alpha_i)\mid \alpha_i\right].
@@ -78,22 +78,22 @@ obtained by solving the finite-sample analog of this optimization problem.
 Having obtained the estimates of the propensity scores, the weights for the IPTW 
 estimation of the marginal structural model are constructed as
 \begin{equation}
-\widehat{W}_i(\hat{\boldsymbol{\beta}},\hat{\boldsymbol{\alpha}}_i)=\prod_{t=T-k}^{T}
-\left(\frac{1}{\pi_{it}(\hat{\boldsymbol{\beta}},\hat{\boldsymbol{\alpha}}_i)}\right)^{A_{it}}
-\left(\frac{1}{1-\pi_{it}(\hat{\boldsymbol{\beta}},\hat{\boldsymbol{\alpha}}_i)}\right)^{1-A_{it}}
+\widehat{W}_i(\hat{\boldsymbol{\beta}},\hat{\alpha}_i)=\prod_{t=T-k}^{T}
+\left(\frac{1}{\pi_{it}(\hat{\boldsymbol{\beta}},\hat{\alpha}_i)}\right)^{A_{it}}
+\left(\frac{1}{1-\pi_{it}(\hat{\boldsymbol{\beta}},\hat{\alpha}_i)}\right)^{1-A_{it}}
 \label{eq:iptw_weights}
 \end{equation}
-where only the last $k$ time points are included in the product. However, the 
+where only the final intervention window from $T-k$ through $T$ is included in the product. However, the 
 propensity score model is estimated using the full treatment history. 
 
 If a marginal structural model is specified as 
-$\mathbb{E}[Y_i(\underline{\mathbf{a}}_{T-k})] = m(\underline{\mathbf{a}}_{T-k}; \boldsymbol{\theta_0})$,
+$\mathbb{E}[Y_i(\underline{\mathbf{a}}_{T-k})] = m(\underline{\mathbf{a}}_{T-k}; \boldsymbol{\theta}_0)$,
 let 
 \begin{equation}
 \Psi_N(\boldsymbol{\theta})
 :=
 \frac{1}{N} \sum_{i=1}^{N}
-\widehat{W}_i(\hat{\boldsymbol{\beta}}, \hat{\boldsymbol{\alpha}}_i)\,
+\widehat{W}_i(\hat{\boldsymbol{\beta}}, \hat{\alpha}_i)\,
 \mathbf{h}\!\left(\underline{\mathbf{A}}_{i,T-k}\right)\,
 \left[
 Y_i - m\!\left(\underline{\mathbf{A}}_{i,T-k}; \boldsymbol{\theta} \right)
@@ -122,15 +122,15 @@ Suppose there exists a finite-dimensional parameter vector $\boldsymbol{\beta}_0
 and unit-specific effects
 $\alpha_{i0}$ such that, for all $i$ and $t$,
 \[
-\mathbb{P}(A_{it}=1 \mid \mathbf{\bar{X}}_{it}, \mathbf{\bar{A}}_{i,t-1}, \alpha_i)
+\mathbb{P}(A_{it}=1 \mid \bar{\mathbf{X}}_{it}, \bar{\mathbf{A}}_{i,t-1}, \alpha_i)
 =
-\pi_{it}(\mathbf{\bar{X}}_{it}, \mathbf{\bar{A}}_{i,t-1}; \boldsymbol{\beta}_0, \alpha_{i0})
+\pi_{it}(\bar{\mathbf{X}}_{it}, \bar{\mathbf{A}}_{i,t-1}; \boldsymbol{\beta}_0, \alpha_{i0})
 \qquad \text{a.s.}
 \]
 That is, conditional on the unit-specific effect $\alpha_i$, 
 the treatment assignment mechanism
 is correctly specified as a member of the posited parametric family 
-in $(\mathbf{\bar{X}}_{it},\mathbf{\bar{A}}_{i,t-1})$.
+in $(\bar{\mathbf{X}}_{it},\bar{\mathbf{A}}_{i,t-1})$.
 \end{modassumpFE}
 
 This assumption only requires the propensity score to be correctly specified up to the 

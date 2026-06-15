@@ -20,9 +20,9 @@ the mean of observed covariates over time,
 and the unmeasured confounder. 
 
 We simulate longitudinal data for 
-$n \in \{200, 500, 1000\}$ individuals. For the
-length of the time series for each n, we consider 
-three different lengths: $\rho = n/T$ 
+$N \in \{200, 500, 1000\}$ individuals. For the
+length of the time series for each $N$, we consider 
+three different lengths: $\rho = N/T$ 
 with $\rho \in \{5,10,50\}$. The data is balanced,
 meaning that each individual has 
 the same number of time points. 
@@ -35,7 +35,7 @@ $\bar{\mathbf{X}}_{i} = \frac{1}{T}\sum_{t=1}^T \mathbf{X}_{it}$.
 \begin{align}
 U_i &:= \varepsilon_i,
 \qquad
-\varepsilon_i \sim \operatorname{Unif}(-a,a).
+\varepsilon_i \sim \operatorname{Unif}(-c_U,c_U).
 \\
 \mathbf{X}_{it} &:= -\frac{1}{2}\mathbbm{1} + \varepsilon_{it},
 \qquad
@@ -45,20 +45,20 @@ A_{it} &:= \mathbbm{1}\!\left\{\eta_{it} \le
 \operatorname{expit}\!\left(U_i+\varphi A_{i,t-1}+\boldsymbol{\beta}^\top \mathbf{X}_{it}\right)\right\},
 \qquad \eta_{it} \sim \operatorname{Unif}(0,1)
 \\
-Y_{iT} &:= U_i + \tau_F A_{iT} + \tau_C \sum_{t=T-3}^{T-1} A_{it}
+Y_i &:= U_i + \tau_F A_{iT} + \tau_C \sum_{t=T-3}^{T-1} A_{it}
 + \boldsymbol{\theta}^\top \bar{\mathbf{X}}_{i} + \epsilon_{iT},
 \qquad \epsilon_{iT} \sim \mathcal{N}(0,1)
 \label{eq:blackwell_scm_outcome}
 \end{align}
 \end{subequations}
 
-We simulate for two different values of $a \in \{1, 2\}$ to control the
+We simulate for two different values of $c_U \in \{1, 2\}$ to control the
 contribution of the unmeasured confounder $U_i$.
-We simulate for two different number of covariates $p \in \{2, 4\}$ 
+We simulate for two different numbers of covariates $d_X \in \{2, 4\}$ 
 to see the effect of the dimensionality 
 of covariates. 
-The coefficients are set to $\boldsymbol{\beta} = (-0.5, -0.5)^{\top}$ when $p=2$ and 
-$\boldsymbol{\beta} = (-0.5, -0.5, 1, -0.5)^{\top}$ when $p=4$. 
+The coefficients are set to $\boldsymbol{\beta} = (-0.5, -0.5)^{\top}$ when $d_X=2$ and 
+$\boldsymbol{\beta} = (-0.5, -0.5, 1, -0.5)^{\top}$ when $d_X=4$. 
 We set $\varphi = 0.3$. %Note that we generate 
 The covariates $\mathbf{X}_{it}$ are generated exogenously to 
 the treatments solely for the sake of simplicity where  $\Sigma_{jj} = 1$ and $\Sigma_{jj'} = 0.2$ for $j \neq j'$. By doing this, the ground truth 
@@ -70,7 +70,7 @@ values for the causal targets of interests coincide wit the DGP parameters.
 Also note that there is no dynamics 
 in the covariates and the distribution of $\mathbf{X}_{it}$ is the same for all-time points. The parameters 
 for the outcome model are set to $\tau_F = 1$, $\tau_C = 0.3$, and $\boldsymbol{\theta} = (1, 0.5)^{\top}$ 
-when $p=2$ and when $p=4$, $\boldsymbol{\theta} = (1, 0.5, 1, 1)^{\top}$. The causal DAG for 
+when $d_X=2$ and when $d_X=4$, $\boldsymbol{\theta} = (1, 0.5, 1, 1)^{\top}$. The causal DAG for 
 the DGP is shown in Figure~\ref{fig:dgp-dag}. 
 \begin{figure}[ht]
     \centering
@@ -102,8 +102,8 @@ treatments within the intervention window, marginalized over the natural
 values of the treatments this treatment window? 
 Mathematically, 
 this is defined as
-$\mathbb{E}\left[ Y_{iT}\left(a_T = 1, S_3 = s)\right) 
-- Y_{iT}\left(a_T = 0, S_3 = s\right) \right]$. 
+$\mathbb{E}\left[ Y_i\left(a_T = 1, S_3 = s\right) 
+- Y_i\left(a_T = 0, S_3 = s\right) \right]$. 
 The second causal question is: what is the
 average effect of receiving one additional treatment in 
 the last three time points, 
@@ -111,16 +111,16 @@ before $T$ on the final outcome while keeping the final treatment
 fixed, marginalized over the natural 
 values of the treatments in this window? To express 
 this mathematically, we can write it as
-$\mathbb{E}\left[Y_{iT}\left({S_3 = s, 
-A_{iT} = a}\right) - Y_{iT}\left({S_3 = s+1, 
+$\mathbb{E}\left[Y_i\left({S_3 = s+1, 
+A_{iT} = a}\right) - Y_i\left({S_3 = s, 
 A_{iT} = a}\right)\right]$. 
 
 To answer both of these causal questions, a marginal structural 
 model is proposed  
 that relates the assigned treatments to the expected potential 
 outcome at the final time: 
-$\mathbb{E\left[Y_{iT}\left(\underline{\mathbf{a}}_{T-k}\right)\right]} = 
-m(\underline{\mathbf{a}}_{T-k}, \boldsymbol{\theta}_0)$, where 
+\(\mathbb{E}\left[Y_i\left(\underline{\mathbf{a}}_{T-k}\right)\right] = 
+m(\underline{\mathbf{a}}_{T-k}, \boldsymbol{\theta}_0)\), where 
 $m(\underline{\mathbf{a}}_{T-k}, \boldsymbol{\theta}_0)$ is the true unknown function 
 parameterized by $\boldsymbol{\theta}_0$. Our job is 
 to first propose a function $f(\underline{\mathbf{a}}_{T-k}, \boldsymbol{\theta})$ 
@@ -135,14 +135,14 @@ To show this, we begin from Eq.~\eqref{eq:blackwell_scm_outcome}. First note tha
 a structural equation model, we can replace the random variables 
 by their interventional values. So we have:
 \[
-Y_{iT}\!\left(\underline{\mathbf{a}}_{T-k}\right)
+Y_i\!\left(\underline{\mathbf{a}}_{T-k}\right)
 = U_i + \tau_F a_T + \tau_C \sum_{t=T-3}^{T-1} a_t + \boldsymbol{\theta}^\top \bar{\mathbf{X}}_{i}(\underline{\mathbf{a}}_{T-k}) + \epsilon_{iT}.
 \]
 Taking the expectation on both sides and making use of 
 the exogeneity of the covariates and treatments, we have:
 \begin{align}
 \label{eq:truemsmproof}
-\mathbb{E}\!\left[Y_{iT}\!\left(\underline{\mathbf{a}}_{T-k}\right)\right]
+\mathbb{E}\!\left[Y_i\!\left(\underline{\mathbf{a}}_{T-k}\right)\right]
 &= \mathbb{E}[U_i] + \tau_F a_T + \tau_C \sum_{t=T-3}^{T-1} a_t
    + \boldsymbol{\theta}^\top \mathbb{E}[\bar{\mathbf{X}}_{i}(\underline{\mathbf{a}}_{T-k})] + \mathbb{E}[\epsilon_{iT}] \\
 &= \mathbb{E}\!\left[U_i + \boldsymbol{\theta}^\top \bar{\mathbf{X}}_{i}(\underline{\mathbf{a}}_{T-k})\right]
@@ -155,8 +155,8 @@ the exogeneity of the covariates and treatments, we have:
 From Eq.~\eqref{eq:truemsm}, it can be seen: 
 
 \begin{align*}
-        &\mathbb{E}\left[ Y_{iT}\left(a_T = 1, S_3 = s\right) - Y_{iT}\left(a_T = 0, S_3 = s\right) \right] = \tau_F\\
-        &\mathbb{E}\left[ Y_{iT}\left(a_T = a, S_3 = s+1\right) - Y_{iT}\left(a_T = a, S_3 = s\right) \right] = \tau_C
+        &\mathbb{E}\left[ Y_i\left(a_T = 1, S_3 = s\right) - Y_i\left(a_T = 0, S_3 = s\right) \right] = \tau_F\\
+        &\mathbb{E}\left[ Y_i\left(a_T = a, S_3 = s+1\right) - Y_i\left(a_T = a, S_3 = s\right) \right] = \tau_C
 \end{align*}
 The equality between these causal effects and the parameters of the 
 outcome model in the DGP is a result of the linearity of the DGP and 
