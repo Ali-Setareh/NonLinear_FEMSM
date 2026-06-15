@@ -228,7 +228,7 @@ interventions instead of the full treatment regimes.
 \subsection{Deconfounder theory and sequential deconfounding}
 \subsubsection{Multi-treatment deconfounder}
 Another approach to address time-invariant unmeasured confounding is based on the 
-deconfounder theory proposed by \cite{wangBlessingsMultipleCauses2019}. This method is originally 
+deconfounder theory proposed by \citeA{wangBlessingsMultipleCauses2019}. This method is originally 
 devised for static settings with multiple treatments. The key idea is that if there is 
 a true structural unobserved confounder vector $\mathbf{U}_i$ that affects multiple treatments, then it leaves a 
 statistical signature in the observed treatments by inducing conditional independence 
@@ -295,7 +295,7 @@ for that subset while the consistency assumption holds for the full set of treat
 stated by Theorem 6 in \citeA{wangBlessingsMultipleCauses2019}. 
 
 The other criticism is concerning whether the deconfounder's assumptions are truly weaker than the standard 
-ignorability assumption. \citeA{grimmerNaiveRegressionRequires2023} argues that in most settings where
+ignorability assumption. \citeA{grimmerNaiveRegressionRequires2023} argue that in most settings where
 the deconfounder assumptions hold, the naive regression adjustment with only the 
 observed covariates also results in unbiased estimates of the causal effects. Moreover, through 
 extensive simulation studies, they showed 
@@ -373,7 +373,7 @@ and to support future methodological work on longitudinal causal inference with 
     at a single time point. 
     The second DAG (b) represents the sequential deconfounder setting where there are $T$ 
     temporally ordered treatments. Both DAGs include 
-    an unobserved \emph{multi-treatment} confounder $\mathbf{U}_i$ that affects at least two treatments, 
+    an unobserved confounder $\mathbf{U}_i$ that affects at least two treatments, 
     and a latent variable $\mathbf{Z}_i$ which is a statistically sufficient substitute for the unobserved confounder $\mathbf{U}_i$. Both 
     figures can be extended to include observed confounders.}
     \label{fig:deconfounder-comparison}

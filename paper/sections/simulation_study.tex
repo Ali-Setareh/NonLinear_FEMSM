@@ -53,11 +53,11 @@ Y_i &:= U_i + \tau_F A_{iT} + \tau_C \sum_{t=T-3}^{T-1} A_{it}
 
 We simulate for two different values of $c_U \in \{1, 2\}$ to control the
 contribution of the unmeasured confounder $U_i$.
-We simulate for two different numbers of covariates $d_X \in \{2, 4\}$ 
+We simulate for two different numbers of covariates $D \in \{2, 4\}$ 
 to see the effect of the dimensionality 
 of covariates. 
-The coefficients are set to $\boldsymbol{\beta} = (-0.5, -0.5)^{\top}$ when $d_X=2$ and 
-$\boldsymbol{\beta} = (-0.5, -0.5, 1, -0.5)^{\top}$ when $d_X=4$. 
+The coefficients are set to $\boldsymbol{\beta} = (-0.5, -0.5)^{\top}$ when $D=2 $ and 
+$\boldsymbol{\beta} = (-0.5, -0.5, 1, -0.5)^{\top}$ when $D=4$. 
 We set $\varphi = 0.3$. %Note that we generate 
 The covariates $\mathbf{X}_{it}$ are generated exogenously to 
 the treatments solely for the sake of simplicity where  $\Sigma_{jj} = 1$ and $\Sigma_{jj'} = 0.2$ for $j \neq j'$. By doing this, the ground truth 
@@ -69,7 +69,7 @@ values for the causal targets of interest coincide with the DGP parameters.
 Also note that there is no temporal dynamics 
 in the covariates and the distribution of $\mathbf{X}_{it}$ is the same for all time points. The parameters 
 for the outcome model are set to $\tau_F = 1$, $\tau_C = 0.3$, and $\boldsymbol{\theta} = (1, 0.5)^{\top}$ 
-when $d_X=2$ and when $d_X=4$, $\boldsymbol{\theta} = (1, 0.5, 1, 1)^{\top}$. The causal DAG for 
+when $D=2$ and when $D=4$, $\boldsymbol{\theta} = (1, 0.5, 1, 1)^{\top}$. The causal DAG for 
 the DGP is shown in Figure~\ref{fig:dgp-dag}. 
 \begin{figure}[ht]
     \centering
@@ -90,26 +90,27 @@ Define
 $$S_k(\underline{\mathbf{a}}_{T-k}) := \sum_{t=T-k}^{T-1} a_t 
 \in \{0,1,2,\dots, k\}$$ 
 as the sum 
-of treatments received in the last $k$ time points before $T$, where $k+1$ 
-represents the intervention window.  In real-world applications, 
+of treatments received in the $k$ time points immediately before $T$, 
+Together with the final treatment $a_T$, 
+these treatments define the final $(k+1)$-time-point intervention window 
+from $T-k$ through $T$. In real-world applications, 
 the choice of $k$ is based on the research question and the domain 
 knowledge about the relevant time window for the treatment effects. 
 In this simulation, we set $k=3$ to match the dependence structure of the 
 outcome on the treatments in the DGP.
 
 We are interested in two causal questions.
-What is the average effect of the treatment received at the 
-final time on the 
-final outcome while holding fixed the sum of the earlier 
-treatments within the intervention window, marginalized over the natural 
-values of the treatments in this treatment window? 
+What is the average effect of the treatment received at the final time point on 
+the final outcome, while holding fixed the sum of the $k$ earlier treatments in 
+the intervention window, marginalized over the natural values of the treatments 
+before this treatment window?
 Mathematically, 
 this is defined as
 $\mathbb{E}\left[ Y_i\left(a_T = 1, S_3 = s\right) 
 - Y_i\left(a_T = 0, S_3 = s\right) \right]$. 
 The second causal question is: what is the
 average effect of receiving one additional treatment in 
-the last three time points, 
+the last three time points 
 before $T$ on the final outcome while keeping the final treatment 
 fixed, marginalized over the natural 
 values of the treatments in this window? To express 
@@ -125,7 +126,7 @@ outcome at the final time:
 \(\mathbb{E}\left[Y_i\left(\underline{\mathbf{a}}_{T-k}\right)\right] = 
 m(\underline{\mathbf{a}}_{T-k}, \boldsymbol{\theta}_0)\), where 
 $m(\underline{\mathbf{a}}_{T-k}, \boldsymbol{\theta}_0)$ is the true unknown function 
-parameterized by $\boldsymbol{\theta}_0$. Our job is 
+parameterized by $\boldsymbol{\theta}_0$. The task is 
 to first propose a function $f(\underline{\mathbf{a}}_{T-k}, \boldsymbol{\theta})$ 
 and then estimate its parameters $\boldsymbol{\theta}$. In this 
 DGP, the ground truth function $m$, is: 
@@ -152,7 +153,7 @@ the exogeneity of the covariates and treatments, we have:
    + \tau_F a_T + \tau_C \sum_{t=T-3}^{T-1} a_t \\
 &= \alpha_0 + \tau_F a_T + \tau_C \sum_{t=T-3}^{T-1} a_t,
 \qquad
-\alpha_0 := \mathbb{E}\!\left[U_i + \boldsymbol{\theta}^\top \bar{\mathbf{X}}_{i}(\underline{\mathbf{a}}_{T-k})\right]
+\alpha_0 := \mathbb{E}\!\left[U_i + \boldsymbol{\theta}^\top \bar{\mathbf{X}}_{i}\right]
 \end{align}
  
 From Eq.~\eqref{eq:truemsm}, it can be seen: 

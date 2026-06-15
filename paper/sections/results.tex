@@ -29,15 +29,16 @@ p(a_{it} = 1 \mid x_{it}, a_{i,t-1}, \alpha_i) = \operatorname{expit}(w_1^\top x
 
 
 For the sequential GPLVM, a $\text{CMM}(1)$ with a one-dimensional latent variable 
-(i.e., $Z_i \in \mathbb{R}$ and $|\mathcal{Z}| = 1$) 
+(i.e., $Z_i \in \mathbb{R}$ and $J = 1$) 
 is fitted to the treatment data, 
 using a linear kernel: 
 \[
-k_t^{\text{treat}} ((x_t,a_{t-1},z), (x'_t,a'_{t-1},z'))= \nu \left[\sum_{j=1}^{|\mathcal{X_t}|}x_{jt} x'_{jt} 
-+ aa' + \sum_{j=1}^{|\mathcal{Z}|} z_{j} z'_{j} \right]
+k_t^{\text{treat}} ((x_t,a_{t-1},z), (x'_t,a'_{t-1},z'))= \nu \left[\sum_{j=1}^{d_X}x_{jt} x'_{jt} 
++ aa' + \sum_{j=1}^{J} z_{j} z'_{j} \right]
 \]
-where $\nu$ is the variance hyperparameter. This is equivalent to 
-the Bayesian linear regression with a latent variable. The observed confounders 
+where $\nu$ is the variance hyperparameter. With a linear kernel, 
+this corresponds to a Bayesian generalized linear latent-function model 
+for the treatment assignment mechanism. The observed confounders 
 are standardized before fitting the GPLVM. A  
 weakly informative Gamma prior is placed on 
 $\nu$, specifically $\nu \sim \Gamma(2,1)$.
@@ -91,8 +92,8 @@ Figure~\ref{fig:simulation_bias_combined_a_p2} reports the bias,
 Figure~\ref{fig:simulation_standard_error_combined_a_p2} reports the standard error, and 
 Figure~\ref{fig:simulation_coverage_combined_a_p2} reports the coverage. 
 Within each figure, the first two rows correspond to the weak unmeasured confounding setting where 
-$U_i \in [-1,1]$ ($a=1$), and the last two rows correspond to the strong unmeasured confounding 
-setting where $U_i \in [-2,2]$ ($a=2$). The first and third rows correspond to 
+$U_i \in [-1,1]$ ($c_U=1$), and the last two rows correspond to the strong unmeasured confounding 
+setting where $U_i \in [-2,2]$ ($c_U=2$). The first and third rows correspond to 
 $\tau_F = 1$, while the second and fourth rows correspond to $\tau_C = 0.3$. 
 The columns correspond to the $N$ to $T$ ratio, with panels (A), (D), (G), and (J) showing 
 $\rho = 5$ (the largest number of time points), panels (B), (E), (H), and (K) showing 
@@ -116,7 +117,7 @@ standard error compared to the SeqGPLVM-MSM, particularly for smaller sample siz
 This may be due to the fact that the FE-MSM method relies on a correctly specified 
 parametric model for the propensity scores, while the sequential GPLVM method is more 
 flexible but may require larger sample sizes to achieve similar performance. We can see that 
-the worst case for both methods is for $\rho = 50$, but specially this is visible for 
+the worst case for both methods is for $\rho = 50$, but especially this is visible for 
 the sequential GPLVM in the smallest sample size $N = 200$, where it introduces 
 more bias than the naive IPTW for the strong unmeasured confounding case 
 (Figure~\ref{fig:simulation_bias_combined_a_p2}, panels (I) and (L)) 
@@ -145,7 +146,7 @@ although some undercoverage remains, again most visibly for $\rho = 50$ (panel (
 In this weaker confounding setting, \texttt{FE-MSM} is generally 
 closer to \texttt{IPTW-True} than \texttt{SeqGPLVM-MSM}, 
 but it does not match the true-propensity benchmark, especially for the 
-shortest treatment sequence. Even when $a = 1$, \texttt{FE-MSM} 
+shortest treatment sequence. Even when $c_U = 1$, \texttt{FE-MSM} 
 still exhibits noticeably larger bias and lower coverage than \texttt{IPTW-True}, 
 and this gap becomes more pronounced under stronger unmeasured confounding. 
 

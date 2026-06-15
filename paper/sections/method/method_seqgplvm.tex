@@ -185,7 +185,7 @@ Once the approximate posterior distribution of the substitute confounder is esti
 it can be used to adjust for confounding in the outcome model. This stage 
 closely parallels the FE-MSM procedure described in Section~\ref{sec:fe-msm}. In
 particular, Theorem~1 implies identification of the mean truncated potential outcome
-over the last $k$ time periods through the same IPTW representation as in
+over the last $k+1$ time periods through the same IPTW representation as in
 Eq.~\eqref{eq:truncated_potential_outcome_id}, with the unobserved fixed effect
 $\alpha_i$ replaced by the latent variable $\mathbf{Z}_i$:
 \begin{equation}
@@ -309,7 +309,8 @@ the FE-MSM method described in section \ref{sec:fe-msm}.
 time-varying propensity scores for a first-order CMM. For each time point $t$, 
 a Gaussian process
 $f_t(\cdot)$ with hyperparameters $\boldsymbol{\gamma}_t$ maps the latent state and
-observed history into the assignment probability $A_{it}$.
+observed history into a latent assignment score, 
+which is transformed through the Bernoulli likelihood to obtain \(P(A_{it}=1 \mid \cdot)\). 
 The variables $g_t$ denote GP function values at inducing inputs $\mathbf{w}_t$
 (shown without nodes as they are treated as parameters).
 Filled nodes indicate observed quantities and unfilled nodes latent quantities.
