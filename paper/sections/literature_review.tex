@@ -333,6 +333,25 @@ is the most controversial assumption and the implementations of it will
 be discussed in Chapter~\ref{chap:discussion}. A graphical comparison of 
 the sequential deconfounder and the multi-treatment deconfounder is presented In Figure 
 \ref{fig:deconfounder-comparison}.
+
+\section{Research gap and thesis contribution}
+
+The literature reviewed in this chapter shows that longitudinal causal inference methods differ not only in the causal structures 
+they are designed to handle, but also in the causal targets they aim to identify. Standard g-methods such as marginal structural 
+models provide a principled way to estimate average potential outcomes under treatment regimes in the presence of treatment-confounder 
+feedback. However, their validity depends on sequential ignorability, an assumption that may be implausible in many observational studies 
+when important baseline characteristics are unmeasured. Fixed-effect approaches and deconfounder-based methods offer two different strategies 
+for addressing time-invariant unmeasured confounding, but they do so under different assumptions and with different implications for the causal 
+estimands that can be identified.
+
+The present thesis is positioned at this intersection. It compares two recent approaches for estimating causal effects of time-varying treatments 
+in the presence of time-invariant unmeasured confounding: the fixed-effect marginal structural model and the sequential Gaussian process latent variable model. 
+Rather than treating these methods as unrelated contributions from different research traditions, this thesis presents them within a common notation and highlights 
+their similarities and differences in terms of their assumptions, estimation procedures, and causal targets. In doing so, it clarifies how the fixed-effect and 
+latent-variable perspectives each attempt to recover information about unobserved heterogeneity from longitudinal treatment histories. 
+These contributions aim to make the relationship between the two methods more transparent 
+and to support future methodological work on longitudinal causal inference with time-invariant unmeasured confounding.
+
 \begin{figure}[htbp]
     \centering
 
